@@ -17,10 +17,12 @@ public:
   static int defaultBerat;
   static int defaultUang;
 
+  ~Pemain();
+
   virtual void setStatus() = 0;
-  void setUang();
-  void setString();
-  void setberatBadan();
+  void setUsername(string username);
+  void setUang(int uang);
+  void setberatBadan(int beratBadan);
   string getStatus();
   string getUsername();
   int getUang();
@@ -33,7 +35,7 @@ private:
   //static map<Tumbuhan> ladang;
 public:
   Petani();
-  Petani(string username);
+  Petani(string username, int uang, int beratBadan);
   ~Petani();
   Petani(Petani& other);
   Petani& operator=(const Petani& other);
@@ -55,14 +57,14 @@ private:
 
 public:
   Walikota();
-  Walikota(string username);
+  Walikota(string username, int uang, int beratBadan);
   ~Walikota();
   Walikota(Walikota& other);
   Walikota& operator=(const Walikota& other);
 
   void setStatus();
   void setWalikotaID();
-  string getWalikotaID();
+  int getWalikotaID();
 
   void tagihPajak();
   void bangunBangunan();
@@ -76,7 +78,7 @@ private:
   //static map<Hewan> peternakan;
 public:
   Peternak();
-  Peternak(string username);
+  Peternak(string username, int uang, int beratBadan);
   ~Peternak();
   Peternak(Peternak& other);
   Peternak& operator=(const Peternak& other);
@@ -85,7 +87,8 @@ public:
   void setPeternakID();
   //void setLadang();
   int getPeternakID();
-  //map<Tumbuhan> getLadang();
+  //map<Hewan> getPeternakan();
+  //void printPeternakan();
 
   void taruhHewan();
   void beriMakan();

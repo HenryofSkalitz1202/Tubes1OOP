@@ -27,6 +27,8 @@ public:
   string getUsername();
   int getUang();
   int getBeratBadan();
+
+  virtual void countPajak() = 0;
 };
 
 class Petani : public Pemain{
@@ -49,6 +51,8 @@ public:
   void tanamTanaman();
   void panenTanaman();
   void beliBangunan();
+
+  void countPajak();
 };
 
 class Walikota : public Pemain{
@@ -70,6 +74,8 @@ public:
   void bangunBangunan();
   void tambahAkun();
   void jualBangunan();
+
+  void countPajak();
 };
 
 class Peternak : public Pemain{
@@ -94,5 +100,6 @@ public:
   void beriMakan();
   void panenHewan();
   void beliBangunan();
+  void countPajak();
 };
 #endif

@@ -84,6 +84,21 @@ void Controller::start_default()
     this->set_current_player(this->get_first_player());
 }
 
+bool Controller::is_petani(Pemain* player)
+{
+    return dynamic_cast<Petani*>(player) != nullptr;
+}
+
+bool Controller::is_peternak(Pemain* player)
+{
+    return dynamic_cast<Peternak*>(player) != nullptr;
+}
+
+bool Controller::is_walikota(Pemain* player)
+{
+    return dynamic_cast<Walikota*>(player) != nullptr;
+}
+
 void Controller::next()
 {
     this->is_won();

@@ -14,8 +14,8 @@ class Controller
 private:
     std::vector<Pemain*> players;
     size_t current_player_index;
-    int turn_number;
     Pemain* current_player;
+    int turn_number;
     bool game_over;
 
 public:
@@ -36,6 +36,10 @@ public:
 
     void start_default();
     void start_load();
+
+    bool is_petani(Pemain* player);
+    bool is_peternak(Pemain* player);
+    bool is_walikota(Pemain* player);
 
     void next();
     void cetak_penyimpanan();

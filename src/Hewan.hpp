@@ -12,8 +12,7 @@ protected:
   size_t weightToHarvest;
   int price;
   int weight;
-  size_t turn_instantiated;
-  static size_t current_turn;
+  
 public:
   ~Hewan();
 

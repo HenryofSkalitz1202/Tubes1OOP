@@ -9,11 +9,10 @@ protected:
   int bangunanID;
   string namaBangunan;
   int hargaBangunan;
-  //vector<Bahan> resepBangunan;
+  //static vector<Bahan> resepBangunan;
 
 public:
-  Bangunan();
-  Bangunan(string namaBangunan, int hargaBangunan);
+  Bangunan(int bangunanID, string namaBangunan, int hargaBangunan);
   ~Bangunan();
   Bangunan(Bangunan& other);
   Bangunan& operator=(const Bangunan& other);
@@ -24,6 +23,7 @@ public:
   int getBangunanID();
   string getNamaBangunan();
   int getHargaBangunan();
+  //void print();
 };
 
 #endif

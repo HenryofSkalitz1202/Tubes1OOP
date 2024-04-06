@@ -12,7 +12,7 @@ protected:
   size_t weightToHarvest;
   int price;
   int weight;
-  
+
 public:
   ~Hewan();
 
@@ -42,7 +42,7 @@ public:
   Herbivore(int hewanID, string kodeHuruf, string namaHewan, size_t weightToHarvest, int price);
   ~Herbivore();
   Herbivore(Herbivore& other);
-  Herbivore& operator=(Herbivore& other);
+  Herbivore& operator=(const Herbivore& other);
 
   void setType();
 
@@ -55,7 +55,7 @@ public:
   Carnivore(int hewanID, string kodeHuruf, string namaHewan, size_t weightToHarvest, int price);
   ~Carnivore();
   Carnivore(Carnivore& other);
-  Carnivore& operator=(Carnivore& other);
+  Carnivore& operator=(const Carnivore& other);
 
   void setType();
 
@@ -68,7 +68,7 @@ public:
   Omnivore(int hewanID, string kodeHuruf, string namaHewan, size_t weightToHarvest, int price);
   ~Omnivore();
   Omnivore(Omnivore& other);
-  Omnivore& operator=(Omnivore& other);
+  Omnivore& operator=(const Omnivore& other);
 
   void setType();
 

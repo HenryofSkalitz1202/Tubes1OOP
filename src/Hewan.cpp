@@ -87,18 +87,22 @@ Herbivore::Herbivore(Herbivore& other){
     this->setHewanID(other.getHewanID());
     this->setKodeHuruf(other.getKodeHuruf());
     this->setNamaHewan(other.getNamaHewan());
+    this->Herbivore::setType();
     this->setWeightToHarvest(other.getWeightToHarvest());
     this->setPrice(other.getPrice());
     this->setWeight(other.getWeight());
 }
   
-Herbivore& Herbivore::operator=(Herbivore& other){
-    this->setHewanID(other.getHewanID());
-    this->setKodeHuruf(other.getKodeHuruf());
-    this->setNamaHewan(other.getNamaHewan());
-    this->setWeightToHarvest(other.getWeightToHarvest());
-    this->setPrice(other.getPrice());
-    this->setWeight(other.getWeight());
+Herbivore& Herbivore::operator=(const Herbivore& other){
+    this->setHewanID(other.hewanID);
+    this->setKodeHuruf(other.kodeHuruf);
+    this->setNamaHewan(other.namaHewan);
+    this->Herbivore::setType();
+    this->setWeightToHarvest(other.weightToHarvest);
+    this->setPrice(other.price);
+    this->setWeight(other.weight);
+
+    return *this;
 }
 
   void makan();
@@ -125,18 +129,22 @@ Carnivore::Carnivore(Carnivore& other){
     this->setHewanID(other.getHewanID());
     this->setKodeHuruf(other.getKodeHuruf());
     this->setNamaHewan(other.getNamaHewan());
+    this->Carnivore::setType();
     this->setWeightToHarvest(other.getWeightToHarvest());
     this->setPrice(other.getPrice());
     this->setWeight(other.getWeight());
 }
 
-Carnivore& Carnivore::operator=(Carnivore& other){
-    this->setHewanID(other.getHewanID());
-    this->setKodeHuruf(other.getKodeHuruf());
-    this->setNamaHewan(other.getNamaHewan());
-    this->setWeightToHarvest(other.getWeightToHarvest());
-    this->setPrice(other.getPrice());
-    this->setWeight(other.getWeight());
+Carnivore& Carnivore::operator=(const Carnivore& other){
+    this->setHewanID(other.hewanID);
+    this->setKodeHuruf(other.kodeHuruf);
+    this->setNamaHewan(other.namaHewan);
+    this->Carnivore::setType();
+    this->setWeightToHarvest(other.weightToHarvest);
+    this->setPrice(other.price);
+    this->setWeight(other.weight);
+
+    return *this;
 }
 
   void makan();
@@ -163,18 +171,22 @@ Omnivore::Omnivore(Omnivore& other){
     this->setHewanID(other.getHewanID());
     this->setKodeHuruf(other.getKodeHuruf());
     this->setNamaHewan(other.getNamaHewan());
+    this->Omnivore::setType();
     this->setWeightToHarvest(other.getWeightToHarvest());
     this->setPrice(other.getPrice());
     this->setWeight(other.getWeight());
 }
 
-Omnivore& Omnivore::operator=(Omnivore& other){
-    this->setHewanID(other.getHewanID());
-    this->setKodeHuruf(other.getKodeHuruf());
-    this->setNamaHewan(other.getNamaHewan());
-    this->setWeightToHarvest(other.getWeightToHarvest());
-    this->setPrice(other.getPrice());
-    this->setWeight(other.getWeight());
+Omnivore& Omnivore::operator=(const Omnivore& other){
+    this->setHewanID(other.hewanID);
+    this->setKodeHuruf(other.kodeHuruf);
+    this->setNamaHewan(other.namaHewan);
+    this->Omnivore::setType();
+    this->setWeightToHarvest(other.weightToHarvest);
+    this->setPrice(other.price);
+    this->setWeight(other.weight);
+
+    return *this;
 }
 
   void makan();

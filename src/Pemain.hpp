@@ -24,11 +24,11 @@ public:
   void setUang(int uang);
   void setberatBadan(int beratBadan);
   string getStatus();
-  string getUsername();
+  string getUsername() const;
   int getUang();
   int getBeratBadan();
 
-  virtual void countPajak() = 0;
+  // virtual void countPajak() = 0;
 };
 
 class Petani : public Pemain{
@@ -52,7 +52,7 @@ public:
   void panenTanaman();
   void beliBangunan();
 
-  void countPajak();
+  // void countPajak();
 };
 
 class Walikota : public Pemain{
@@ -75,7 +75,7 @@ public:
   void tambahAkun();
   void jualBangunan();
 
-  void countPajak();
+  // void countPajak();
 };
 
 class Peternak : public Pemain{
@@ -100,6 +100,6 @@ public:
   void beriMakan();
   void panenHewan();
   void beliBangunan();
-  void countPajak();
+  // void countPajak();
 };
 #endif

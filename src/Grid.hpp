@@ -5,8 +5,6 @@
 
 using namespace std;
 
-#include <vector>
-
 template <typename T>
 class Grid{
 protected:
@@ -25,7 +23,7 @@ public:
 };
 
 // template<>
-// class Ladang : public Grid<char>{
+// class Ladang : public Grid<Tumbuhan>{
 // public:
 //   void printLadang();
 // };

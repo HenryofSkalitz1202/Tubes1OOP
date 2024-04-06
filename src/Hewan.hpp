@@ -11,6 +11,9 @@ protected:
   string type;
   size_t weightToHarvest;
   int price;
+  int weight;
+  size_t turn_instantiated;
+  static size_t current_turn;
 public:
   ~Hewan();
 
@@ -20,6 +23,7 @@ public:
   virtual void setType() = 0;
   void setWeightToHarvest(size_t weightToHarvest);
   void setPrice(int price);
+  void setWeight(int weight);
 
   int getHewanID();
   string getKodeHuruf();
@@ -27,6 +31,7 @@ public:
   string getType();
   size_t getWeightToHarvest();
   int getPrice();
+  int getWeight();
 
   bool isReadyToHarvest();
   virtual void makan() = 0;
@@ -35,14 +40,12 @@ public:
 
 class Herbivore : public Hewan{
 public:
-  Herbivore();
+  Herbivore(int hewanID, string kodeHuruf, string namaHewan, size_t weightToHarvest, int price);
   ~Herbivore();
   Herbivore(Herbivore& other);
   Herbivore& operator=(Herbivore& other);
 
-  void setType(){
-    this->type = "HERBIVORE";
-  }
+  void setType();
 
   void makan();
   void harvest();
@@ -50,14 +53,12 @@ public:
 
 class Carnivore : public Hewan{
 public:
-  Carnivore();
+  Carnivore(int hewanID, string kodeHuruf, string namaHewan, size_t weightToHarvest, int price);
   ~Carnivore();
   Carnivore(Carnivore& other);
   Carnivore& operator=(Carnivore& other);
 
-  void setType(){
-    this->type = "CARNIVORE";
-  }
+  void setType();
 
   void makan();
   void harvest();
@@ -65,14 +66,12 @@ public:
 
 class Omnivore : public Hewan{
 public:
-  Omnivore();
+  Omnivore(int hewanID, string kodeHuruf, string namaHewan, size_t weightToHarvest, int price);
   ~Omnivore();
   Omnivore(Omnivore& other);
   Omnivore& operator=(Omnivore& other);
 
-  void setType(){
-    this->type = "OMNIVORE";
-  }
+  void setType();
 
   void makan();
   void harvest();

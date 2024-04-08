@@ -3,6 +3,7 @@
 #include "Exception.hpp"
 #include "Produk.cpp"
 #include "Hewan.cpp"
+#include "Tumbuhan.cpp"
 #include <iostream>
 #include <vector>
 #include <sstream>
@@ -113,6 +114,38 @@ void populateConfigHewan(string filePathHewan){
     }
 }
 
+void populateConfigTumbuhan(string filePathTumbuhan){
+    FileReader fileReader(filePathTumbuhan);
+    std::string fileContent = fileReader.readText();
+
+    vector<string> fileContentarr = stringToArrayEnter(fileContent);
+    map<string, Tumbuhan*> mp;
+
+    for (const auto& str : fileContentarr) {
+        vector<string> str_arr = stringToArraySpace(str);
+        Tumbuhan* tumbuhanPtr = nullptr;
+        if(str_arr[3] == "MATERIAL_PLANT"){
+            tumbuhanPtr = new MaterialPlant(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], std::stoi(str_arr[4]), std::stoi(str_arr[5]), std::stoi(str_arr[6]));
+        }else if(str_arr[3] == "FRUIT_PLANT"){
+            tumbuhanPtr = new FruitPlant(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], std::stoi(str_arr[4]), std::stoi(str_arr[5]), std::stoi(str_arr[6]));
+        }else{
+            cout << "Type " << str_arr[3];
+            throw UnknownPlantTypeException();
+        }
+        mp.insert({str_arr[1], tumbuhanPtr});
+    }
+
+    Tumbuhan::configTumbuhan.clear(); // Clear the existing configProduk map if needed
+    for (const auto& pair : mp) {
+        Tumbuhan::configTumbuhan.insert({pair.first, pair.second});
+    }
+
+    std::cout << "Map content:" << std::endl;
+    for (const auto& pair : Tumbuhan::configTumbuhan) {
+        std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaTumbuhan() << std::endl;
+    }
+}
+
 int main() {
     std::string filePathProduk = "produk.txt"; // Replace "input.txt" with your file path
     std::string filePathHewan = "animal.txt";
@@ -136,6 +169,15 @@ int main() {
 
         populateConfigHewan(filePathHewan);
         fileHewan.close();
+
+        std::ifstream fileTumbuhan(filePathTumbuhan);
+        if (!fileTumbuhan.is_open()) {
+            cout << "File config hewan '" << filePathTumbuhan;
+            throw FilePathTumbuhanNotFoundException();
+        }
+
+        populateConfigTumbuhan(filePathTumbuhan);
+        fileTumbuhan.close();
     } catch(UnknownProductTypeException& e){
         cout << e.what() << endl;
     } catch(FilePathProdukNotFoundException& e){

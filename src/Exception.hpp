@@ -16,6 +16,12 @@ struct FilePathHewanNotFoundException : public exception{
     }
 };
 
+struct FilePathTumbuhanNotFoundException : public exception{
+    const char* what() const throw(){
+        return "' is not found.";
+    }
+};
+
 struct NotHerbivoreException : public exception{
     const char* what() const throw(){
         return " bukan herbivore.";
@@ -43,6 +49,12 @@ struct UnknownProductTypeException : public exception{
 struct UnknownAnimalTypeException : public exception{
     const char* what() const throw(){
         return " is an unknown animal type.";
+    }
+};
+
+struct UnknownPlantTypeException : public exception{
+    const char* what() const throw(){
+        return " is an unknown plant type.";
     }
 };
 #endif

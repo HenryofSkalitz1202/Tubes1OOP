@@ -15,12 +15,13 @@ protected:
   size_t turn_instantiated;
   static size_t current_turn;
 public:
+  static map<string, Tumbuhan*> configTumbuhan;
   ~Tumbuhan();
 
   void setTumbuhanID(int tumbuhanID);
   void setKodeHuruf(string kodeHuruf);
   void setNamaTumbuhan(string namaTumbuhan);
-  virtual void setType() = 0;
+  void setType(string type);
   void setDurationToHarvest(size_t durationToHarvest);
   void setPrice(int price);
   void setTurnInstantiated(size_t turn_instantiated);
@@ -38,26 +39,23 @@ public:
 
 class FruitPlant :  public Tumbuhan{
 public:
-  FruitPlant(int TumbuhanID, string kodeHuruf, string namaTumbuhan, size_t durationToHarvest, int price, size_t turn_instantiated);
+  FruitPlant(int TumbuhanID, string kodeHuruf, string namaTumbuhan, string type, size_t durationToHarvest, int price, size_t turn_instantiated);
   ~FruitPlant();
   FruitPlant(FruitPlant& other);
   FruitPlant& operator=(const FruitPlant& other);
 
-  void setType();
-  void harvest();
+  void harvest(){} //TO DO
 
 };
 
 class MaterialPlant : public Tumbuhan{
 public:
-  MaterialPlant(int TumbuhanID, string kodeHuruf, string namaTumbuhan, size_t durationToHarvest, int price, size_t turn_instantiated);
+  MaterialPlant(int TumbuhanID, string kodeHuruf, string namaTumbuhan, string type, size_t durationToHarvest, int price, size_t turn_instantiated);
   ~MaterialPlant();
   MaterialPlant(MaterialPlant& other);
   MaterialPlant& operator=(const MaterialPlant& other);
-  void setType(){
-    this->type = "MATERIAL_PLANT";
-  }
-  void harvest();
+
+  void harvest(){} //TO DO
 };
 
 #endif

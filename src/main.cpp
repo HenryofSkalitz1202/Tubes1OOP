@@ -76,11 +76,16 @@ int main() {
                 cout << "Type " << str_arr[3];
                 throw UnknownProductTypeException();
             }
-            mp.insert({str_arr[2], produkPtr});
+            mp.insert({str_arr[1], produkPtr});
+        }
+
+        Produk::configProduk.clear(); // Clear the existing configProduk map if needed
+        for (const auto& pair : mp) {
+            Produk::configProduk.insert({pair.first, pair.second});
         }
 
         std::cout << "Map content:" << std::endl;
-        for (const auto& pair : mp) {
+        for (const auto& pair : Produk::configProduk) {
             std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaProduk() << std::endl;
         }
     } catch(UnknownProductTypeException& e){

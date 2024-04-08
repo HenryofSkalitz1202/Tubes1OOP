@@ -14,8 +14,9 @@ protected:
   string origin;
   int addedWeight;
   int price;
-  static map<string, Produk> configProduk;
+
 public:
+  static map<string, Produk*> configProduk;
   ~Produk();
 
   void setAssetType();

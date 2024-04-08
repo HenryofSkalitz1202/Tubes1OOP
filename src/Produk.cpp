@@ -2,6 +2,8 @@
 #include <iostream>
 using namespace std;
 
+map<string, Produk*> Produk::configProduk;
+
 //<---------------PRODUK----------------->
 void Produk::setAssetType(){
     this->assetType = "PRODUK";

@@ -1,6 +1,9 @@
 #ifndef PEMAIN_HPP
 #define PEMAIN_HPP
 #include <string>
+#include "Asset.hpp"
+#include "Bangunan.hpp"
+#include "Produk.hpp"
 
 using namespace std;
 
@@ -10,7 +13,7 @@ protected:
   int uang;
   int beratBadan;
   string status;
-  //static map<Barang> inventory;
+  //static map<Asset> inventory;
 public:
   static int beratWin;
   static int uangWin;

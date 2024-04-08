@@ -20,6 +20,10 @@ Bangunan& Bangunan::operator=(const Bangunan& other){
     this->hargaBangunan = other.hargaBangunan;
 }
 
+void Bangunan::setAssetType(string assetType){
+    this->assetType = "BANGUNAN";
+}
+
 void Bangunan::setBangunanID(int bangunanID){
     this->bangunanID = bangunanID;
 }

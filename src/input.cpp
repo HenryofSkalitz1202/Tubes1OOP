@@ -23,18 +23,3 @@ public:
 private:
     std::string filePath;
 };
-
-int main() {
-    std::string filePath = "input.txt"; // Replace "input.txt" with your file path
-    FileReader fileReader(filePath);
-    try {
-        std::string fileContent = fileReader.readText();
-        std::cout << fileContent << std::endl; // Print the file content
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl; // Print any error message
-        return 1;
-    }
-
-    return 0;
-}
-

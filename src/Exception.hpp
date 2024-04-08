@@ -6,19 +6,25 @@ using namespace std;
 
 struct NotHerbivoreException : public exception{
     const char* what() const throw(){
-        return " bukan herbivore";
+        return " bukan herbivore.";
     }
 };
 
 struct NotCarnivoreException : public exception{
     const char* what() const throw(){
-        return " bukan carnivore";
+        return " bukan carnivore.";
     }
 };
 
 struct NotOmnivoreException : public exception{
     const char* what() const throw(){
-        return " bukan omnivore";
+        return " bukan omnivore.";
+    }
+};
+
+struct UnknownProductTypeException : public exception{
+    const char* what() const throw(){
+        return " is an unknown product type.";
     }
 };
 

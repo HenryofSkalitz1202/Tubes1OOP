@@ -45,6 +45,7 @@ public:
   Herbivore& operator=(const Herbivore& other);
 
   void setType();
+  bool isHerbivore(const std::string& kodeHuruf);
 
   void makan();
   void harvest();
@@ -58,6 +59,7 @@ public:
   Carnivore& operator=(const Carnivore& other);
 
   void setType();
+  bool isCarnivore(const std::string& kodeHuruf);
 
   void makan();
   void harvest();
@@ -71,8 +73,10 @@ public:
   Omnivore& operator=(const Omnivore& other);
 
   void setType();
+  bool isOmnivore(const std::string& kodeHuruf);
 
   void makan();
   void harvest();
 };
+
 #endif

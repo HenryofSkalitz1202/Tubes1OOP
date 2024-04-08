@@ -1,4 +1,8 @@
 #include "Hewan.hpp"
+#include <unordered_set>
+#include "Exception.hpp"
+#include <iostream>
+using namespace std;
 
 //<---------------HEWAN----------------->
 Hewan::~Hewan(){
@@ -71,14 +75,29 @@ void Herbivore::setType(){
     this->type = "HERBIVORE";
 }
 
+bool Herbivore::isHerbivore(const std::string& kodeHuruf) {
+    static const std::unordered_set<std::string> herbivoreCodes = {
+        "COW", "SHP", "HRS", "RBT"
+    };
+
+    return herbivoreCodes.find(kodeHuruf) != herbivoreCodes.end();
+}
+
 Herbivore::Herbivore(int hewanID, string kodeHuruf, string namaHewan, size_t weightToHarvest, int price){
-    this->setHewanID(hewanID);
-    this->setKodeHuruf(kodeHuruf);
-    this->setNamaHewan(namaHewan);
-    this->Herbivore::setType();
-    this->setWeightToHarvest(weightToHarvest);
-    this->setPrice(price);
-    this->setWeight(0);
+    try{
+        if(!isHerbivore(kodeHuruf)){
+            throw NotHerbivoreException();
+        }
+        this->setHewanID(hewanID);
+        this->setKodeHuruf(kodeHuruf);
+        this->setNamaHewan(namaHewan);
+        this->Herbivore::setType();
+        this->setWeightToHarvest(weightToHarvest);
+        this->setPrice(price);
+        this->setWeight(0);
+    }catch(NotHerbivoreException& e){
+        cout << "Hewan dengan kode " << kodeHuruf << e.what() << endl;
+    }
 }
 
 Herbivore::~Herbivore(){}
@@ -113,14 +132,29 @@ void Carnivore::setType(){
     this->type = "CARNIVORE";
 }
 
+bool Carnivore::isCarnivore(const std::string& kodeHuruf) {
+    static const std::unordered_set<std::string> carnivoreCodes = {
+        "SNK"
+    };
+
+    return carnivoreCodes.find(kodeHuruf) != carnivoreCodes.end();
+}
+
 Carnivore::Carnivore(int hewanID, string kodeHuruf, string namaHewan, size_t weightToHarvest, int price){
-    this->setHewanID(hewanID);
-    this->setKodeHuruf(kodeHuruf);
-    this->setNamaHewan(namaHewan);
-    this->Carnivore::setType();
-    this->setWeightToHarvest(weightToHarvest);
-    this->setPrice(price);
-    this->setWeight(0);
+    try{
+        if(!isCarnivore(kodeHuruf)){
+            throw NotCarnivoreException();
+        }
+        this->setHewanID(hewanID);
+        this->setKodeHuruf(kodeHuruf);
+        this->setNamaHewan(namaHewan);
+        this->Carnivore::setType();
+        this->setWeightToHarvest(weightToHarvest);
+        this->setPrice(price);
+        this->setWeight(0);
+    }catch(NotCarnivoreException& e){
+        cout << "Hewan dengan kode " << kodeHuruf << e.what() << endl;
+    }
 }
   
 Carnivore::~Carnivore(){}
@@ -155,14 +189,29 @@ void Omnivore::setType(){
    this->type = "OMNIVORE";
 }
 
+bool Omnivore::isOmnivore(const std::string& kodeHuruf) {
+    static const std::unordered_set<std::string> omnivoreCodes = {
+        "CHK", "DCK"
+    };
+
+    return omnivoreCodes.find(kodeHuruf) != omnivoreCodes.end();
+}
+
 Omnivore::Omnivore(int hewanID, string kodeHuruf, string namaHewan, size_t weightToHarvest, int price){
-    this->setHewanID(hewanID);
-    this->setKodeHuruf(kodeHuruf);
-    this->setNamaHewan(namaHewan);
-    this->Omnivore::setType();
-    this->setWeightToHarvest(weightToHarvest);
-    this->setPrice(price);
-    this->setWeight(0);
+    try{
+        if(!isOmnivore(kodeHuruf)){
+            throw NotOmnivoreException();
+        }
+        this->setHewanID(hewanID);
+        this->setKodeHuruf(kodeHuruf);
+        this->setNamaHewan(namaHewan);
+        this->Omnivore::setType();
+        this->setWeightToHarvest(weightToHarvest);
+        this->setPrice(price);
+        this->setWeight(0);
+    }catch(NotOmnivoreException& e){
+        cout << "Hewan dengan kode huruf " << kodeHuruf << e.what();
+    }
 }
 
 Omnivore::~Omnivore(){}

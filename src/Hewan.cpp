@@ -4,6 +4,8 @@
 #include <iostream>
 using namespace std;
 
+map<string, Hewan*> Hewan::configHewan;
+
 //<---------------HEWAN----------------->
 Hewan::~Hewan(){
     kodeHuruf.erase();
@@ -21,6 +23,10 @@ void Hewan::setKodeHuruf(string kodeHuruf){
 
 void Hewan::setNamaHewan(string namaHewan){
     this->namaHewan = namaHewan;
+}
+
+void Hewan::setType(string type){
+    this->type = type;
 }
 
 void Hewan::setWeightToHarvest(size_t weightToHarvest){
@@ -71,10 +77,6 @@ bool Hewan::isReadyToHarvest(){
 }
 
 //<---------------HERBIVORE----------------->
-void Herbivore::setType(){
-    this->type = "HERBIVORE";
-}
-
 bool Herbivore::isHerbivore(const std::string& kodeHuruf) {
     static const std::unordered_set<std::string> herbivoreCodes = {
         "COW", "SHP", "HRS", "RBT"
@@ -83,7 +85,7 @@ bool Herbivore::isHerbivore(const std::string& kodeHuruf) {
     return herbivoreCodes.find(kodeHuruf) != herbivoreCodes.end();
 }
 
-Herbivore::Herbivore(int hewanID, string kodeHuruf, string namaHewan, size_t weightToHarvest, int price){
+Herbivore::Herbivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price){
     try{
         if(!isHerbivore(kodeHuruf)){
             throw NotHerbivoreException();
@@ -91,7 +93,7 @@ Herbivore::Herbivore(int hewanID, string kodeHuruf, string namaHewan, size_t wei
         this->setHewanID(hewanID);
         this->setKodeHuruf(kodeHuruf);
         this->setNamaHewan(namaHewan);
-        this->Herbivore::setType();
+        this->setType(type);
         this->setWeightToHarvest(weightToHarvest);
         this->setPrice(price);
         this->setWeight(0);
@@ -106,7 +108,7 @@ Herbivore::Herbivore(Herbivore& other){
     this->setHewanID(other.getHewanID());
     this->setKodeHuruf(other.getKodeHuruf());
     this->setNamaHewan(other.getNamaHewan());
-    this->Herbivore::setType();
+    this->setType(other.getType());
     this->setWeightToHarvest(other.getWeightToHarvest());
     this->setPrice(other.getPrice());
     this->setWeight(other.getWeight());
@@ -116,7 +118,7 @@ Herbivore& Herbivore::operator=(const Herbivore& other){
     this->setHewanID(other.hewanID);
     this->setKodeHuruf(other.kodeHuruf);
     this->setNamaHewan(other.namaHewan);
-    this->Herbivore::setType();
+    this->setType(other.type);
     this->setWeightToHarvest(other.weightToHarvest);
     this->setPrice(other.price);
     this->setWeight(other.weight);
@@ -128,10 +130,6 @@ Herbivore& Herbivore::operator=(const Herbivore& other){
   void harvest();
 
 //<---------------CARNIVORE----------------->
-void Carnivore::setType(){
-    this->type = "CARNIVORE";
-}
-
 bool Carnivore::isCarnivore(const std::string& kodeHuruf) {
     static const std::unordered_set<std::string> carnivoreCodes = {
         "SNK"
@@ -140,7 +138,7 @@ bool Carnivore::isCarnivore(const std::string& kodeHuruf) {
     return carnivoreCodes.find(kodeHuruf) != carnivoreCodes.end();
 }
 
-Carnivore::Carnivore(int hewanID, string kodeHuruf, string namaHewan, size_t weightToHarvest, int price){
+Carnivore::Carnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price){
     try{
         if(!isCarnivore(kodeHuruf)){
             throw NotCarnivoreException();
@@ -148,7 +146,7 @@ Carnivore::Carnivore(int hewanID, string kodeHuruf, string namaHewan, size_t wei
         this->setHewanID(hewanID);
         this->setKodeHuruf(kodeHuruf);
         this->setNamaHewan(namaHewan);
-        this->Carnivore::setType();
+        this->setType(type);
         this->setWeightToHarvest(weightToHarvest);
         this->setPrice(price);
         this->setWeight(0);
@@ -163,7 +161,7 @@ Carnivore::Carnivore(Carnivore& other){
     this->setHewanID(other.getHewanID());
     this->setKodeHuruf(other.getKodeHuruf());
     this->setNamaHewan(other.getNamaHewan());
-    this->Carnivore::setType();
+    this->setType(other.getType());
     this->setWeightToHarvest(other.getWeightToHarvest());
     this->setPrice(other.getPrice());
     this->setWeight(other.getWeight());
@@ -173,7 +171,7 @@ Carnivore& Carnivore::operator=(const Carnivore& other){
     this->setHewanID(other.hewanID);
     this->setKodeHuruf(other.kodeHuruf);
     this->setNamaHewan(other.namaHewan);
-    this->Carnivore::setType();
+    this->setType(other.type);
     this->setWeightToHarvest(other.weightToHarvest);
     this->setPrice(other.price);
     this->setWeight(other.weight);
@@ -185,10 +183,6 @@ Carnivore& Carnivore::operator=(const Carnivore& other){
   void harvest();
 
 //<---------------OMNIVORE----------------->
-void Omnivore::setType(){
-   this->type = "OMNIVORE";
-}
-
 bool Omnivore::isOmnivore(const std::string& kodeHuruf) {
     static const std::unordered_set<std::string> omnivoreCodes = {
         "CHK", "DCK"
@@ -197,7 +191,7 @@ bool Omnivore::isOmnivore(const std::string& kodeHuruf) {
     return omnivoreCodes.find(kodeHuruf) != omnivoreCodes.end();
 }
 
-Omnivore::Omnivore(int hewanID, string kodeHuruf, string namaHewan, size_t weightToHarvest, int price){
+Omnivore::Omnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price){
     try{
         if(!isOmnivore(kodeHuruf)){
             throw NotOmnivoreException();
@@ -205,7 +199,7 @@ Omnivore::Omnivore(int hewanID, string kodeHuruf, string namaHewan, size_t weigh
         this->setHewanID(hewanID);
         this->setKodeHuruf(kodeHuruf);
         this->setNamaHewan(namaHewan);
-        this->Omnivore::setType();
+        this->setType(type);
         this->setWeightToHarvest(weightToHarvest);
         this->setPrice(price);
         this->setWeight(0);
@@ -220,7 +214,7 @@ Omnivore::Omnivore(Omnivore& other){
     this->setHewanID(other.getHewanID());
     this->setKodeHuruf(other.getKodeHuruf());
     this->setNamaHewan(other.getNamaHewan());
-    this->Omnivore::setType();
+    this->setType(other.getType());
     this->setWeightToHarvest(other.getWeightToHarvest());
     this->setPrice(other.getPrice());
     this->setWeight(other.getWeight());
@@ -230,7 +224,7 @@ Omnivore& Omnivore::operator=(const Omnivore& other){
     this->setHewanID(other.hewanID);
     this->setKodeHuruf(other.kodeHuruf);
     this->setNamaHewan(other.namaHewan);
-    this->Omnivore::setType();
+    this->setType(other.type);
     this->setWeightToHarvest(other.weightToHarvest);
     this->setPrice(other.price);
     this->setWeight(other.weight);

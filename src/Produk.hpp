@@ -62,7 +62,7 @@ public:
     //TO DO: exception kalau weight ga 0 maybe?
   }
 
-  void useProduct(){};
+  void useProduct(){}; //TO DO
   void printProduct(ProductMaterial p);
 };
 
@@ -88,7 +88,7 @@ public:
 
   void setAddedWeight(int addedWeight);
 
-  void useProduct(){};
+  void useProduct(){}; //TO DO
   void printProduct(ProductFruit p);
 };
 
@@ -113,7 +113,7 @@ public:
 
   void setAddedWeight(int addedWeight);
 
-  void useProduct(){};
+  void useProduct(){}; //TO DO
   void printProduct(ProductHewan p);
 };
 

@@ -4,6 +4,18 @@
 #include <exception>
 using namespace std;
 
+struct FilePathProdukNotFoundException : public exception{
+    const char* what() const throw(){
+        return "' is not found.";
+    }
+};
+
+struct FilePathHewanNotFoundException : public exception{
+    const char* what() const throw(){
+        return "' is not found.";
+    }
+};
+
 struct NotHerbivoreException : public exception{
     const char* what() const throw(){
         return " bukan herbivore.";
@@ -28,4 +40,9 @@ struct UnknownProductTypeException : public exception{
     }
 };
 
+struct UnknownAnimalTypeException : public exception{
+    const char* what() const throw(){
+        return " is an unknown animal type.";
+    }
+};
 #endif

@@ -1,6 +1,7 @@
 #ifndef HEWAN_HPP
 #define HEWAN_HPP
 #include <string>
+#include <map>
 using namespace std;
 
 class Hewan{
@@ -14,12 +15,13 @@ protected:
   int weight;
 
 public:
+  static map<string, Hewan*> configHewan;
   ~Hewan();
 
   void setHewanID(int hewanID);
   void setKodeHuruf(string kodeHuruf);
   void setNamaHewan(string namaHewan);
-  virtual void setType() = 0;
+  void setType(string type);
   void setWeightToHarvest(size_t weightToHarvest);
   void setPrice(int price);
   void setWeight(int weight);
@@ -39,44 +41,41 @@ public:
 
 class Herbivore : public Hewan{
 public:
-  Herbivore(int hewanID, string kodeHuruf, string namaHewan, size_t weightToHarvest, int price);
+  Herbivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price);
   ~Herbivore();
   Herbivore(Herbivore& other);
   Herbivore& operator=(const Herbivore& other);
 
-  void setType();
   bool isHerbivore(const std::string& kodeHuruf);
 
-  void makan();
-  void harvest();
+  void makan(){} //TO DO
+  void harvest(){} //TO DO
 };
 
 class Carnivore : public Hewan{
 public:
-  Carnivore(int hewanID, string kodeHuruf, string namaHewan, size_t weightToHarvest, int price);
+  Carnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price);
   ~Carnivore();
   Carnivore(Carnivore& other);
   Carnivore& operator=(const Carnivore& other);
 
-  void setType();
   bool isCarnivore(const std::string& kodeHuruf);
 
-  void makan();
-  void harvest();
+  void makan(){} //TO DO
+  void harvest(){} //TO DO
 };
 
 class Omnivore : public Hewan{
 public:
-  Omnivore(int hewanID, string kodeHuruf, string namaHewan, size_t weightToHarvest, int price);
+  Omnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price);
   ~Omnivore();
   Omnivore(Omnivore& other);
   Omnivore& operator=(const Omnivore& other);
 
-  void setType();
   bool isOmnivore(const std::string& kodeHuruf);
 
-  void makan();
-  void harvest();
+  void makan(){} //TO DO
+  void harvest(){} //TO DO
 };
 
 #endif

@@ -101,7 +101,7 @@ FruitPlant& FruitPlant::operator=(const FruitPlant& other){
     this->setTurnInstantiated(other.turn_instantiated);
 }
 
-void harvest(){
+void FruitPlant::harvest(){
     //TO DO
 }
 
@@ -138,6 +138,6 @@ MaterialPlant& MaterialPlant::operator=(const MaterialPlant& other){
     this->setTurnInstantiated(other.turn_instantiated);
 }
 
-void harvest(){
+void MaterialPlant::harvest(){
     //TO DO
 }

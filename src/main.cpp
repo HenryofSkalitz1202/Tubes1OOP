@@ -14,6 +14,7 @@ int Pemain::beratWin = 50;
 int Pemain::uangWin = 40;
 int Pemain::defaultBerat = 69;
 int Pemain::defaultUang = 100;
+size_t Tumbuhan::current_turn = 0;
 
 vector<string> stringToArrayEnter(const string& input) {
     vector<string> result;
@@ -125,9 +126,9 @@ void populateConfigTumbuhan(string filePathTumbuhan){
         vector<string> str_arr = stringToArraySpace(str);
         Tumbuhan* tumbuhanPtr = nullptr;
         if(str_arr[3] == "MATERIAL_PLANT"){
-            tumbuhanPtr = new MaterialPlant(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], std::stoi(str_arr[4]), std::stoi(str_arr[5]), std::stoi(str_arr[6]));
+            tumbuhanPtr = new MaterialPlant(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], std::stoi(str_arr[4]), std::stoi(str_arr[5]), Tumbuhan::current_turn);
         }else if(str_arr[3] == "FRUIT_PLANT"){
-            tumbuhanPtr = new FruitPlant(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], std::stoi(str_arr[4]), std::stoi(str_arr[5]), std::stoi(str_arr[6]));
+            tumbuhanPtr = new FruitPlant(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], std::stoi(str_arr[4]), std::stoi(str_arr[5]), Tumbuhan::current_turn);
         }else{
             cout << "Type " << str_arr[3];
             throw UnknownPlantTypeException();
@@ -167,15 +168,17 @@ int main() {
             throw FilePathHewanNotFoundException();
         }
 
+        cout << endl;
         populateConfigHewan(filePathHewan);
         fileHewan.close();
 
         std::ifstream fileTumbuhan(filePathTumbuhan);
         if (!fileTumbuhan.is_open()) {
-            cout << "File config hewan '" << filePathTumbuhan;
+            cout << "File config tumbuhan '" << filePathTumbuhan;
             throw FilePathTumbuhanNotFoundException();
         }
 
+        cout << endl;
         populateConfigTumbuhan(filePathTumbuhan);
         fileTumbuhan.close();
     } catch(UnknownProductTypeException& e){

@@ -13,8 +13,8 @@ protected:
   size_t duration_to_harvest;
   int price;
   size_t turn_instantiated;
-  static size_t current_turn;
 public:
+  static size_t current_turn;
   static map<string, Tumbuhan*> configTumbuhan;
   ~Tumbuhan();
 
@@ -44,7 +44,7 @@ public:
   FruitPlant(FruitPlant& other);
   FruitPlant& operator=(const FruitPlant& other);
 
-  void harvest(){} //TO DO
+  void harvest(); //TO DO
 
 };
 
@@ -55,7 +55,7 @@ public:
   MaterialPlant(MaterialPlant& other);
   MaterialPlant& operator=(const MaterialPlant& other);
 
-  void harvest(){} //TO DO
+  void harvest(); //TO DO
 };
 
 #endif

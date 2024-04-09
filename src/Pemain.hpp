@@ -19,6 +19,8 @@ public:
   static int uangWin;
   static int defaultBerat;
   static int defaultUang;
+  static int inventoryRowSize;
+  static int inventoryColumnSize;
 
   ~Pemain();
 
@@ -37,8 +39,11 @@ public:
 class Petani : public Pemain{
 private:
   int petaniID;
-  //static map<Tumbuhan> ladang;
+  //static map<Tumbuhan> lahan;
 public:
+  static int lahanRowSize;
+  static int lahanColumnSize;
+
   Petani();
   Petani(string username, int uang, int beratBadan);
   ~Petani();
@@ -86,6 +91,9 @@ private:
   int peternakID;
   //static map<Hewan> peternakan;
 public:
+  static int peternakanRowSize;
+  static int peternakanColumnSize;
+  
   Peternak();
   Peternak(string username, int uang, int beratBadan);
   ~Peternak();

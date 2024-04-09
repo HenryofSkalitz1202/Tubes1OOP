@@ -11,8 +11,6 @@
 #include <fstream>
 #include <stdexcept>
 
-int Pemain::beratWin = 50;
-int Pemain::uangWin = 40;
 int Pemain::defaultBerat = 69;
 int Pemain::defaultUang = 100;
 size_t Tumbuhan::current_turn = 0;
@@ -220,11 +218,35 @@ void populateConfigBangunan(string filePathBangunan){
     }
 }
 
+void GameConfig(string filePathMisc){
+    FileReader fileReader(filePathMisc);
+    std::string fileContent = fileReader.readText();
+
+    vector<string> fileContentarr = stringToArrayEnter(fileContent);
+    //vector<string> str_arr = stringToArraySpace(str);
+
+    Pemain::uangWin = std::stoi(fileContentarr[0]);
+    Pemain::beratWin = std::stoi(fileContentarr[1]);
+
+    vector<string> str_arr = stringToArraySpace(fileContentarr[2]);
+    Pemain::inventoryRowSize = std::stoi(str_arr[0]);
+    Pemain::inventoryColumnSize = std::stoi(str_arr[1]);
+
+    vector<string> str_arr = stringToArraySpace(fileContentarr[3]);
+    Petani::lahanRowSize = std::stoi(str_arr[0]);
+    Petani::lahanColumnSize = std::stoi(str_arr[1]);
+
+    vector<string> str_arr = stringToArraySpace(fileContentarr[4]);
+    Peternak::peternakanRowSize = std::stoi(str_arr[0]);
+    Peternak::peternakanColumnSize = std::stoi(str_arr[1]);
+}
+
 int main() {
     std::string filePathProduk = "produk.txt"; // Replace "input.txt" with your file path
     std::string filePathHewan = "animal.txt";
     std::string filePathTumbuhan = "plant.txt";
     std::string filePathBangunan = "recipe.txt";
+    std::string filePathMisc = "misc.txt";
 
     try {
         std::ifstream fileProduk(filePathProduk);

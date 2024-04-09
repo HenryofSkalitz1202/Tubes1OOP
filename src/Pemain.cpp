@@ -1,5 +1,9 @@
 #include "Pemain.hpp"
 
+int Pemain::uangWin = 1000;
+int Pemain::beratWin = 100;
+int Pemain::inventoryRowSize = 5;
+int Pemain::inventoryColumnSize = 5;
 //<---------------PEMAIN----------------->
 Pemain::~Pemain(){
     //delete[] inventory;
@@ -34,6 +38,9 @@ int Pemain::getBeratBadan(){
 }
 
 //<---------------PETANI----------------->
+int Petani::lahanRowSize = 5;
+int Petani::lahanColumnSize = 5;
+
 Petani::Petani(){
     this->username = "Petani";
     this->uang = defaultUang;
@@ -152,6 +159,9 @@ void Walikota::jualBangunan(){
 }
 
 //<---------------PETERNAK----------------->
+int Peternak::peternakanRowSize = 5;
+int Peternak::peternakanColumnSize = 5;
+
 Peternak::Peternak(){
     this->username = "Peternak";
     this->uang = defaultUang;

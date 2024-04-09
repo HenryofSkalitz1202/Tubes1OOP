@@ -4,6 +4,7 @@
 #include "Produk.cpp"
 #include "Hewan.cpp"
 #include "Tumbuhan.cpp"
+#include "Bangunan.cpp"
 #include <iostream>
 #include <vector>
 #include <sstream>
@@ -52,31 +53,60 @@ void populateConfigProduk(string filePathProduk){
     std::string fileContent = fileReader.readText();
 
     vector<string> fileContentarr = stringToArrayEnter(fileContent);
-    map<string, Produk*> mp;
+    map<string, ProductMaterial*> mp_material;
+    map<string, ProductFruit*> mp_fruit;
+    map<string, ProductHewan*> mp_hewan;
+    map<string, int> mp_bahan;
 
     for (const auto& str : fileContentarr) {
         vector<string> str_arr = stringToArraySpace(str);
-        Produk* produkPtr = nullptr;
+        ProductMaterial* produkMaterialPtr = nullptr;
+        ProductFruit* produkFruitPtr = nullptr;
+        ProductHewan* produkHewanPtr = nullptr;
         if(str_arr[3] == "PRODUCT_MATERIAL_PLANT"){
-            produkPtr = new ProductMaterial(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], std::stoi(str_arr[5]), std::stoi(str_arr[6]));
+            produkMaterialPtr = new ProductMaterial(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], std::stoi(str_arr[5]), std::stoi(str_arr[6]));
+            mp_material.insert({str_arr[2], produkMaterialPtr});
         }else if(str_arr[3] == "PRODUCT_FRUIT_PLANT"){
-            produkPtr = new ProductFruit(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], std::stoi(str_arr[5]), std::stoi(str_arr[6]));
+            produkFruitPtr = new ProductFruit(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], std::stoi(str_arr[5]), std::stoi(str_arr[6]));
+            mp_fruit.insert({str_arr[1], produkFruitPtr});
         }else if(str_arr[3] == "PRODUCT_ANIMAL"){
-            produkPtr = new ProductHewan(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], std::stoi(str_arr[5]), std::stoi(str_arr[6]));
+            produkHewanPtr = new ProductHewan(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], std::stoi(str_arr[5]), std::stoi(str_arr[6]));
+            mp_hewan.insert({str_arr[1], produkHewanPtr});
         }else{
             cout << "Type " << str_arr[3];
             throw UnknownProductTypeException();
         }
-        mp.insert({str_arr[1], produkPtr});
     }
 
-    Produk::configProduk.clear(); // Clear the existing configProduk map if needed
-    for (const auto& pair : mp) {
-        Produk::configProduk.insert({pair.first, pair.second});
+    ProductMaterial::configProdukMaterial.clear(); // Clear the existing configProduk map if needed
+    for (const auto& pair : mp_material) {
+        ProductMaterial::configProdukMaterial.insert({pair.first, pair.second});
     }
 
-    std::cout << "Map content:" << std::endl;
-    for (const auto& pair : Produk::configProduk) {
+    ProductFruit::configProdukFruit.clear(); // Clear the existing configProduk map if needed
+    for (const auto& pair : mp_fruit) {
+        ProductFruit::configProdukFruit.insert({pair.first, pair.second});
+    }
+
+    ProductHewan::configProdukHewan.clear(); // Clear the existing configProduk map if needed
+    for (const auto& pair : mp_hewan) {
+        ProductHewan::configProdukHewan.insert({pair.first, pair.second});
+    }
+
+    std::cout << "Map content Material:" << std::endl;
+    for (const auto& pair : ProductMaterial::configProdukMaterial) {
+        std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaProduk() << std::endl;
+    }
+
+    std::cout << std::endl;
+    std::cout << "Map content Plant:" << std::endl;
+    for (const auto& pair : ProductFruit::configProdukFruit) {
+        std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaProduk() << std::endl;
+    }
+
+    std::cout << std::endl;
+    std::cout << "Map content Hewan:" << std::endl;
+    for (const auto& pair : ProductHewan::configProdukHewan) {
         std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaProduk() << std::endl;
     }
 }
@@ -147,10 +177,54 @@ void populateConfigTumbuhan(string filePathTumbuhan){
     }
 }
 
+void populateConfigBangunan(string filePathBangunan){
+    FileReader fileReader(filePathBangunan);
+    std::string fileContent = fileReader.readText();
+
+    vector<string> fileContentarr = stringToArrayEnter(fileContent);
+    map<string, Bangunan*> mp;
+
+    for (const auto& str : fileContentarr) {
+        vector<string> str_arr = stringToArraySpace(str);
+        Bangunan* bangunanPtr = nullptr;
+        map<string, int> mp_bahan;
+
+        try{
+            for(size_t i = 4; i < str_arr.size(); i+=2){
+                auto it = ProductMaterial::configProdukMaterial.find(str_arr[i]);
+                if (it == ProductMaterial::configProdukMaterial.end()) {
+                    cout << "Material " << str_arr[i];
+                    throw MaterialBangunanNotProductMaterialException();
+                }
+
+                mp_bahan.insert({str_arr[i], std::stoi(str_arr[i+1])});
+            }
+
+            bangunanPtr = new Bangunan(std::stoi(str_arr[0]), str_arr[1], str_arr[2], std::stoi(str_arr[3]), mp_bahan);
+            mp.insert({str_arr[1], bangunanPtr});
+        }catch(MaterialBangunanNotProductMaterialException& e){
+            cout << e.what() << endl;
+        }catch(exception& e){
+            cout << e.what() << endl;
+        }
+    }
+
+    Bangunan::resepBangunan.clear();
+    for (const auto& pair : mp) {
+        Bangunan::resepBangunan.insert({pair.first, pair.second});
+    }
+
+    std::cout << "Map content:" << std::endl;
+    for (const auto& pair : Bangunan::resepBangunan) {
+        std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaBangunan() << std::endl;
+    }
+}
+
 int main() {
     std::string filePathProduk = "produk.txt"; // Replace "input.txt" with your file path
     std::string filePathHewan = "animal.txt";
     std::string filePathTumbuhan = "plant.txt";
+    std::string filePathBangunan = "recipe.txt";
 
     try {
         std::ifstream fileProduk(filePathProduk);
@@ -181,11 +255,24 @@ int main() {
         cout << endl;
         populateConfigTumbuhan(filePathTumbuhan);
         fileTumbuhan.close();
+
+        std::ifstream fileBangunan(filePathBangunan);
+        if (!fileBangunan.is_open()) {
+            cout << "File config bangunan '" << filePathBangunan;
+            throw FilePathBangunanNotFoundException();
+        }
+
+        cout << endl;
+        populateConfigBangunan(filePathBangunan);
+        fileBangunan.close();
+
     } catch(UnknownProductTypeException& e){
         cout << e.what() << endl;
     } catch(FilePathProdukNotFoundException& e){
         cout << e.what() << endl;
     } catch(FilePathHewanNotFoundException& e){
+        cout << e.what() << endl;
+    } catch(FilePathBangunanNotFoundException& e){
         cout << e.what() << endl;
     } catch(const std::exception& e) {
         cerr << e.what() << endl; // Print any error message

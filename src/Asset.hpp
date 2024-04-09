@@ -10,7 +10,7 @@ protected:
 public:
   ~Asset(){}
 
-  virtual void setAssetType() = 0;
+  virtual void setAssetType(string assetType) = 0;
   string getAssetType(){
     return this->assetType;
   }

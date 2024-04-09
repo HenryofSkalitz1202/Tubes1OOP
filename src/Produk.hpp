@@ -16,20 +16,20 @@ protected:
   int price;
 
 public:
-  static map<string, Produk*> configProduk;
   ~Produk();
 
-  void setAssetType();
+  void setAssetType(string assetType);
   void setProdukID(int produkID);
   void setKodeHuruf(string kodeHuruf);
   void setNamaProduk(string namaProduk);
-  virtual void setProdukType() = 0;
+  void setProdukType(string produkType);
   void setOrigin(string origin);
   virtual void setAddedWeight(int addedWeight) = 0;
   void setPrice(int price);
   int getProdukID();
   string getKodeHuruf();
   string getNamaProduk();
+  string getProdukType();
   string getOrigin();
   int getAddedWeight();
   int getPrice();
@@ -44,18 +44,15 @@ private:
   const bool isBuildable = true;
 
 public:
+  static map<string, ProductMaterial*> configProdukMaterial;
+
   ProductMaterial(int ProdukID, string kodeHuruf, string namaProduk, string produkType, string origin, int addedWeight, int price);
   ~ProductMaterial();
   ProductMaterial(ProductMaterial& other);
   ProductMaterial& operator=(const ProductMaterial& other);
 
-  void setProdukType(){
-    this->produkType = "PRODUCT_MATERIAL_PLANT";
-  }
-
-  void setAssetType(){
-    Produk::setAssetType();
-  }
+  void setAssetType(string assetType);
+  void setProdukType(string produkType);
 
   void setAddedWeight(int addedWeight){
     this->addedWeight = 0;
@@ -73,19 +70,14 @@ private:
   const bool isBuildable = false;
 
 public:
+  static map<string, ProductFruit*> configProdukFruit;
   ProductFruit(int ProdukID, string kodeHuruf, string namaProduk, string produkType, string origin, int addedWeight, int price);
   ~ProductFruit();
   ProductFruit(ProductFruit& other);
   ProductFruit& operator=(const ProductFruit& other);
 
-  void setAssetType(){
-    Produk::setAssetType();
-  }
-
-  void setProdukType(){
-    this->produkType = "PRODUCT_FRUIT_PLANT";
-  }
-
+  void setAssetType(string assetType);
+  void setProdukType(string produkType);
   void setAddedWeight(int addedWeight);
 
   void useProduct(){}; //TO DO
@@ -99,18 +91,14 @@ private:
   const bool isBuildable = false;
 
 public:
+  static map<string, ProductHewan*> configProdukHewan;
   ProductHewan(int ProdukID, string kodeHuruf, string namaProduk, string produkType, string origin, int addedWeight, int price);
   ~ProductHewan();
   ProductHewan(ProductHewan& other);
   ProductHewan& operator=(const ProductHewan& other);
-  void setAssetType(){
-    Produk::setAssetType();
-  }
 
-  void setProdukType(){
-    this->produkType = "PRODUCT_ANIMAL";
-  }
-
+  void setAssetType(string assetType);
+  void setProdukType(string produkType);
   void setAddedWeight(int addedWeight);
 
   void useProduct(){}; //TO DO

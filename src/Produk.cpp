@@ -2,11 +2,17 @@
 #include <iostream>
 using namespace std;
 
-map<string, Produk*> Produk::configProduk;
-
 //<---------------PRODUK----------------->
-void Produk::setAssetType(){
-    this->assetType = "PRODUK";
+void Produk::setAssetType(string assetType){
+    try{
+        if(assetType != "PRODUK"){
+            throw ProdukFalseTypeException();
+        }
+
+        this->assetType = assetType;
+    }catch(ProdukFalseTypeException& e){
+        cout << e.what();
+    }
 }
 
 Produk::~Produk(){
@@ -25,6 +31,10 @@ void Produk::setKodeHuruf(string kodeHuruf){
 
 void Produk::setNamaProduk(string namaProduk){
     this->namaProduk = namaProduk;
+}
+
+void Produk::setProdukType(string produkType){
+    this->produkType = produkType;
 }
 
 void Produk::setOrigin(string origin){
@@ -47,6 +57,10 @@ string Produk::getNamaProduk(){
     return this->namaProduk;
 }
 
+string Produk::getProdukType(){
+    return this->produkType;
+}
+
 string Produk::getOrigin(){
     return this->origin;
 }
@@ -60,11 +74,29 @@ int Produk::getPrice(){
 }
 
 //<---------------PRODUCT MATERIAL----------------->
+map<string, ProductMaterial*> ProductMaterial::configProdukMaterial;
+
+void ProductMaterial::setAssetType(string assetType){
+    Produk::setAssetType(assetType);
+}
+
+void ProductMaterial::setProdukType(string produkType){
+    try{
+      if(produkType != "PRODUCT_MATERIAL_PLANT"){
+        throw ProductMaterialFalseTypeException();
+      }
+      Produk::setProdukType(produkType);
+    } catch(ProductMaterialFalseTypeException& e){
+      cout << e.what();
+    }
+}
+
 ProductMaterial::ProductMaterial(int ProdukID, string kodeHuruf, string namaProduk, string produkType, string origin, int addedWeight, int price){
+    this->setAssetType("PRODUK");
     this->setProdukID(produkID);
     this->setKodeHuruf(kodeHuruf);
     this->setNamaProduk(namaProduk);
-    this->setProdukType();
+    this->setProdukType(produkType);
     this->setOrigin(origin);
     this->setAddedWeight(addedWeight);
     this->setPrice(price);
@@ -72,20 +104,22 @@ ProductMaterial::ProductMaterial(int ProdukID, string kodeHuruf, string namaProd
 ProductMaterial::~ProductMaterial(){}
 
 ProductMaterial::ProductMaterial(ProductMaterial& other){
+    this->setAssetType(other.getAssetType());
     this->setProdukID(other.getProdukID());
     this->setKodeHuruf(other.getKodeHuruf());
     this->setNamaProduk(other.getNamaProduk());
-    this->setProdukType();
+    this->setProdukType(other.getProdukType());
     this->setOrigin(other.getOrigin());
     this->setAddedWeight(other.getAddedWeight());
     this->setPrice(other.getPrice());
 }
 
 ProductMaterial& ProductMaterial::operator=(const ProductMaterial& other){
+    this->setAssetType(other.assetType);
     this->setProdukID(other.produkID);
     this->setKodeHuruf(other.kodeHuruf);
     this->setNamaProduk(other.namaProduk);
-    this->setProdukType();
+    this->setProdukType(other.produkType);
     this->setOrigin(other.origin);
     this->setAddedWeight(other.addedWeight);
     this->setPrice(other.price);
@@ -101,15 +135,33 @@ void ProductMaterial::printProduct(ProductMaterial p){
     cout << "Price: " << p.price << endl;
 }
 //<---------------PRODUCT FRUIT----------------->
+map<string, ProductFruit*> ProductFruit::configProdukFruit;
+
+void ProductFruit::setAssetType(string assetType){
+    Produk::setAssetType(assetType);
+}
+
+void ProductFruit::setProdukType(string produkType){
+    try{
+      if(produkType != "PRODUCT_FRUIT_PLANT"){
+        throw ProductFruitFalseTypeException();
+      }
+      Produk::setProdukType(produkType);
+    } catch(ProductFruitFalseTypeException& e){
+      cout << e.what();
+    }
+}
+
 void ProductFruit::setAddedWeight(int addedWeight){
     this->addedWeight = addedWeight;
 }
 
 ProductFruit::ProductFruit(int ProdukID, string kodeHuruf, string namaProduk, string produkType, string origin, int addedWeight, int price){
+    this->setAssetType("PRODUK");
     this->setProdukID(produkID);
     this->setKodeHuruf(kodeHuruf);
     this->setNamaProduk(namaProduk);
-    this->setProdukType();
+    this->setProdukType(produkType);
     this->setOrigin(origin);
     this->setAddedWeight(addedWeight);
     this->setPrice(price);
@@ -117,20 +169,22 @@ ProductFruit::ProductFruit(int ProdukID, string kodeHuruf, string namaProduk, st
 ProductFruit::~ProductFruit(){}
 
 ProductFruit::ProductFruit(ProductFruit& other){
+    this->setAssetType(other.getAssetType());
     this->setProdukID(other.getProdukID());
     this->setKodeHuruf(other.getKodeHuruf());
     this->setNamaProduk(other.getNamaProduk());
-    this->setProdukType();
+    this->setProdukType(other.getProdukType());
     this->setOrigin(other.getOrigin());
     this->setAddedWeight(other.getAddedWeight());
     this->setPrice(other.getPrice());
 }
 
 ProductFruit& ProductFruit::operator=(const ProductFruit& other){
+    this->setAssetType(other.assetType);
     this->setProdukID(other.produkID);
     this->setKodeHuruf(other.kodeHuruf);
     this->setNamaProduk(other.namaProduk);
-    this->setProdukType();
+    this->setProdukType(other.produkType);
     this->setOrigin(other.origin);
     this->setAddedWeight(other.addedWeight);
     this->setPrice(other.price);
@@ -147,15 +201,33 @@ void ProductFruit::printProduct(ProductFruit p){
 }
 
 //<---------------PRODUCT HEWAN----------------->
+map<string, ProductHewan*> ProductHewan::configProdukHewan;
+
+void ProductHewan::setAssetType(string assetType){
+    Produk::setAssetType(assetType);
+}
+
+void ProductHewan::setProdukType(string produkType){
+    try{
+      if(produkType != "PRODUCT_ANIMAL"){
+        throw ProductHewanFalseTypeException();
+      }
+      Produk::setProdukType(produkType);
+    } catch(ProductHewanFalseTypeException& e){
+      cout << e.what();
+    }
+}
+
 void ProductHewan::setAddedWeight(int addedWeight){
     this->addedWeight = addedWeight;
 }
 
 ProductHewan::ProductHewan(int ProdukID, string kodeHuruf, string namaProduk, string produkType, string origin, int addedWeight, int price){
+    this->setAssetType("PRODUK");
     this->setProdukID(produkID);
     this->setKodeHuruf(kodeHuruf);
     this->setNamaProduk(namaProduk);
-    this->setProdukType();
+    this->setProdukType(produkType);
     this->setOrigin(origin);
     this->setAddedWeight(addedWeight);
     this->setPrice(price);
@@ -163,20 +235,22 @@ ProductHewan::ProductHewan(int ProdukID, string kodeHuruf, string namaProduk, st
 ProductHewan::~ProductHewan(){}
 
 ProductHewan::ProductHewan(ProductHewan& other){
+    this->setAssetType(other.getAssetType());
     this->setProdukID(other.getProdukID());
     this->setKodeHuruf(other.getKodeHuruf());
     this->setNamaProduk(other.getNamaProduk());
-    this->setProdukType();
+    this->setProdukType(other.getProdukType());
     this->setOrigin(other.getOrigin());
     this->setAddedWeight(other.getAddedWeight());
     this->setPrice(other.getPrice());
 }
 
 ProductHewan& ProductHewan::operator=(const ProductHewan& other){
+    this->setAssetType(other.assetType);
     this->setProdukID(other.produkID);
     this->setKodeHuruf(other.kodeHuruf);
     this->setNamaProduk(other.namaProduk);
-    this->setProdukType();
+    this->setProdukType(other.produkType);
     this->setOrigin(other.origin);
     this->setAddedWeight(other.addedWeight);
     this->setPrice(other.price);

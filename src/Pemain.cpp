@@ -77,10 +77,10 @@ Petani& Petani::operator=(const Petani& other){
 void Petani::setStatus(){
     this->status = "petani";
 }
-  
-// void Petani::setPetaniID(){
-//     this.petaniID = 
-//}
+
+void Petani::setPetaniID(int petaniID){
+    this->petaniID = petaniID;
+}
 
   //void setLadang();
 int Petani::getPetaniID(){
@@ -97,6 +97,10 @@ void Petani::panenTanaman(){
 }
 
 void Petani::beliBangunan(){
+    //TO DO
+}
+
+void Petani::countPajak(){
     //TO DO
 }
 
@@ -137,6 +141,9 @@ void Walikota::setStatus(){
     this->status = "walikota";
 }
 
+void Walikota::setWalikotaID(int walikotaID){
+    this->walikotaID = walikotaID;
+}
 //void Walikota::setWalikotaID();
 int Walikota::getWalikotaID(){
     return this->walikotaID;
@@ -155,6 +162,10 @@ void Walikota::tambahAkun(){
 }
 
 void Walikota::jualBangunan(){
+    //TO DO
+}
+
+void Walikota::countPajak(){
     //TO DO
 }
 
@@ -199,7 +210,9 @@ void Peternak::setStatus(){
     this->status = "peternak";
 }
 
-//void Peternak::setPeternakID();
+void Peternak::setPeternakID(int peternakID){
+    this->peternakID = peternakID;
+}
 //void Peternak::setLadang();
 int Peternak::getPeternakID(){
     return this->peternakID;
@@ -210,14 +223,18 @@ void Peternak::taruhHewan(){
     //TO DO
 }
 
-void beriMakan(){
+void Peternak::beriMakan(){
     //TO DO
 }
   
-void panenHewan(){
+void Peternak::panenHewan(){
     //TO DO
 }
 
-void beliBangunan(){
+void Peternak::beliBangunan(){
+    //TO DO
+}
+
+void Peternak::countPajak(){
     //TO DO
 }

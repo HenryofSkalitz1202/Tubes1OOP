@@ -51,7 +51,7 @@ public:
   Petani& operator=(const Petani& other);
 
   void setStatus();
-  void setPetaniID();
+  void setPetaniID(int petaniID);
   //void setLadang();
   int getPetaniID();
   //map<Tumbuhan> getLadang();
@@ -75,7 +75,7 @@ public:
   Walikota& operator=(const Walikota& other);
 
   void setStatus();
-  void setWalikotaID();
+  void setWalikotaID(int walikotaID);
   int getWalikotaID();
 
   void tagihPajak();
@@ -101,7 +101,7 @@ public:
   Peternak& operator=(const Peternak& other);
 
   void setStatus();
-  void setPeternakID();
+  void setPeternakID(int peternakID);
   //void setLadang();
   int getPeternakID();
   //map<Hewan> getPeternakan();

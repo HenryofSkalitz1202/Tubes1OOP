@@ -1,4 +1,4 @@
-#include "Pemain.hpp"
+#include "Pemain.cpp"
 #include "input.cpp"
 #include "Exception.hpp"
 #include "Produk.cpp"
@@ -200,6 +200,12 @@ void populateConfigBangunan(string filePathBangunan){
 
             bangunanPtr = new Bangunan(std::stoi(str_arr[0]), str_arr[1], str_arr[2], std::stoi(str_arr[3]), mp_bahan);
             mp.insert({str_arr[1], bangunanPtr});
+
+            std::cout << "ListBahan:" << std::endl;
+            for (const auto& pair : mp_bahan) {
+                std::cout << "Key: " << pair.first << ", Value: " << pair.second << std::endl;
+            }
+            std::cout << "=====================" << std::endl;
         }catch(MaterialBangunanNotProductMaterialException& e){
             cout << e.what() << endl;
         }catch(exception& e){
@@ -228,17 +234,17 @@ void GameConfig(string filePathMisc){
     Pemain::uangWin = std::stoi(fileContentarr[0]);
     Pemain::beratWin = std::stoi(fileContentarr[1]);
 
-    vector<string> str_arr = stringToArraySpace(fileContentarr[2]);
-    Pemain::inventoryRowSize = std::stoi(str_arr[0]);
-    Pemain::inventoryColumnSize = std::stoi(str_arr[1]);
+    vector<string> str_arr_inv = stringToArraySpace(fileContentarr[2]);
+    Pemain::inventoryRowSize = std::stoi(str_arr_inv[0]);
+    Pemain::inventoryColumnSize = std::stoi(str_arr_inv[1]);
 
-    vector<string> str_arr = stringToArraySpace(fileContentarr[3]);
-    Petani::lahanRowSize = std::stoi(str_arr[0]);
-    Petani::lahanColumnSize = std::stoi(str_arr[1]);
+    vector<string> str_arr_lhn = stringToArraySpace(fileContentarr[3]);
+    Petani::lahanRowSize = std::stoi(str_arr_lhn[0]);
+    Petani::lahanColumnSize = std::stoi(str_arr_lhn[1]);
 
-    vector<string> str_arr = stringToArraySpace(fileContentarr[4]);
-    Peternak::peternakanRowSize = std::stoi(str_arr[0]);
-    Peternak::peternakanColumnSize = std::stoi(str_arr[1]);
+    vector<string> str_arr_pet = stringToArraySpace(fileContentarr[4]);
+    Peternak::peternakanRowSize = std::stoi(str_arr_pet[0]);
+    Peternak::peternakanColumnSize = std::stoi(str_arr_pet[1]);
 }
 
 int main() {

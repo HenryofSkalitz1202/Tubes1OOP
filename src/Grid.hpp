@@ -17,6 +17,7 @@ protected:
   map<string, T> data; 
   size_t rows;
   size_t cols;
+  int available_capacity;
 
 public:
   Grid(size_t rows, size_t cols);
@@ -25,6 +26,7 @@ public:
   T get(size_t row, size_t col);
   size_t numRows();
   size_t numCols();
+  int countAvailableCapacity();
   void printLexicalOrder(int n);
   void printBorder(int n);
   virtual void print() = 0;
@@ -32,6 +34,8 @@ public:
 
 class Inventory : public Grid<Asset*>{
 public:
+  static int inventoryRowSize;
+  static int inventoryColumnSize;
   // Constructors
   Inventory(size_t rows, size_t cols);
   Inventory(Inventory& other);

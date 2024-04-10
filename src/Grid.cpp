@@ -80,7 +80,23 @@ void Grid<T>::printBorder(int n) {
     std::cout << "+" << std::endl;
 }
 
+template<typename T>
+int Grid<T>::countAvailableCapacity() {
+    size_t count = 0;
+    for (size_t i = 0; i < numRows(); ++i) {
+        for (size_t j = 0; j < numCols(); ++j) {
+            if (get(i, j) == nullptr) {
+                ++count;
+            }
+        }
+    }
+    return count;
+}
+
 //<---------------INVENTORY----------------->
+int Inventory::inventoryRowSize;
+int Inventory::inventoryColumnSize;
+
 Inventory::Inventory(size_t rows, size_t cols) : Grid<Asset*>(rows, cols) {}
 
 

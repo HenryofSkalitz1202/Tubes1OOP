@@ -1,12 +1,11 @@
 #include "Pemain.hpp"
 
-int Pemain::uangWin = 1000;
-int Pemain::beratWin = 100;
-int Pemain::inventoryRowSize = 5;
-int Pemain::inventoryColumnSize = 5;
+int Pemain::uangWin;
+int Pemain::beratWin;
 //<---------------PEMAIN----------------->
+Pemain::Pemain() : inventory(Inventory::inventoryRowSize, Inventory::inventoryColumnSize) {}
+
 Pemain::~Pemain(){
-    //delete[] inventory;
 }
 
 void Pemain::setUsername(string username){
@@ -38,8 +37,8 @@ int Pemain::getBeratBadan(){
 }
 
 //<---------------PETANI----------------->
-int Petani::lahanRowSize = 5;
-int Petani::lahanColumnSize = 5;
+int Petani::lahanRowSize;
+int Petani::lahanColumnSize;
 
 Petani::Petani(){
     this->username = "Petani";
@@ -170,8 +169,8 @@ void Walikota::countPajak(){
 }
 
 //<---------------PETERNAK----------------->
-int Peternak::peternakanRowSize = 5;
-int Peternak::peternakanColumnSize = 5;
+int Peternak::peternakanRowSize;
+int Peternak::peternakanColumnSize;
 
 Peternak::Peternak(){
     this->username = "Peternak";

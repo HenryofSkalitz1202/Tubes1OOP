@@ -22,6 +22,15 @@ public:
     Controller();
     ~Controller();
 
+    static vector<string> stringToArrayEnter(const string& input);
+    static vector<string> stringToArraySpace(const string& input);
+    static void printVector(const vector<string>& vec);
+    static void populateConfigProduk(string filePathProduk);
+    static void populateConfigHewan(string filePathHewan);
+    static void populateConfigTumbuhan(string filePathTumbuhan);
+    static void populateConfigBangunan(string filePathBangunan);
+    static void GameConfig(string filePathMisc);
+
     void set_current_player(Pemain* player);
     Pemain* get_current_player();
     void print_current_player();

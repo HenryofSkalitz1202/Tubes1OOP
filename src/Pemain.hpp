@@ -4,6 +4,7 @@
 #include "Asset.hpp"
 #include "Bangunan.hpp"
 #include "Produk.hpp"
+#include "Grid.hpp"
 
 using namespace std;
 
@@ -13,16 +14,15 @@ protected:
   int uang;
   int beratBadan;
   string status;
-  //static map<Asset> inventory;
+  Inventory inventory;
 public:
   static int beratWin;
   static int uangWin;
   static int defaultBerat;
   static int defaultUang;
-  static int inventoryRowSize;
-  static int inventoryColumnSize;
 
-  ~Pemain();
+  Pemain();
+  virtual ~Pemain();
 
   virtual void setStatus() = 0;
   void setUsername(string username);

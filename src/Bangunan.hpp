@@ -8,10 +8,6 @@ using namespace std;
 
 class Bangunan : public Asset{
 protected:
-  int bangunanID;
-  string kodeBangunan;
-  string namaBangunan;
-  int hargaBangunan;
   map<string, int> listBahan;
 
 public:
@@ -22,15 +18,7 @@ public:
   Bangunan& operator=(const Bangunan& other);
 
   void setAssetType(string assetType);
-  void setBangunanID(int bangunanID);
-  void setKodeBangunan(string kodeBangunan);
-  void setNamaBangunan(string namaBangunan);
-  void setHargaBangunan(int hargaBangunan);
   void setListBahan(map<string, int> listBahan);
-  int getBangunanID();
-  string getKodeBangunan();
-  string getNamaBangunan();
-  int getHargaBangunan();
   map<string, int> getListBahan();
   //void print();
 };

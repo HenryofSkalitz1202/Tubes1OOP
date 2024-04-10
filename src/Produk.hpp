@@ -7,32 +7,20 @@ using namespace std;
 
 class Produk : public Asset{
 protected:
-  int produkID;
-  string kodeHuruf;
-  string namaProduk;
   string produkType;
   string origin;
   int addedWeight;
-  int price;
 
 public:
   ~Produk();
 
   void setAssetType(string assetType);
-  void setProdukID(int produkID);
-  void setKodeHuruf(string kodeHuruf);
-  void setNamaProduk(string namaProduk);
   void setProdukType(string produkType);
   void setOrigin(string origin);
   virtual void setAddedWeight(int addedWeight) = 0;
-  void setPrice(int price);
-  int getProdukID();
-  string getKodeHuruf();
-  string getNamaProduk();
   string getProdukType();
   string getOrigin();
   int getAddedWeight();
-  int getPrice();
 
   virtual void useProduct() = 0;
 };
@@ -51,7 +39,6 @@ public:
   ProductMaterial(ProductMaterial& other);
   ProductMaterial& operator=(const ProductMaterial& other);
 
-  void setAssetType(string assetType);
   void setProdukType(string produkType);
 
   void setAddedWeight(int addedWeight){
@@ -76,7 +63,6 @@ public:
   ProductFruit(ProductFruit& other);
   ProductFruit& operator=(const ProductFruit& other);
 
-  void setAssetType(string assetType);
   void setProdukType(string produkType);
   void setAddedWeight(int addedWeight);
 
@@ -97,7 +83,6 @@ public:
   ProductHewan(ProductHewan& other);
   ProductHewan& operator=(const ProductHewan& other);
 
-  void setAssetType(string assetType);
   void setProdukType(string produkType);
   void setAddedWeight(int addedWeight);
 

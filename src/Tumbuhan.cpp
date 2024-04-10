@@ -1,5 +1,6 @@
 #include "Tumbuhan.hpp"
 
+size_t Tumbuhan::current_turn;
 map<string, Tumbuhan*> Tumbuhan::configTumbuhan;
 //<---------------TUMBUHAN----------------->
 Tumbuhan::~Tumbuhan(){

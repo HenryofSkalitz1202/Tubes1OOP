@@ -30,31 +30,31 @@ struct FilePathBangunanNotFoundException : public exception{
 
 struct BangunanFalseTypeException : public exception{
     const char* what() const throw(){
-        return "Object of Bangunan type doesn't have type 'BANGUNAN";
+        return "Object of Bangunan type doesn't have type 'BANGUNAN\n";
     }
 };
 
 struct ProdukFalseTypeException : public exception{
     const char* what() const throw(){
-        return "Object of Produk type doesn't have type 'PRODUK";
+        return "Object of Produk type doesn't have type 'PRODUK\n";
     }
 };
 
 struct ProductMaterialFalseTypeException : public exception{
     const char* what() const throw(){
-        return "Object of ProductMaterial type doesn't have type 'PRODUCT_MATERIAL_PLANT";
+        return "Object of ProductMaterial type doesn't have type 'PRODUCT_MATERIAL_PLANT\n";
     }
 };
 
 struct ProductFruitFalseTypeException : public exception{
     const char* what() const throw(){
-        return "Object of ProductFruit type doesn't have type 'PRODUCT_FRUIT_PLANT";
+        return "Object of ProductFruit type doesn't have type 'PRODUCT_FRUIT_PLANT\n";
     }
 };
 
 struct ProductHewanFalseTypeException : public exception{
     const char* what() const throw(){
-        return "Object of ProductHewan type doesn't have type 'PRODUCT_ANIMAL";
+        return "Object of ProductHewan type doesn't have type 'PRODUCT_ANIMAL\n";
     }
 };
 

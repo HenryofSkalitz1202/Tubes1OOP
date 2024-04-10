@@ -36,7 +36,7 @@ public:
   Inventory(size_t rows, size_t cols);
   Inventory(Inventory& other);
   ~Inventory();
-
+  Inventory& operator=(const Inventory& other);
   void print();
 };
 
@@ -45,6 +45,7 @@ public:
   Ladang(size_t rows, size_t cols);
   Ladang(Ladang& other);
   ~Ladang();
+  Ladang& operator=(const Ladang& other);
   void print();
 };
 
@@ -53,6 +54,7 @@ public:
   Peternakan(size_t rows, size_t cols);
   Peternakan(Peternakan& other);
   ~Peternakan();
+  Peternakan& operator=(const Peternakan& other);
   void print();
 };
 

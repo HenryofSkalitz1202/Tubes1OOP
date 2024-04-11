@@ -1,12 +1,10 @@
 #include "Controller.cpp"
-#include "Pemain.cpp"
-#include "Grid.cpp"
 
 int Pemain::defaultBerat;
 int Pemain::defaultUang;
 
 int main() {
-    std::string filePathProduk = "produk.txt"; // Replace "input.txt" with your file path
+    std::string filePathProduk = "produk.txt";
     std::string filePathHewan = "animal.txt";
     std::string filePathTumbuhan = "plant.txt";
     std::string filePathBangunan = "recipe.txt";
@@ -42,15 +40,37 @@ int main() {
         Controller::populateConfigTumbuhan(filePathTumbuhan);
         fileTumbuhan.close();
 
-        std::ifstream fileBangunan(filePathBangunan);
-        if (!fileBangunan.is_open()) {
+        std::ifstream fileMisc(filePathMisc);
+        if (!fileMisc.is_open()) {
             cout << "File config bangunan '" << filePathBangunan;
             throw FilePathBangunanNotFoundException();
         }
 
         cout << endl;
-        Controller::populateConfigBangunan(filePathBangunan);
-        fileBangunan.close();
+        Controller::GameConfig(filePathMisc);
+        fileMisc.close();
+
+        // Create a MaterialPlant object
+        int tumbuhanID = 1; // Assign a suitable ID
+        string kodeHuruf = "ALT"; // Assign a suitable code
+        string namaTumbuhan = "ALOE_TREE"; // Assign a suitable name
+        string type = "MATERIAL_PLANT"; // Assign the type (assuming Material)
+        size_t durationToHarvest = 5; // Assign the duration to harvest
+        int price = 10; // Assign the price
+        size_t turnInstantiated = 0; // Assign the turn instantiated (assuming starting from turn 0)
+
+        MaterialPlant materialPlant(tumbuhanID, kodeHuruf, namaTumbuhan, type, durationToHarvest, price, turnInstantiated);
+
+        // Harvest materials
+        vector<Produk*> harvestedMaterials = materialPlant.harvest();
+
+        // Display harvested materials
+        cout << "Harvested Materials:" << endl;
+        for (Produk* material : harvestedMaterials) {
+            cout << "Name: " << material->getNamaAsset() << ", Origin: " << material->getOrigin() << endl;
+        }
+
+        return 0;
 
     } catch(UnknownProductTypeException& e){
         cout << e.what() << endl;

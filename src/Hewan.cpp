@@ -126,8 +126,23 @@ Herbivore& Herbivore::operator=(const Herbivore& other){
     return *this;
 }
 
-  void makan();
-  void harvest();
+void Herbivore::makan(Produk* pakan){
+    try{
+        ProductFruit* fruit = dynamic_cast<ProductFruit*>(pakan);
+        if (fruit){
+            this->weight += fruit->getAddedWeight();
+        } else {
+            cout << "Herbivore is fed " << pakan->getNamaAsset() << " which is not of ProductFruit type. ";
+            throw HerbivoreWrongFoodTypeException();
+        }
+    }catch(HerbivoreWrongFoodTypeException& e){
+        cout << e.what();
+    }
+}
+
+// void Herbivore::harvest(Pemain *player){
+//     //TO DO
+// }
 
 //<---------------CARNIVORE----------------->
 bool Carnivore::isCarnivore(const std::string& kodeHuruf) {
@@ -179,8 +194,23 @@ Carnivore& Carnivore::operator=(const Carnivore& other){
     return *this;
 }
 
-  void makan();
-  void harvest();
+void Carnivore::makan(Produk* pakan){
+    try{
+        ProductHewan* hewan = dynamic_cast<ProductHewan*>(pakan);
+        if (hewan){
+            this->weight += hewan->getAddedWeight();
+        } else {
+            cout << "Carnivore is fed " << pakan->getNamaAsset() << " which is not of ProductHewan type. ";
+            throw CarnivoreWrongFoodTypeException();
+        }
+    }catch(CarnivoreWrongFoodTypeException& e){
+        cout << e.what();
+    }
+}
+
+// void Carnivore::harvest(Pemain *player){
+    
+// }
 
 //<---------------OMNIVORE----------------->
 bool Omnivore::isOmnivore(const std::string& kodeHuruf) {
@@ -232,5 +262,25 @@ Omnivore& Omnivore::operator=(const Omnivore& other){
     return *this;
 }
 
-  void makan();
-  void harvest();
+void Omnivore::makan(Produk* pakan){
+    try{
+        ProductHewan* hewan = dynamic_cast<ProductHewan*>(pakan);
+        if (hewan){
+            this->weight += hewan->getAddedWeight();
+        } else{
+            ProductFruit* fruit = dynamic_cast<ProductFruit*>(pakan);
+            if(fruit){
+                this->weight += fruit->getAddedWeight();
+            } else{
+                cout << "Omnivore is fed " << pakan->getNamaAsset() << " which is neither of ProductFruit nor ProductHewan type. ";
+                throw OmnivoreWrongFoodTypeException();
+            }
+        }
+    }catch(OmnivoreWrongFoodTypeException& e){
+        cout << e.what();
+    }
+}
+
+// void Omnivore::harvest(Pemain *player){
+//     //TO DO
+// }

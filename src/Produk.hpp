@@ -26,11 +26,6 @@ public:
 };
 
 class ProductMaterial : public Produk{
-private:
-  const bool isEdibleHerbivore = false;
-  const bool isEdibleCarnivore = false;
-  const bool isBuildable = true;
-
 public:
   static map<string, ProductMaterial*> configProdukMaterial;
 
@@ -51,13 +46,9 @@ public:
 };
 
 class ProductFruit : public Produk{
-private:
-  const bool isEdibleHerbivore = true;
-  const bool isEdibleCarnivore = false;
-  const bool isBuildable = false;
-
 public:
   static map<string, ProductFruit*> configProdukFruit;
+
   ProductFruit(int ProdukID, string kodeHuruf, string namaProduk, string produkType, string origin, int addedWeight, int price);
   ~ProductFruit();
   ProductFruit(ProductFruit& other);
@@ -71,13 +62,9 @@ public:
 };
 
 class ProductHewan : public Produk{
-private:
-  const bool isEdibleHerbivore = false;
-  const bool isEdibleCarnivore = true;
-  const bool isBuildable = false;
-
 public:
   static map<string, ProductHewan*> configProdukHewan;
+  
   ProductHewan(int ProdukID, string kodeHuruf, string namaProduk, string produkType, string origin, int addedWeight, int price);
   ~ProductHewan();
   ProductHewan(ProductHewan& other);

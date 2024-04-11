@@ -1,5 +1,7 @@
 #include "Tumbuhan.hpp"
+#include <iostream>
 
+using namespace std;
 size_t Tumbuhan::current_turn;
 map<string, Tumbuhan*> Tumbuhan::configTumbuhan;
 //<---------------TUMBUHAN----------------->
@@ -102,8 +104,16 @@ FruitPlant& FruitPlant::operator=(const FruitPlant& other){
     this->setTurnInstantiated(other.turn_instantiated);
 }
 
-void FruitPlant::harvest(){
-    //TO DO
+vector<Produk*> FruitPlant::harvest(){
+    vector<Produk*> harvestedFruits;
+
+    for (const auto& pair : ProductFruit::configProdukFruit) {
+        if (pair.second->getOrigin() == this->namaTumbuhan) {
+            harvestedFruits.push_back(pair.second);
+        }
+    }
+
+    return harvestedFruits;
 }
 
 //<---------------MATERIAL PLANT----------------->
@@ -139,6 +149,14 @@ MaterialPlant& MaterialPlant::operator=(const MaterialPlant& other){
     this->setTurnInstantiated(other.turn_instantiated);
 }
 
-void MaterialPlant::harvest(){
-    //TO DO
+vector<Produk*> MaterialPlant::harvest(){
+    vector<Produk*> harvestedMaterials;
+
+    for (const auto& pair : ProductMaterial::configProdukMaterial) {
+        if (pair.second->getOrigin() == this->namaTumbuhan) {
+            harvestedMaterials.push_back(pair.second);
+        }
+    }
+
+    return harvestedMaterials;
 }

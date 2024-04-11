@@ -3,7 +3,7 @@
 int Pemain::uangWin;
 int Pemain::beratWin;
 //<---------------PEMAIN----------------->
-Pemain::Pemain() : inventory(Inventory::inventoryRowSize, Inventory::inventoryColumnSize) {}
+Pemain::Pemain(){}
 
 Pemain::~Pemain(){
 }
@@ -37,9 +37,6 @@ int Pemain::getBeratBadan(){
 }
 
 //<---------------PETANI----------------->
-int Petani::lahanRowSize;
-int Petani::lahanColumnSize;
-
 Petani::Petani(){
     this->username = "Petani";
     this->uang = defaultUang;
@@ -169,9 +166,6 @@ void Walikota::countPajak(){
 }
 
 //<---------------PETERNAK----------------->
-int Peternak::peternakanRowSize;
-int Peternak::peternakanColumnSize;
-
 Peternak::Peternak(){
     this->username = "Peternak";
     this->uang = defaultUang;

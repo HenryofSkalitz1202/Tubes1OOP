@@ -1,5 +1,6 @@
 #ifndef HEWAN_HPP
 #define HEWAN_HPP
+#include "Produk.hpp"
 #include <string>
 #include <map>
 using namespace std;
@@ -35,8 +36,8 @@ public:
   int getWeight();
 
   bool isReadyToHarvest();
-  virtual void makan() = 0;
-  virtual void harvest() = 0;
+  virtual void makan(Produk*) = 0;
+  //virtual void harvest(Pemain* player) = 0;
 };
 
 class Herbivore : public Hewan{
@@ -48,8 +49,8 @@ public:
 
   bool isHerbivore(const std::string& kodeHuruf);
 
-  void makan(){} //TO DO
-  void harvest(){} //TO DO
+  void makan(Produk*);
+  //void harvest(Pemain *player);
 };
 
 class Carnivore : public Hewan{
@@ -61,8 +62,8 @@ public:
 
   bool isCarnivore(const std::string& kodeHuruf);
 
-  void makan(){} //TO DO
-  void harvest(){} //TO DO
+  void makan(Produk*);
+  //void harvest(Pemain *player);
 };
 
 class Omnivore : public Hewan{
@@ -74,8 +75,8 @@ public:
 
   bool isOmnivore(const std::string& kodeHuruf);
 
-  void makan(){} //TO DO
-  void harvest(){} //TO DO
+  void makan(Produk*);
+  //void harvest(Pemain *player);
 };
 
 #endif

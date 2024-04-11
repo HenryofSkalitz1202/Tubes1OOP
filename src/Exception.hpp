@@ -60,43 +60,79 @@ struct ProductHewanFalseTypeException : public exception{
 
 struct NotHerbivoreException : public exception{
     const char* what() const throw(){
-        return " bukan herbivore.";
+        return " bukan herbivore.\n";
     }
 };
 
 struct NotCarnivoreException : public exception{
     const char* what() const throw(){
-        return " bukan carnivore.";
+        return " bukan carnivore.\n";
     }
 };
 
 struct NotOmnivoreException : public exception{
     const char* what() const throw(){
-        return " bukan omnivore.";
+        return " bukan omnivore.\n";
     }
 };
 
 struct UnknownProductTypeException : public exception{
     const char* what() const throw(){
-        return " is an unknown product type.";
+        return " is an unknown product type.\n";
     }
 };
 
 struct UnknownAnimalTypeException : public exception{
     const char* what() const throw(){
-        return " is an unknown animal type.";
+        return " is an unknown animal type.\n";
     }
 };
 
 struct UnknownPlantTypeException : public exception{
     const char* what() const throw(){
-        return " is an unknown plant type.";
+        return " is an unknown plant type.\n";
     }
 };
 
 struct MaterialBangunanNotProductMaterialException : public exception{
     const char* what() const throw(){
-        return " is not of ProductMaterial type.";
+        return " is not of ProductMaterial type.\n";
+    }
+};
+
+struct HerbivoreWrongFoodTypeException : public exception{
+    const char* what() const throw(){
+        return "Herbivore can only eat ProductFruit type.\n";
+    }
+};
+
+struct CarnivoreWrongFoodTypeException : public exception{
+    const char* what() const throw(){
+        return "Carnivore can only eat ProductHewan type.\n";
+    }
+};
+
+struct OmnivoreWrongFoodTypeException : public exception{
+    const char* what() const throw(){
+        return "Omnivore can only eat ProductFruit or ProductHewan type.\n";
+    }
+};
+
+struct insertIntoUnemptyCellException : public exception{
+    const char* what() const throw(){
+        return "Value can only be inserted on empty cells.\n";
+    }
+};
+
+struct inventoryEmptyException : public exception{
+    const char* what() const throw(){
+        return "Inventory is empty!\n";
+    }
+};
+
+struct inventoryFullException : public exception{
+    const char* what() const throw(){
+        return "Inventory is full!\n";
     }
 };
 

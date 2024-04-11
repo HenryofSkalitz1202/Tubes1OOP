@@ -31,7 +31,15 @@ Grid<T>::Grid(size_t rows, size_t cols) : rows(rows), cols(cols) {
 
 template <typename T>
 void Grid<T>::set(size_t row, size_t col, T value){
-    this->data[Grid<T>::calculateKey(row, col)] = value;
+    try{
+        if(this->data[Grid<T>::calculateKey(row, col)] != nullptr){
+            cout << "Value of grid(" << row << ", " << col << ") is not null. ";
+            throw insertIntoUnemptyCellException();
+        }
+        this->data[Grid<T>::calculateKey(row, col)] = value;
+    } catch(insertIntoUnemptyCellException& e){
+        cout << e.what();
+    }
 }
 
 template <typename T>
@@ -93,12 +101,28 @@ int Grid<T>::countAvailableCapacity() {
     return count;
 }
 
+template<typename T>
+bool Grid<T>::isEmpty(){
+    if(this->countAvailableCapacity() == (this->rows * this->cols)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+template<typename T>
+bool Grid<T>::isFull(){
+    if(this->countAvailableCapacity() == 0){
+        return true;
+    }else{
+        return false;
+    }
+}
 //<---------------INVENTORY----------------->
 int Inventory::inventoryRowSize;
 int Inventory::inventoryColumnSize;
 
-Inventory::Inventory(size_t rows, size_t cols) : Grid<Asset*>(rows, cols) {}
-
+Inventory::Inventory() : Grid<Asset*>(inventoryRowSize, inventoryColumnSize) {}
 
 Inventory::~Inventory() {
     for (size_t i = 0; i < this->rows; ++i) {
@@ -111,7 +135,6 @@ Inventory::~Inventory() {
     }
 }
 
-// Copy constructor for Inventory
 Inventory::Inventory(Inventory& other) : Grid<Asset*>(other.numRows(), other.numCols()) {
     for (size_t i = 0; i < other.numRows(); ++i) {
         for (size_t j = 0; j < other.numCols(); ++j) {
@@ -177,8 +200,40 @@ Inventory& Inventory::operator=(const Inventory& other) {
     return *this;
 }
 
+void Inventory::rekapInventory() {
+    this->jumlahBangunan = 0;
+    this->jumlahProductMaterial = 0;
+    this->jumlahProductFruit = 0;
+    this->jumlahProductHewan = 0;
+
+    for (size_t i = 0; i < inventoryRowSize; ++i) {
+        for (size_t j = 0; j < inventoryColumnSize; ++j) {
+            Asset* asset = this->get(i, j);
+            
+            if (asset) {
+                if (dynamic_cast<Bangunan*>(asset)) {
+                    this->jumlahBangunan++;
+                } else if (dynamic_cast<ProductMaterial*>(asset)) {
+                    this->jumlahProductMaterial++;
+                } else if (dynamic_cast<ProductFruit*>(asset)) {
+                    this->jumlahProductFruit++;
+                } else if (dynamic_cast<ProductHewan*>(asset)) {
+                    this->jumlahProductHewan++;
+                }
+            }
+        }
+    }
+
+    // // Print the summary
+    // cout << "Inventory Summary:" << endl;
+    // cout << "Bangunan: " << jumlahBangunan << endl;
+    // cout << "ProductMaterial: " << jumlahProductMaterial << endl;
+    // cout << "ProductFruit: " << jumlahProductFruit << endl;
+    // cout << "ProductHewan: " << jumlahProductHewan << endl;
+}
+
 void Inventory::print() {
-    //std::cout << ==============[ LADANG ]==================
+    //std::cout << ==============[ PENYIMPANAN ]==================
     std::cout << " ";
     printLexicalOrder(this->cols);
     for (int i = 0; i < this->rows; ++i) {
@@ -201,7 +256,10 @@ void Inventory::print() {
 }
 
 //<---------------LADANG----------------->
-Ladang::Ladang(size_t rows, size_t cols) : Grid<Tumbuhan*>(rows, cols) {}
+int Ladang::lahanRowSize;
+int Ladang::lahanColumnSize;
+
+Ladang::Ladang() : Grid<Tumbuhan*>(lahanRowSize, lahanColumnSize) {}
 
 Ladang::Ladang(Ladang& other) : Grid<Tumbuhan*>(other.numRows(), other.numCols()) {
     for (size_t i = 0; i < other.numRows(); ++i) {
@@ -246,6 +304,14 @@ Ladang::~Ladang() {
     }
 }
 
+void Ladang::setJumlahTumbuhan(){
+    this->jumlahTumbuhan = this->countAvailableCapacity();
+}
+
+int Ladang::getJumlahTumbuhan(){
+    return this->jumlahTumbuhan;
+}
+
 void Ladang::print() {
     std::cout << " ";
     printLexicalOrder(this->cols);
@@ -268,7 +334,10 @@ void Ladang::print() {
     printBorder(this->cols);
 }
 //<---------------PETERNAKAN----------------->
-Peternakan::Peternakan(size_t rows, size_t cols) : Grid<Hewan*>(rows, cols) {}
+int Peternakan::peternakanRowSize;
+int Peternakan::peternakanColumnSize;
+
+Peternakan::Peternakan() : Grid<Hewan*>(peternakanRowSize, peternakanColumnSize) {}
 
 Peternakan::Peternakan(Peternakan& other) : Grid<Hewan*>(other.numRows(), other.numCols()) {
     for (size_t i = 0; i < other.numRows(); ++i) {
@@ -313,6 +382,14 @@ Peternakan::~Peternakan() {
     }
 }
 
+void Peternakan::setJumlahHewan(){
+    this->jumlahHewan = this->countAvailableCapacity();
+}
+
+int Peternakan::getJumlahHewan(){
+    return this->jumlahHewan;
+}
+
 void Peternakan::print() {
     std::cout << " ";
     printLexicalOrder(this->cols);
@@ -334,38 +411,3 @@ void Peternakan::print() {
     }
     printBorder(this->cols);
 }
-
-// int main() {
-//     Inventory inventory(3, 3);
-
-//     Produk* produk1 = new ProductMaterial(1, "A", "Material 1", "PRODUCT_MATERIAL_PLANT", "Origin 1", 100, 50);
-//     Produk* produk2 = new ProductFruit(2, "B", "Fruit 1", "PRODUCT_FRUIT_PLANT", "Origin 2", 200, 100);
-//     Produk* produk3 = new ProductHewan(3, "C", "Animal 1", "PRODUCT_ANIMAL", "Origin 3", 300, 150);
-
-//     Bangunan* bangunan1 = new Bangunan(1, "D", "Bangunan 1", 500, {{"Bahan1", 10}, {"Bahan2", 20}});
-//     Bangunan* bangunan2 = new Bangunan(2, "E", "Bangunan 2", 800, {{"Bahan3", 15}, {"Bahan4", 25}});
-
-//     inventory.set(0, 0, produk1);
-//     inventory.set(1, 1, produk2);
-//     inventory.set(2, 2, produk3);
-//     inventory.set(0, 1, bangunan1);
-//     inventory.set(2, 0, bangunan2);
-
-//     inventory.print();
-
-//     Asset* retrievedAsset1 = inventory.get(1, 1);
-//     if (retrievedAsset1 != nullptr) {
-//         std::cout << "Retrieved Asset at (1, 1): " << retrievedAsset1->getKodeHuruf() << std::endl;
-//     } else {
-//         std::cout << "No Asset found at (1, 1)" << std::endl;
-//     }
-
-//     Asset* retrievedAsset2 = inventory.get(0, 1);
-//     if (retrievedAsset2 != nullptr) {
-//         std::cout << "Retrieved Asset at (0, 1): " << retrievedAsset2->getKodeHuruf() << std::endl;
-//     } else {
-//         std::cout << "No Asset found at (0, 1)" << std::endl;
-//     }
-
-//     return 0;
-// }

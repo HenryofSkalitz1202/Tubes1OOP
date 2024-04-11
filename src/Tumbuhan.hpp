@@ -1,6 +1,8 @@
 #ifndef TUMBUHAN_HPP
 #define TUMBUHAN_HPP
+#include "Produk.hpp"
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -34,7 +36,7 @@ public:
   size_t getTurnInstantiated();
 
   bool isReadyToHarvest();
-  virtual void harvest() = 0;
+  virtual vector<Produk*> harvest() = 0;
 };
 
 class FruitPlant :  public Tumbuhan{
@@ -44,8 +46,7 @@ public:
   FruitPlant(FruitPlant& other);
   FruitPlant& operator=(const FruitPlant& other);
 
-  void harvest(); //TO DO
-
+  vector<Produk*> harvest(); //TO DO
 };
 
 class MaterialPlant : public Tumbuhan{
@@ -55,7 +56,7 @@ public:
   MaterialPlant(MaterialPlant& other);
   MaterialPlant& operator=(const MaterialPlant& other);
 
-  void harvest(); //TO DO
+  vector<Produk*> harvest(); //TO DO
 };
 
 #endif

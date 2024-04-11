@@ -1,4 +1,5 @@
 #include "Controller.hpp"
+#include "Exception.hpp"
 #include "input.cpp"
 #include <iostream>
 #include <vector>
@@ -245,12 +246,12 @@ void Controller::GameConfig(string filePathMisc){
     Inventory::inventoryColumnSize = std::stoi(str_arr_inv[1]);
 
     vector<string> str_arr_lhn = stringToArraySpace(fileContentarr[3]);
-    Petani::lahanRowSize = std::stoi(str_arr_lhn[0]);
-    Petani::lahanColumnSize = std::stoi(str_arr_lhn[1]);
+    Ladang::lahanRowSize = std::stoi(str_arr_lhn[0]);
+    Ladang::lahanColumnSize = std::stoi(str_arr_lhn[1]);
 
     vector<string> str_arr_pet = stringToArraySpace(fileContentarr[4]);
-    Peternak::peternakanRowSize = std::stoi(str_arr_pet[0]);
-    Peternak::peternakanColumnSize = std::stoi(str_arr_pet[1]);
+    Peternakan::peternakanRowSize = std::stoi(str_arr_pet[0]);
+    Peternakan::peternakanColumnSize = std::stoi(str_arr_pet[1]);
 }
 
 void Controller::set_current_player(Pemain* player)

@@ -1,10 +1,7 @@
 #ifndef PEMAIN_HPP
 #define PEMAIN_HPP
 #include <string>
-#include "Asset.hpp"
-#include "Bangunan.hpp"
-#include "Produk.hpp"
-#include "Grid.hpp"
+#include "Grid.cpp"
 
 using namespace std;
 
@@ -39,11 +36,8 @@ public:
 class Petani : public Pemain{
 private:
   int petaniID;
-  //static map<Tumbuhan> lahan;
+  Ladang ladang;
 public:
-  static int lahanRowSize;
-  static int lahanColumnSize;
-
   Petani();
   Petani(string username, int uang, int beratBadan);
   ~Petani();
@@ -89,11 +83,8 @@ public:
 class Peternak : public Pemain{
 private:
   int peternakID;
-  //static map<Hewan> peternakan;
+  Peternakan peternakan;
 public:
-  static int peternakanRowSize;
-  static int peternakanColumnSize;
-  
   Peternak();
   Peternak(string username, int uang, int beratBadan);
   ~Peternak();
@@ -113,4 +104,5 @@ public:
   void beliBangunan();
   void countPajak();
 };
+
 #endif

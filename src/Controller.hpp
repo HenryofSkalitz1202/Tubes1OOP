@@ -6,7 +6,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "Pemain.hpp"
+#include "Pemain.cpp"
+#include "Bangunan.hpp"
 using namespace std;
 
 class Controller

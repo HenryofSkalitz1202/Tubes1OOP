@@ -172,6 +172,18 @@ struct ladangFullException : public exception{
     }
 };
 
+struct noneSiapPanenLadangException : public exception{
+    const char* what() const throw(){
+        return "\\('u')/ Sing sabar, sing tenang \\('u')/\nNo tanaman is ready for panen yet!\n";
+    }
+};
+
+struct noneSiapPanenPeternakanException : public exception{
+    const char* what() const throw(){
+        return "\\('u')/ Sing sabar, sing tenang \\('u')/\nNo hewan is ready for panen yet!\n";
+    }
+};
+
 struct peternakanEmptyException : public exception{
     const char* what() const throw(){
         return "Peternakan is empty!\n";

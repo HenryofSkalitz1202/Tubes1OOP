@@ -128,11 +128,40 @@ void Petani::tanamTanaman(){
         cout << e.what();
     }catch(insertIntoUnemptyCellException& e){
         cout << e.what();
+    }catch(outOfBoundsException& e){
+        std::cout << e.what();
     }
 }
 
 void Petani::panenTanaman(){
-    //TO DO
+    try{
+        if(this->ladang.isEmpty()){
+            throw ladangEmptyException();
+        }
+
+        if(!this->ladang.isAvailablePanen()){
+            throw noneSiapPanenLadangException();
+        }
+
+        this->ladang.print();
+
+        map<string, int> rekapLadang = this->ladang.rekapLadang();
+        for(const auto& pair : rekapLadang){
+            cout << "- " << pair.first << ": " << Tumbuhan::configTumbuhan[pair.first]->getNamaAsset() << endl;
+        }
+
+        cout << "\nPilih tanaman siap panen yang kamu miliki" << endl;
+        int idx = 0;
+        for(const auto& pair : rekapLadang){
+            if(pair.second > 0){
+                cout << ++idx << ". " << pair.first << " (" << pair.second << " petak siap panen)" << endl;
+            }
+        }
+    }catch(ladangEmptyException& e){
+        cout << e.what();
+    }catch(noneSiapPanenLadangException& e){
+        cout << e.what();
+    }
 }
 
 void Petani::beliBangunan(){
@@ -289,6 +318,8 @@ void Peternak::taruhHewan(){
         cout << e.what();
     }catch(insertIntoUnemptyCellException& e){
         cout << e.what();
+    }catch(outOfBoundsException& e){
+        std::cout << e.what();
     }
 }
 

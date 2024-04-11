@@ -48,9 +48,7 @@ public:
 
   void setStatus();
   void setPetaniID(int petaniID);
-  //void setLadang();
   int getPetaniID();
-  //map<Tumbuhan> getLadang();
 
   void tanamTanaman();
   void panenTanaman();
@@ -95,10 +93,7 @@ public:
 
   void setStatus();
   void setPeternakID(int peternakID);
-  //void setLadang();
   int getPeternakID();
-  //map<Hewan> getPeternakan();
-  //void printPeternakan();
 
   void taruhHewan();
   void beriMakan();

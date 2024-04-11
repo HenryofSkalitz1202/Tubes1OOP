@@ -5,6 +5,11 @@
 #include <sstream>
 #include <map>
 
+#define NORMAL "\x1B[0m"
+#define RED "\x1B[31m"
+#define GREEN "\x1B[32m"
+#define BLUE "\x1B[34m"
+
 template <typename T>
 string Grid<T>::calculateKey(size_t row, size_t col){
     std::ostringstream oss;
@@ -406,14 +411,6 @@ Ladang::~Ladang() {
     }
 }
 
-void Ladang::setJumlahTumbuhan(){
-    this->jumlahTumbuhan = this->countAvailableCapacity();
-}
-
-int Ladang::getJumlahTumbuhan(){
-    return this->jumlahTumbuhan;
-}
-
 void Ladang::addItem(Tumbuhan* tumbuhan) {
     try{
         if(this->isFull()){
@@ -450,6 +447,31 @@ void Ladang::addItemKey(Tumbuhan* tumbuhan, string loc) {
     }
 }
 
+bool Ladang::isAvailablePanen(){
+    for(const auto& pair : this->data){
+        if(pair.second->isReadyToHarvest()){
+            return true;
+        }
+    }
+    return false;
+}
+
+map<string, int> Ladang::rekapLadang(){
+    map<string, int> siapPanen;
+    
+    for (const auto& pair : this->data) {
+        siapPanen[pair.second->getKodeHuruf()] = 0;
+    }
+
+    for (const auto& pair : this->data) {
+        if (pair.second->isReadyToHarvest()) {
+            siapPanen[pair.second->getKodeHuruf()]++;
+        }
+    }
+
+    return siapPanen;
+}
+
 void Ladang::print() {
     std::cout << " ";
     printLexicalOrder(this->cols);
@@ -461,7 +483,11 @@ void Ladang::print() {
         for (int j = 0; j < this->cols; ++j) {
             Tumbuhan* tumbuhan = get(i, j);
             if (tumbuhan != nullptr) {
-                std::cout << std::setw(3) << std::setfill('0') << tumbuhan->getKodeHuruf();
+                if(tumbuhan->isReadyToHarvest()){
+                    std::cout << GREEN << tumbuhan->getKodeHuruf() << NORMAL;
+                }else{
+                    std::cout << RED << tumbuhan->getKodeHuruf() << NORMAL;
+                }
             } else {
                 std::cout << "   ";
             }
@@ -526,14 +552,6 @@ Peternakan::~Peternakan() {
     }
 }
 
-void Peternakan::setJumlahHewan(){
-    this->jumlahHewan = this->countAvailableCapacity();
-}
-
-int Peternakan::getJumlahHewan(){
-    return this->jumlahHewan;
-}
-
 void Peternakan::addItem(Hewan* hewan) {
     try{
         if(this->isFull()){
@@ -570,6 +588,34 @@ void Peternakan::addItemKey(Hewan* hewan, string loc) {
     }
 }
 
+bool Peternakan::isAvailablePanen(){
+    for(const auto& pair : this->data){
+        if(pair.second->isReadyToHarvest()){
+            return true;
+        }
+    }
+    return false;
+}
+
+
+std::map<std::string, int> Peternakan::rekapPeternakan() {
+    std::map<std::string, int> siapPanen;
+
+    // Initialize count for all kodeHuruf
+    for (const auto& pair : this->data) {
+        siapPanen[pair.second->getKodeHuruf()] = 0;
+    }
+
+    // Update count for ready-to-harvest animals
+    for (const auto& pair : this->data) {
+        if (pair.second->isReadyToHarvest()) {
+            siapPanen[pair.second->getKodeHuruf()]++;
+        }
+    }
+
+    return siapPanen;
+}
+
 void Peternakan::print() {
     std::cout << " ";
     printLexicalOrder(this->cols);
@@ -581,7 +627,11 @@ void Peternakan::print() {
         for (int j = 0; j < this->cols; ++j) {
             Hewan* hewan = get(i, j);
             if (hewan != nullptr) {
-                std::cout << std::setw(3) << std::setfill('0') << hewan->getKodeHuruf();
+                if(hewan->isReadyToHarvest()){
+                    std::cout << GREEN << hewan->getKodeHuruf() << NORMAL;
+                }else{
+                    std::cout << RED << hewan->getKodeHuruf() << NORMAL;
+                }
             } else {
                 std::cout << "   ";
             }

@@ -57,6 +57,7 @@
         "stack": "cpp",
         "unordered_set": "cpp",
         "xhash": "cpp",
-        "optional": "cpp"
+        "optional": "cpp",
+        "variant": "cpp"
     }
 }

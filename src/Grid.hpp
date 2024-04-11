@@ -65,8 +65,6 @@ public:
 };
 
 class Ladang : public Grid<Tumbuhan*>{
-private:
-  int jumlahTumbuhan;
 public:
   static int lahanRowSize;
   static int lahanColumnSize;
@@ -78,14 +76,13 @@ public:
 
   void addItem(Tumbuhan*);
   void addItemKey(Tumbuhan*, string loc);
-  void setJumlahTumbuhan();
-  int getJumlahTumbuhan();
+
+  bool isAvailablePanen();
+  map<string, int> rekapLadang();
   void print();
 };
 
 class Peternakan : public Grid<Hewan*>{
-private:
-  int jumlahHewan;
 public:
   static int peternakanRowSize;
   static int peternakanColumnSize;
@@ -96,8 +93,9 @@ public:
 
   void addItem(Hewan*);
   void addItemKey(Hewan*, string loc);
-  void setJumlahHewan();
-  int getJumlahHewan();
+
+  bool isAvailablePanen();
+  map<string, int> rekapPeternakan();
   void print();
 };
 

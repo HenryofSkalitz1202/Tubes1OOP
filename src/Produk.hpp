@@ -1,6 +1,6 @@
 #ifndef PRODUK_HPP
 #define PRODUK_HPP
-#include "Asset.hpp"
+#include "Asset.cpp"
 #include <string>
 #include <map>
 using namespace std;

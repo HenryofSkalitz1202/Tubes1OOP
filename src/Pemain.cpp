@@ -20,6 +20,10 @@ void Pemain::setberatBadan(int beratBadan){
     this->beratBadan = beratBadan;
 }
 
+void Pemain::addToInventory(Asset* item){
+    this->inventory.addItem(item);
+}
+
 string Pemain::getStatus(){
     return this->status;
 }
@@ -34,6 +38,10 @@ int Pemain::getUang(){
 
 int Pemain::getBeratBadan(){
     return this->beratBadan;
+}
+
+Asset* Pemain::getFromInventory(string key){
+    return this->inventory.get(key);
 }
 
 //<---------------PETANI----------------->
@@ -85,7 +93,42 @@ int Petani::getPetaniID(){
   //map<Tumbuhan> getLadang();
 
 void Petani::tanamTanaman(){
-    //TO DO
+    cout << "Pilih tanaman dari penyimpanan" << endl;
+    this->inventory.print();
+
+    string key_inv;
+    cout << "Slot : ";
+    cin >> key_inv;
+
+    Tumbuhan* tumbuhan = dynamic_cast<Tumbuhan*>(this->inventory.get(key_inv));
+
+    try{
+        if(tumbuhan){
+            cout << "Kamu memilih " << tumbuhan->getNamaAsset() << endl;
+            cout << "\n";
+            cout << "Pilih petak yang akan ditanami" << endl;
+            this->ladang.print();
+
+            string key_ladang;
+            cout << "Petak tanah: ";
+            cin >> key_ladang;
+
+            this->ladang.setWithKey(key_ladang, tumbuhan);
+
+            cout << "\nCangkul, cangkul, cangkul yang dalam~!" << endl;
+            cout << tumbuhan->getNamaAsset() << " berhasil ditanam!";
+
+            this->inventory.setNull(key_inv);
+            delete tumbuhan;
+        }else{
+            cout << "An attempt is detected to plant " << this->inventory.get(key_inv)->getNamaAsset() << " which is of " << this->inventory.get(key_inv)->getAssetType() << " type.";
+            throw tanamNotTumbuhanException();
+        }
+    }catch(tanamNotTumbuhanException& e){
+        cout << e.what();
+    }catch(insertIntoUnemptyCellException& e){
+        cout << e.what();
+    }
 }
 
 void Petani::panenTanaman(){
@@ -213,7 +256,40 @@ int Peternak::getPeternakID(){
 //map<Tumbuhan> getLadang();
 
 void Peternak::taruhHewan(){
-    //TO DO
+    cout << "Pilih hewan dari penyimpanan" << endl;
+    this->inventory.print();
+
+    string key_inv;
+    cout << "Slot : ";
+    cin >> key_inv;
+
+    Hewan* hewan = dynamic_cast<Hewan*>(this->inventory.get(key_inv));
+
+    try{
+        if(hewan){
+            cout << "Kamu memilih " << hewan->getNamaAsset() << endl;
+            cout << "\nPilih petak peternakan yang akan ditinggali" << endl;
+            this->peternakan.print();
+
+            string key_peternakan;
+            cout << "Petak peternakan: ";
+            cin >> key_peternakan;
+
+            this->peternakan.setWithKey(key_peternakan, hewan);
+
+            cout << "\nDengan hati-hati, kamu meletakkan seekor " << hewan->getNamaAsset() << " di kandang." << endl;
+            cout << hewan->getNamaAsset() << " telah menjadi peliharaanmu sekarang!";
+
+            this->inventory.setNull(key_inv);
+        }else{
+            cout << "An attempt is detected to raise " << this->inventory.get(key_inv)->getNamaAsset() << " which is of " << this->inventory.get(key_inv)->getAssetType() << " type.";
+            throw ternakNotHewanException();
+        }
+    }catch(ternakNotHewanException& e){
+        cout << e.what();
+    }catch(insertIntoUnemptyCellException& e){
+        cout << e.what();
+    }
 }
 
 void Peternak::beriMakan(){

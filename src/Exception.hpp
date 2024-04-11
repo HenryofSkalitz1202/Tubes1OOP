@@ -40,6 +40,18 @@ struct ProdukFalseTypeException : public exception{
     }
 };
 
+struct HewanFalseTypeException : public exception{
+    const char* what() const throw(){
+        return "Object of Hewan type doesn't have type 'Hewan\n";
+    }
+};
+
+struct TumbuhanFalseTypeException : public exception{
+    const char* what() const throw(){
+        return "Object of Tumbuhan type doesn't have type 'Tumbuhan\n";
+    }
+};
+
 struct ProductMaterialFalseTypeException : public exception{
     const char* what() const throw(){
         return "Object of ProductMaterial type doesn't have type 'PRODUCT_MATERIAL_PLANT\n";
@@ -124,6 +136,18 @@ struct insertIntoUnemptyCellException : public exception{
     }
 };
 
+struct isAlreadyNullException : public exception{
+    const char* what() const throw(){
+        return "Value of given cell is already null!\n";
+    }
+};
+
+struct outOfBoundsException : public exception{
+    const char* what() const throw(){
+        return " .Index is out of bounds!\n";
+    }
+};
+
 struct inventoryEmptyException : public exception{
     const char* what() const throw(){
         return "Inventory is empty!\n";
@@ -157,6 +181,18 @@ struct peternakanEmptyException : public exception{
 struct peternakanFullException : public exception{
     const char* what() const throw(){
         return "Peternakan is full!\n";
+    }
+};
+
+struct tanamNotTumbuhanException : public exception{
+    const char* what() const throw(){
+        return " You can only plant object of Tumbuhan type.\n";
+    }
+};
+
+struct ternakNotHewanException : public exception{
+    const char* what() const throw(){
+        return " You can only raise object of Hewan type.\n";
     }
 };
 

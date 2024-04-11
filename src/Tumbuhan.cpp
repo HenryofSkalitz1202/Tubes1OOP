@@ -5,22 +5,18 @@ using namespace std;
 size_t Tumbuhan::current_turn;
 map<string, Tumbuhan*> Tumbuhan::configTumbuhan;
 //<---------------TUMBUHAN----------------->
-Tumbuhan::~Tumbuhan(){
-    this->kodeHuruf.erase();
-    this->namaTumbuhan.erase();
-    this->type.erase();
-}
+Tumbuhan::~Tumbuhan(){}
 
-void Tumbuhan::setTumbuhanID(int tumbuhanID){
-    this->tumbuhanID = tumbuhanID;
-}
+void Tumbuhan::setAssetType(string assetType){
+    try{
+        if(assetType != "Tumbuhan"){
+            throw TumbuhanFalseTypeException();
+        }
 
-void Tumbuhan::setKodeHuruf(string kodeHuruf){
-    this->kodeHuruf = kodeHuruf;
-}
-
-void Tumbuhan::setNamaTumbuhan(string namaTumbuhan){
-    this->namaTumbuhan = namaTumbuhan;
+        this->assetType = assetType;
+    }catch(TumbuhanFalseTypeException& e){
+        cout << e.what();
+    }
 }
 
 void Tumbuhan::setType(string type){
@@ -31,24 +27,8 @@ void Tumbuhan::setDurationToHarvest(size_t durationToHarvest){
     this->duration_to_harvest = duration_to_harvest;
 }
 
-void Tumbuhan::setPrice(int price){
-    this->price = price;
-}
-
 void Tumbuhan::setTurnInstantiated(size_t turn_instantiated){
     this->turn_instantiated = turn_instantiated;
-}
-
-int Tumbuhan::getTumbuhanID(){
-    return this->tumbuhanID;
-}
-
-string Tumbuhan::getKodeHuruf(){
-    return this->kodeHuruf;
-}
-
-string Tumbuhan::getNamaTumbuhan(){
-    return this->namaTumbuhan;
 }
 
 string Tumbuhan::getType(){
@@ -57,10 +37,6 @@ string Tumbuhan::getType(){
 
 size_t Tumbuhan::getDurationToHarvest(){
     return this->duration_to_harvest;
-}
-
-int Tumbuhan::getPrice(){
-    return this->price;
 }
 
 size_t Tumbuhan::getTurnInstantiated(){
@@ -72,10 +48,11 @@ bool Tumbuhan::isReadyToHarvest(){
 }
 
 //<---------------FRUIT PLANT----------------->
-FruitPlant::FruitPlant(int TumbuhanID, string kodeHuruf, string namaTumbuhan, string type, size_t durationToHarvest, int price, size_t turn_instantiated){
-    this->setTumbuhanID(tumbuhanID);
+FruitPlant::FruitPlant(int tumbuhanID, string kodeHuruf, string namaTumbuhan, string type, size_t durationToHarvest, int price, size_t turn_instantiated){
+    this->setAssetType("Tumbuhan");
+    this->setAssetID(tumbuhanID);
     this->setKodeHuruf(kodeHuruf);
-    this->setNamaTumbuhan(namaTumbuhan);
+    this->setNamaAsset(namaTumbuhan);
     this->setType(type);
     this->setDurationToHarvest(duration_to_harvest);
     this->setPrice(price);
@@ -85,9 +62,10 @@ FruitPlant::FruitPlant(int TumbuhanID, string kodeHuruf, string namaTumbuhan, st
 FruitPlant::~FruitPlant(){}
 
 FruitPlant::FruitPlant(FruitPlant& other){
-    this->setTumbuhanID(other.getTumbuhanID());
+    this->setAssetType(other.getAssetType());
+    this->setAssetID(other.getAssetID());
     this->setKodeHuruf(other.getKodeHuruf());
-    this->setNamaTumbuhan(other.getNamaTumbuhan());
+    this->setNamaAsset(other.getNamaAsset());
     this->setType(other.getType());
     this->setDurationToHarvest(other.getDurationToHarvest());
     this->setPrice(other.getPrice());
@@ -95,9 +73,10 @@ FruitPlant::FruitPlant(FruitPlant& other){
 }
 
 FruitPlant& FruitPlant::operator=(const FruitPlant& other){
-    this->setTumbuhanID(other.tumbuhanID);
+    this->setAssetType(other.assetType);
+    this->setAssetID(other.assetID);
     this->setKodeHuruf(other.kodeHuruf);
-    this->setNamaTumbuhan(other.namaTumbuhan);
+    this->setNamaAsset(other.namaAsset);
     this->setType(other.type);
     this->setDurationToHarvest(other.duration_to_harvest);
     this->setPrice(other.price);
@@ -108,7 +87,7 @@ vector<Produk*> FruitPlant::harvest(){
     vector<Produk*> harvestedFruits;
 
     for (const auto& pair : ProductFruit::configProdukFruit) {
-        if (pair.second->getOrigin() == this->namaTumbuhan) {
+        if (pair.second->getOrigin() == this->namaAsset) {
             harvestedFruits.push_back(pair.second);
         }
     }
@@ -117,10 +96,11 @@ vector<Produk*> FruitPlant::harvest(){
 }
 
 //<---------------MATERIAL PLANT----------------->
-MaterialPlant::MaterialPlant(int TumbuhanID, string kodeHuruf, string namaTumbuhan, string type, size_t durationToHarvest, int price, size_t turn_instantiated){
-    this->setTumbuhanID(tumbuhanID);
+MaterialPlant::MaterialPlant(int tumbuhanID, string kodeHuruf, string namaTumbuhan, string type, size_t durationToHarvest, int price, size_t turn_instantiated){
+    this->setAssetType("Tumbuhan");
+    this->setAssetID(tumbuhanID);
     this->setKodeHuruf(kodeHuruf);
-    this->setNamaTumbuhan(namaTumbuhan);
+    this->setNamaAsset(namaTumbuhan);
     this->setType(type);
     this->setDurationToHarvest(duration_to_harvest);
     this->setPrice(price);
@@ -130,9 +110,10 @@ MaterialPlant::MaterialPlant(int TumbuhanID, string kodeHuruf, string namaTumbuh
 MaterialPlant::~MaterialPlant(){}
 
 MaterialPlant::MaterialPlant(MaterialPlant& other){
-    this->setTumbuhanID(other.getTumbuhanID());
+    this->setAssetType(other.getAssetType());
+    this->setAssetID(other.getAssetID());
     this->setKodeHuruf(other.getKodeHuruf());
-    this->setNamaTumbuhan(other.getNamaTumbuhan());
+    this->setNamaAsset(other.getNamaAsset());
     this->setType(other.getType());
     this->setDurationToHarvest(other.getDurationToHarvest());
     this->setPrice(other.getPrice());
@@ -140,9 +121,10 @@ MaterialPlant::MaterialPlant(MaterialPlant& other){
 }
 
 MaterialPlant& MaterialPlant::operator=(const MaterialPlant& other){
-    this->setTumbuhanID(other.tumbuhanID);
+    this->setAssetType(other.assetType);
+    this->setAssetID(other.assetID);
     this->setKodeHuruf(other.kodeHuruf);
-    this->setNamaTumbuhan(other.namaTumbuhan);
+    this->setNamaAsset(other.namaAsset);
     this->setType(other.type);
     this->setDurationToHarvest(other.duration_to_harvest);
     this->setPrice(other.price);
@@ -153,7 +135,7 @@ vector<Produk*> MaterialPlant::harvest(){
     vector<Produk*> harvestedMaterials;
 
     for (const auto& pair : ProductMaterial::configProdukMaterial) {
-        if (pair.second->getOrigin() == this->namaTumbuhan) {
+        if (pair.second->getOrigin() == this->namaAsset) {
             harvestedMaterials.push_back(pair.second);
         }
     }

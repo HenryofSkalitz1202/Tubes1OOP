@@ -1,39 +1,28 @@
 #ifndef HEWAN_HPP
 #define HEWAN_HPP
-#include "Produk.hpp"
+#include "Produk.cpp"
 #include <string>
 #include <vector>
 #include <map>
 using namespace std;
 
-class Hewan{
+class Hewan : public Asset{
 protected:
-  int hewanID;
-  string kodeHuruf;
-  string namaHewan;
   string type;
   size_t weightToHarvest;
-  int price;
   int weight;
 
 public:
   static map<string, Hewan*> configHewan;
   ~Hewan();
 
-  void setHewanID(int hewanID);
-  void setKodeHuruf(string kodeHuruf);
-  void setNamaHewan(string namaHewan);
+  void setAssetType(string assetType);
   void setType(string type);
   void setWeightToHarvest(size_t weightToHarvest);
-  void setPrice(int price);
   void setWeight(int weight);
 
-  int getHewanID();
-  string getKodeHuruf();
-  string getNamaHewan();
   string getType();
   size_t getWeightToHarvest();
-  int getPrice();
   int getWeight();
 
   bool isReadyToHarvest();
@@ -48,8 +37,6 @@ public:
   Herbivore(Herbivore& other);
   Herbivore& operator=(const Herbivore& other);
 
-  //bool isHerbivore(const std::string& kodeHuruf);
-
   void makan(Produk*);
 };
 
@@ -60,8 +47,6 @@ public:
   Carnivore(Carnivore& other);
   Carnivore& operator=(const Carnivore& other);
 
-  //bool isCarnivore(const std::string& kodeHuruf);
-
   void makan(Produk*);
 };
 
@@ -71,8 +56,6 @@ public:
   ~Omnivore();
   Omnivore(Omnivore& other);
   Omnivore& operator=(const Omnivore& other);
-
-  //bool isOmnivore(const std::string& kodeHuruf);
 
   void makan(Produk*);
 };

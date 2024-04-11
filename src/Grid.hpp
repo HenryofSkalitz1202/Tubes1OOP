@@ -1,7 +1,6 @@
 #ifndef GRID_HPP
 #define GRID_HPP
-#include "Asset.cpp"
-#include "Produk.cpp"
+#include "Exception.hpp"
 #include "Tumbuhan.cpp"
 #include "Hewan.cpp"
 #include "Bangunan.cpp"
@@ -25,13 +24,17 @@ public:
   string calculateKey(size_t row, size_t col);
   void set(size_t row, size_t col, T value);
   void setWithKey(string key, T value);
+  void setNull(string key);
+
   T get(size_t row, size_t col);
   T get(string key);
   size_t numRows();
   size_t numCols();
   int countAvailableCapacity();
+
   bool isEmpty();
   bool isFull();
+  bool isValidKey(string key);
 
   virtual void addItem(T item) = 0;
   virtual void addItemKey(T item, string loc) = 0;

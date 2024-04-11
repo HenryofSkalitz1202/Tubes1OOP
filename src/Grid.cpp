@@ -31,39 +31,69 @@ Grid<T>::Grid(size_t rows, size_t cols) : rows(rows), cols(cols) {
 
 template <typename T>
 void Grid<T>::set(size_t row, size_t col, T value){
-    try{
-        if(this->data[Grid<T>::calculateKey(row, col)] != nullptr){
-            cout << "Value of grid(" << row << ", " << col << ") is not null. ";
-            throw insertIntoUnemptyCellException();
-        }
-        this->data[Grid<T>::calculateKey(row, col)] = value;
-    } catch(insertIntoUnemptyCellException& e){
-        cout << e.what();
+    if(row >= this->rows || col >= this->cols) {
+        cout << "Attempted to set value at position (" << row << ", " << col << ").";
+        throw outOfBoundsException();
     }
+
+    if(this->data[Grid<T>::calculateKey(row, col)] != nullptr){
+        cout << "Value of grid(" << row << ", " << col << ") is not null. ";
+        throw insertIntoUnemptyCellException();
+    }
+    this->data[Grid<T>::calculateKey(row, col)] = value;
 }
 
 template <typename T>
 void Grid<T>::setWithKey(string key, T value){
+    if(!this->isValidKey(key)) {
+        cout << "Attempted to set value with invalid key: " << key;
+        throw outOfBoundsException();
+    }
+
+    if(this->data[key] != nullptr){
+        cout << "Value of grid " << key << " is not null. ";
+        throw insertIntoUnemptyCellException();
+    }else{
+        this->data[key] = value;
+    }
+}
+
+template<typename T>
+void Grid<T>::setNull(string key){
     try{
-        if(this->data[key] != nullptr){
-            cout << "Value of grid " << key << " is not null. ";
-            throw insertIntoUnemptyCellException();
+        if(!this->isValidKey(key)){
+            cout << "Attempted to set value with invalid key: " << key;
+            throw outOfBoundsException();
         }
 
-        this->data[key] = value;
-    } catch(insertIntoUnemptyCellException& e){
+        if(this->data[key] == nullptr){
+            throw isAlreadyNullException();
+        }
+
+        this->data[key] = nullptr;
+    }catch(isAlreadyNullException& e){
         cout << e.what();
     }
 }
 
 template <typename T>
 T Grid<T>::get(size_t row, size_t col){
+    if(row >= this->rows || col >= this->cols) {
+        cout << "Attempted to set value at position (" << row << ", " << col << ").";
+        throw outOfBoundsException();
+    }
+
     auto it = this->data.find(calculateKey(row, col));
     return it->second;
 }
 
 template <typename T>
 T Grid<T>::get(string key){
+    if(!this->isValidKey(key)) {
+        cout << "Attempted to set value with invalid key: " << key;
+        throw outOfBoundsException();
+    }
+
     auto it = this->data.find(key);
     return it->second;
 }
@@ -138,6 +168,11 @@ bool Grid<T>::isFull(){
         return false;
     }
 }
+
+template<typename T>
+bool Grid<T>::isValidKey(string key){
+    return this->data.find(key) != this->data.end();
+}
 //<---------------INVENTORY----------------->
 int Inventory::inventoryRowSize;
 int Inventory::inventoryColumnSize;
@@ -156,26 +191,30 @@ Inventory::~Inventory() {
 }
 
 Inventory::Inventory(Inventory& other) : Grid<Asset*>(other.numRows(), other.numCols()) {
-    for (size_t i = 0; i < other.numRows(); ++i) {
-        for (size_t j = 0; j < other.numCols(); ++j) {
-            Asset* asset = other.get(i, j);
-            if (asset != nullptr) {
-                if (Produk* produk = dynamic_cast<Produk*>(asset)) {
-                    Produk* newProduk = nullptr;
-                    if (ProductMaterial* material = dynamic_cast<ProductMaterial*>(produk)) {
-                        newProduk = new ProductMaterial(*material);
-                    } else if (ProductFruit* fruit = dynamic_cast<ProductFruit*>(produk)) {
-                        newProduk = new ProductFruit(*fruit);
-                    } else if (ProductHewan* hewan = dynamic_cast<ProductHewan*>(produk)) {
-                        newProduk = new ProductHewan(*hewan);
+    try{
+        for (size_t i = 0; i < other.numRows(); ++i) {
+            for (size_t j = 0; j < other.numCols(); ++j) {
+                Asset* asset = other.get(i, j);
+                if (asset != nullptr) {
+                    if (Produk* produk = dynamic_cast<Produk*>(asset)) {
+                        Produk* newProduk = nullptr;
+                        if (ProductMaterial* material = dynamic_cast<ProductMaterial*>(produk)) {
+                            newProduk = new ProductMaterial(*material);
+                        } else if (ProductFruit* fruit = dynamic_cast<ProductFruit*>(produk)) {
+                            newProduk = new ProductFruit(*fruit);
+                        } else if (ProductHewan* hewan = dynamic_cast<ProductHewan*>(produk)) {
+                            newProduk = new ProductHewan(*hewan);
+                        }
+                        newProduk->setProdukType(produk->getProdukType());
+                        set(i, j, newProduk);
+                    } else if (Bangunan* bangunan = dynamic_cast<Bangunan*>(asset)) {
+                        set(i, j, new Bangunan(*bangunan));
                     }
-                    newProduk->setProdukType(produk->getProdukType());
-                    set(i, j, newProduk);
-                } else if (Bangunan* bangunan = dynamic_cast<Bangunan*>(asset)) {
-                    set(i, j, new Bangunan(*bangunan));
                 }
             }
         }
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
     }
 }
 
@@ -192,30 +231,34 @@ Inventory& Inventory::operator=(const Inventory& other) {
         }
     }
 
-    for (size_t i = 0; i < numRows(); ++i) {
-        for (size_t j = 0; j < numCols(); ++j) {
-            auto it = other.data.find(calculateKey(i, j));
-            Asset* asset = it->second;
-            if (asset != nullptr) {
-                if (Produk* produk = dynamic_cast<Produk*>(asset)) {
-                    Produk* newProduk = nullptr;
-                    if (ProductMaterial* material = dynamic_cast<ProductMaterial*>(produk)) {
-                        newProduk = new ProductMaterial(*material);
-                    } else if (ProductFruit* fruit = dynamic_cast<ProductFruit*>(produk)) {
-                        newProduk = new ProductFruit(*fruit);
-                    } else if (ProductHewan* hewan = dynamic_cast<ProductHewan*>(produk)) {
-                        newProduk = new ProductHewan(*hewan);
-                    }
+    try{
+        for (size_t i = 0; i < numRows(); ++i) {
+            for (size_t j = 0; j < numCols(); ++j) {
+                auto it = other.data.find(calculateKey(i, j));
+                Asset* asset = it->second;
+                if (asset != nullptr) {
+                    if (Produk* produk = dynamic_cast<Produk*>(asset)) {
+                        Produk* newProduk = nullptr;
+                        if (ProductMaterial* material = dynamic_cast<ProductMaterial*>(produk)) {
+                            newProduk = new ProductMaterial(*material);
+                        } else if (ProductFruit* fruit = dynamic_cast<ProductFruit*>(produk)) {
+                            newProduk = new ProductFruit(*fruit);
+                        } else if (ProductHewan* hewan = dynamic_cast<ProductHewan*>(produk)) {
+                            newProduk = new ProductHewan(*hewan);
+                        }
 
-                    newProduk->setProdukType(produk->getProdukType());
-                    set(i, j, newProduk);
-                } else if (Bangunan* bangunan = dynamic_cast<Bangunan*>(asset)) {
-                    set(i, j, new Bangunan(*bangunan));
+                        newProduk->setProdukType(produk->getProdukType());
+                        set(i, j, newProduk);
+                    } else if (Bangunan* bangunan = dynamic_cast<Bangunan*>(asset)) {
+                        set(i, j, new Bangunan(*bangunan));
+                    }
                 }
             }
         }
+        return *this;
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
     }
-    return *this;
 }
 
 void Inventory::addItem(Asset* asset) {
@@ -233,6 +276,8 @@ void Inventory::addItem(Asset* asset) {
         }
     }catch(inventoryFullException& e){
         std::cout << e.what();
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
     }
 }
 
@@ -244,6 +289,10 @@ void Inventory::addItemKey(Asset* asset, string loc) {
 
         setWithKey(loc, asset);
     }catch(inventoryFullException& e){
+        std::cout << e.what();
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
+    }catch(outOfBoundsException& e){
         std::cout << e.what();
     }
 }
@@ -309,10 +358,14 @@ int Ladang::lahanColumnSize;
 Ladang::Ladang() : Grid<Tumbuhan*>(lahanRowSize, lahanColumnSize) {}
 
 Ladang::Ladang(Ladang& other) : Grid<Tumbuhan*>(other.numRows(), other.numCols()) {
-    for (size_t i = 0; i < other.numRows(); ++i) {
-        for (size_t j = 0; j < other.numCols(); ++j) {
-            set(i, j, other.get(i, j));
+    try{
+        for (size_t i = 0; i < other.numRows(); ++i) {
+            for (size_t j = 0; j < other.numCols(); ++j) {
+                set(i, j, other.get(i, j));
+            }
         }
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
     }
 }
 
@@ -329,13 +382,17 @@ Ladang& Ladang::operator=(const Ladang& other) {
         }
     }
 
-    for (size_t i = 0; i < numRows(); ++i) {
-        for (size_t j = 0; j < numCols(); ++j) {
-            auto it = other.data.find(calculateKey(i, j));
-            set(i, j, it->second);
+    try{
+        for (size_t i = 0; i < numRows(); ++i) {
+            for (size_t j = 0; j < numCols(); ++j) {
+                auto it = other.data.find(calculateKey(i, j));
+                set(i, j, it->second);
+            }
         }
+        return *this;
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
     }
-    return *this;
 }
 
 Ladang::~Ladang() {
@@ -372,6 +429,8 @@ void Ladang::addItem(Tumbuhan* tumbuhan) {
         }
     }catch(ladangFullException& e){
         std::cout << e.what();
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
     }
 }
 
@@ -383,6 +442,10 @@ void Ladang::addItemKey(Tumbuhan* tumbuhan, string loc) {
 
         setWithKey(loc, tumbuhan);
     }catch(ladangFullException& e){
+        std::cout << e.what();
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
+    }catch(outOfBoundsException& e){
         std::cout << e.what();
     }
 }
@@ -415,10 +478,14 @@ int Peternakan::peternakanColumnSize;
 Peternakan::Peternakan() : Grid<Hewan*>(peternakanRowSize, peternakanColumnSize) {}
 
 Peternakan::Peternakan(Peternakan& other) : Grid<Hewan*>(other.numRows(), other.numCols()) {
-    for (size_t i = 0; i < other.numRows(); ++i) {
-        for (size_t j = 0; j < other.numCols(); ++j) {
-            set(i, j, other.get(i, j));
+    try{
+        for (size_t i = 0; i < other.numRows(); ++i) {
+            for (size_t j = 0; j < other.numCols(); ++j) {
+                set(i, j, other.get(i, j));
+            }
         }
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
     }
 }
 
@@ -435,13 +502,17 @@ Peternakan& Peternakan::operator=(const Peternakan& other) {
         }
     }
 
-    for (size_t i = 0; i < numRows(); ++i) {
-        for (size_t j = 0; j < numCols(); ++j) {
-            auto it = other.data.find(calculateKey(i, j));
-            set(i, j, it->second);
+    try{
+        for (size_t i = 0; i < numRows(); ++i) {
+            for (size_t j = 0; j < numCols(); ++j) {
+                auto it = other.data.find(calculateKey(i, j));
+                set(i, j, it->second);
+            }
         }
+        return *this;
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
     }
-    return *this;
 }
 
 Peternakan::~Peternakan() {
@@ -478,6 +549,8 @@ void Peternakan::addItem(Hewan* hewan) {
         }
     }catch(peternakanFullException& e){
         std::cout << e.what();
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
     }
 }
 
@@ -489,6 +562,10 @@ void Peternakan::addItemKey(Hewan* hewan, string loc) {
 
         setWithKey(loc, hewan);
     }catch(peternakanFullException& e){
+        std::cout << e.what();
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
+    }catch(outOfBoundsException& e){
         std::cout << e.what();
     }
 }

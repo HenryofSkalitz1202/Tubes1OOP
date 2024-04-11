@@ -25,10 +25,12 @@ public:
   void setUsername(string username);
   void setUang(int uang);
   void setberatBadan(int beratBadan);
+  void addToInventory(Asset* item);
   string getStatus();
   string getUsername();
   int getUang();
   int getBeratBadan();
+  Asset* getFromInventory(string key);
 
   virtual void countPajak() = 0;
 };

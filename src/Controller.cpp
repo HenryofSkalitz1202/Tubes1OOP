@@ -146,7 +146,7 @@ void Controller::populateConfigHewan(string filePathHewan){
 
     std::cout << "Map content:" << std::endl;
     for (const auto& pair : Hewan::configHewan) {
-        std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaHewan() << std::endl;
+        std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
     }
 }
 
@@ -178,7 +178,7 @@ void Controller::populateConfigTumbuhan(string filePathTumbuhan){
 
     std::cout << "Map content:" << std::endl;
     for (const auto& pair : Tumbuhan::configTumbuhan) {
-        std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaTumbuhan() << std::endl;
+        std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
     }
 }
 

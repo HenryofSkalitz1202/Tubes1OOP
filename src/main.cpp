@@ -95,8 +95,8 @@ int main() {
 
         // Add Hewan to the peternakan
         peternakan.addItem(hewan1);
-        peternakan.addItemKey(hewan2, "B01");
-        peternakan.addItemKey(hewan3, "C01");
+        peternakan.addItemKey(hewan2, "B04");
+        peternakan.addItemKey(hewan3, "E07");
 
         // Print the peternakan
         std::cout << "\nPeternakan:" << std::endl;

@@ -6,33 +6,22 @@
 
 using namespace std;
 
-class Tumbuhan{
+class Tumbuhan : public Asset{
 protected:
-  int tumbuhanID;
-  string kodeHuruf;
-  string namaTumbuhan;
   string type;
   size_t duration_to_harvest;
-  int price;
   size_t turn_instantiated;
 public:
   static size_t current_turn;
   static map<string, Tumbuhan*> configTumbuhan;
   ~Tumbuhan();
 
-  void setTumbuhanID(int tumbuhanID);
-  void setKodeHuruf(string kodeHuruf);
-  void setNamaTumbuhan(string namaTumbuhan);
+  void setAssetType(string assetType);
   void setType(string type);
   void setDurationToHarvest(size_t durationToHarvest);
-  void setPrice(int price);
   void setTurnInstantiated(size_t turn_instantiated);
-  int getTumbuhanID();
-  string getKodeHuruf();
-  string getNamaTumbuhan();
   string getType();
   size_t getDurationToHarvest();
-  int getPrice();
   size_t getTurnInstantiated();
 
   bool isReadyToHarvest();

@@ -13,6 +13,8 @@ protected:
   int addedWeight;
   int price;
 public:
+  static map<string, Produk*> configProduk;
+
   Produk();
   Produk(string kodeHuruf, string namaProduk, string origin, int addedWeight, int price);
   ~Produk();
@@ -32,6 +34,9 @@ public:
   string getOrigin();
   int getAddedWeight();
   int getPrice();
+  bool isEdibleHerbivore();
+  bool isEdibleCarnivore();
+  bool isBuildable();
 
   virtual void useProduct() = 0;
 };

@@ -76,20 +76,32 @@ bool Hewan::isReadyToHarvest(){
     return false;
 }
 
-//<---------------HERBIVORE----------------->
-bool Herbivore::isHerbivore(const std::string& kodeHuruf) {
-    static const std::unordered_set<std::string> herbivoreCodes = {
-        "COW", "SHP", "HRS", "RBT"
-    };
+vector<Produk*> Hewan::harvest(){
+    vector<Produk*> harvestedMaterials;
 
-    return herbivoreCodes.find(kodeHuruf) != herbivoreCodes.end();
+    for (const auto& pair : ProductHewan::configProdukHewan) {
+        if (pair.second->getOrigin() == this->namaHewan) {
+            harvestedMaterials.push_back(pair.second);
+        }
+    }
+
+    return harvestedMaterials;
 }
+
+//<---------------HERBIVORE----------------->
+// bool Herbivore::isHerbivore(const std::string& kodeHuruf) {
+//     static const std::unordered_set<std::string> herbivoreCodes = {
+//         "COW", "SHP", "HRS", "RBT"
+//     };
+
+//     return herbivoreCodes.find(kodeHuruf) != herbivoreCodes.end();
+// }
 
 Herbivore::Herbivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price){
     try{
-        if(!isHerbivore(kodeHuruf)){
-            throw NotHerbivoreException();
-        }
+        // if(!isHerbivore(kodeHuruf)){
+        //     throw NotHerbivoreException();
+        // }
         this->setHewanID(hewanID);
         this->setKodeHuruf(kodeHuruf);
         this->setNamaHewan(namaHewan);
@@ -140,24 +152,20 @@ void Herbivore::makan(Produk* pakan){
     }
 }
 
-// void Herbivore::harvest(Pemain *player){
-//     //TO DO
-// }
-
 //<---------------CARNIVORE----------------->
-bool Carnivore::isCarnivore(const std::string& kodeHuruf) {
-    static const std::unordered_set<std::string> carnivoreCodes = {
-        "SNK"
-    };
+// bool Carnivore::isCarnivore(const std::string& kodeHuruf) {
+//     static const std::unordered_set<std::string> carnivoreCodes = {
+//         "SNK"
+//     };
 
-    return carnivoreCodes.find(kodeHuruf) != carnivoreCodes.end();
-}
+//     return carnivoreCodes.find(kodeHuruf) != carnivoreCodes.end();
+// }
 
 Carnivore::Carnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price){
     try{
-        if(!isCarnivore(kodeHuruf)){
-            throw NotCarnivoreException();
-        }
+        // if(!isCarnivore(kodeHuruf)){
+        //     throw NotCarnivoreException();
+        // }
         this->setHewanID(hewanID);
         this->setKodeHuruf(kodeHuruf);
         this->setNamaHewan(namaHewan);
@@ -208,24 +216,20 @@ void Carnivore::makan(Produk* pakan){
     }
 }
 
-// void Carnivore::harvest(Pemain *player){
-    
-// }
-
 //<---------------OMNIVORE----------------->
-bool Omnivore::isOmnivore(const std::string& kodeHuruf) {
-    static const std::unordered_set<std::string> omnivoreCodes = {
-        "CHK", "DCK"
-    };
+// bool Omnivore::isOmnivore(const std::string& kodeHuruf) {
+//     static const std::unordered_set<std::string> omnivoreCodes = {
+//         "CHK", "DCK"
+//     };
 
-    return omnivoreCodes.find(kodeHuruf) != omnivoreCodes.end();
-}
+//     return omnivoreCodes.find(kodeHuruf) != omnivoreCodes.end();
+// }
 
 Omnivore::Omnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price){
     try{
-        if(!isOmnivore(kodeHuruf)){
-            throw NotOmnivoreException();
-        }
+        // if(!isOmnivore(kodeHuruf)){
+        //     throw NotOmnivoreException();
+        // }
         this->setHewanID(hewanID);
         this->setKodeHuruf(kodeHuruf);
         this->setNamaHewan(namaHewan);
@@ -280,7 +284,3 @@ void Omnivore::makan(Produk* pakan){
         cout << e.what();
     }
 }
-
-// void Omnivore::harvest(Pemain *player){
-//     //TO DO
-// }

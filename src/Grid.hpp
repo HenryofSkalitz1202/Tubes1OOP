@@ -24,13 +24,17 @@ public:
 
   string calculateKey(size_t row, size_t col);
   void set(size_t row, size_t col, T value);
+  void setWithKey(string key, T value);
   T get(size_t row, size_t col);
+  T get(string key);
   size_t numRows();
   size_t numCols();
   int countAvailableCapacity();
   bool isEmpty();
   bool isFull();
 
+  virtual void addItem(T item) = 0;
+  virtual void addItemKey(T item, string loc) = 0;
   void printLexicalOrder(int n);
   void printBorder(int n);
   virtual void print() = 0;
@@ -51,6 +55,8 @@ public:
   ~Inventory();
   Inventory& operator=(const Inventory& other);
 
+  void addItem(Asset*);
+  void addItemKey(Asset*, string loc);
   void rekapInventory();
   void print();
 };
@@ -67,6 +73,8 @@ public:
   ~Ladang();
   Ladang& operator=(const Ladang& other);
 
+  void addItem(Tumbuhan*);
+  void addItemKey(Tumbuhan*, string loc);
   void setJumlahTumbuhan();
   int getJumlahTumbuhan();
   void print();
@@ -83,6 +91,8 @@ public:
   ~Peternakan();
   Peternakan& operator=(const Peternakan& other);
 
+  void addItem(Hewan*);
+  void addItemKey(Hewan*, string loc);
   void setJumlahHewan();
   int getJumlahHewan();
   void print();

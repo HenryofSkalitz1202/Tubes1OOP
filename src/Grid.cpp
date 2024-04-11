@@ -9,7 +9,7 @@ template <typename T>
 string Grid<T>::calculateKey(size_t row, size_t col){
     std::ostringstream oss;
     char key_alphabet = 'A' + col;
-    oss << std::setw(2) << std::setfill('0') << row;
+    oss << std::setw(2) << std::setfill('0') << row + 1;
     std::string final_key = key_alphabet + oss.str();
 
     oss.str("");
@@ -21,7 +21,7 @@ string Grid<T>::calculateKey(size_t row, size_t col){
 template <typename T>
 Grid<T>::Grid(size_t rows, size_t cols) : rows(rows), cols(cols) {
     std::ostringstream oss;
-    for(int i = 0; i < this->rows; i++){
+    for(int i = 0; i <= this->rows; i++){
         for(int j = 0; j < this->cols; j++){
             std::string kunci = calculateKey(i, j);
             this->data.insert({kunci, nullptr});
@@ -43,8 +43,28 @@ void Grid<T>::set(size_t row, size_t col, T value){
 }
 
 template <typename T>
+void Grid<T>::setWithKey(string key, T value){
+    try{
+        if(this->data[key] != nullptr){
+            cout << "Value of grid " << key << " is not null. ";
+            throw insertIntoUnemptyCellException();
+        }
+
+        this->data[key] = value;
+    } catch(insertIntoUnemptyCellException& e){
+        cout << e.what();
+    }
+}
+
+template <typename T>
 T Grid<T>::get(size_t row, size_t col){
     auto it = this->data.find(calculateKey(row, col));
+    return it->second;
+}
+
+template <typename T>
+T Grid<T>::get(string key){
+    auto it = this->data.find(key);
     return it->second;
 }
 
@@ -160,10 +180,9 @@ Inventory::Inventory(Inventory& other) : Grid<Asset*>(other.numRows(), other.num
 }
 
 Inventory& Inventory::operator=(const Inventory& other) {
-    if (this == &other) // Self-assignment check
+    if (this == &other)
         return *this;
 
-    // Clear existing data in this Inventory
     for (size_t i = 0; i < numRows(); ++i) {
         for (size_t j = 0; j < numCols(); ++j) {
             Asset* asset = get(i, j);
@@ -173,7 +192,6 @@ Inventory& Inventory::operator=(const Inventory& other) {
         }
     }
 
-    // Copy data from other Inventory
     for (size_t i = 0; i < numRows(); ++i) {
         for (size_t j = 0; j < numCols(); ++j) {
             auto it = other.data.find(calculateKey(i, j));
@@ -200,6 +218,36 @@ Inventory& Inventory::operator=(const Inventory& other) {
     return *this;
 }
 
+void Inventory::addItem(Asset* asset) {
+    try{
+        if(this->isFull()){
+            throw inventoryFullException();
+        }
+        for (size_t row = 0; row < this->numRows(); ++row) {
+            for (size_t col = 0; col < this->numCols(); ++col) {
+                if (this->data[calculateKey(row, col)] == nullptr) {
+                    set(row, col, asset);
+                    return;
+                }
+            }
+        }
+    }catch(inventoryFullException& e){
+        std::cout << e.what();
+    }
+}
+
+void Inventory::addItemKey(Asset* asset, string loc) {
+    try{
+        if(this->isFull()){
+            throw inventoryFullException();
+        }
+
+        setWithKey(loc, asset);
+    }catch(inventoryFullException& e){
+        std::cout << e.what();
+    }
+}
+
 void Inventory::rekapInventory() {
     this->jumlahBangunan = 0;
     this->jumlahProductMaterial = 0;
@@ -224,12 +272,11 @@ void Inventory::rekapInventory() {
         }
     }
 
-    // // Print the summary
-    // cout << "Inventory Summary:" << endl;
-    // cout << "Bangunan: " << jumlahBangunan << endl;
-    // cout << "ProductMaterial: " << jumlahProductMaterial << endl;
-    // cout << "ProductFruit: " << jumlahProductFruit << endl;
-    // cout << "ProductHewan: " << jumlahProductHewan << endl;
+    std::cout << "Inventory Summary:" << endl;
+    std::cout << "Bangunan: " << jumlahBangunan << endl;
+    std::cout << "ProductMaterial: " << jumlahProductMaterial << endl;
+    std::cout << "ProductFruit: " << jumlahProductFruit << endl;
+    std::cout << "ProductHewan: " << jumlahProductHewan << endl;
 }
 
 void Inventory::print() {
@@ -270,10 +317,9 @@ Ladang::Ladang(Ladang& other) : Grid<Tumbuhan*>(other.numRows(), other.numCols()
 }
 
 Ladang& Ladang::operator=(const Ladang& other) {
-    if (this == &other) // Self-assignment check
+    if (this == &other)
         return *this;
 
-    // Clear existing data in this Ladang
     for (size_t i = 0; i < numRows(); ++i) {
         for (size_t j = 0; j < numCols(); ++j) {
             Tumbuhan* tumbuhan = get(i, j);
@@ -283,7 +329,6 @@ Ladang& Ladang::operator=(const Ladang& other) {
         }
     }
 
-    // Copy data from other Ladang
     for (size_t i = 0; i < numRows(); ++i) {
         for (size_t j = 0; j < numCols(); ++j) {
             auto it = other.data.find(calculateKey(i, j));
@@ -310,6 +355,36 @@ void Ladang::setJumlahTumbuhan(){
 
 int Ladang::getJumlahTumbuhan(){
     return this->jumlahTumbuhan;
+}
+
+void Ladang::addItem(Tumbuhan* tumbuhan) {
+    try{
+        if(this->isFull()){
+            throw ladangFullException();
+        }
+        for (size_t row = 0; row < this->numRows(); ++row) {
+            for (size_t col = 0; col < this->numCols(); ++col) {
+                if (this->data[calculateKey(row, col)] == nullptr) {
+                    set(row, col, tumbuhan);
+                    return;
+                }
+            }
+        }
+    }catch(ladangFullException& e){
+        std::cout << e.what();
+    }
+}
+
+void Ladang::addItemKey(Tumbuhan* tumbuhan, string loc) {
+    try{
+        if(this->isFull()){
+            throw ladangFullException();
+        }
+
+        setWithKey(loc, tumbuhan);
+    }catch(ladangFullException& e){
+        std::cout << e.what();
+    }
 }
 
 void Ladang::print() {
@@ -348,10 +423,9 @@ Peternakan::Peternakan(Peternakan& other) : Grid<Hewan*>(other.numRows(), other.
 }
 
 Peternakan& Peternakan::operator=(const Peternakan& other) {
-    if (this == &other) // Self-assignment check
+    if (this == &other)
         return *this;
 
-    // Clear existing data in this Peternakan
     for (size_t i = 0; i < numRows(); ++i) {
         for (size_t j = 0; j < numCols(); ++j) {
             Hewan* hewan = get(i, j);
@@ -361,7 +435,6 @@ Peternakan& Peternakan::operator=(const Peternakan& other) {
         }
     }
 
-    // Copy data from other Peternakan
     for (size_t i = 0; i < numRows(); ++i) {
         for (size_t j = 0; j < numCols(); ++j) {
             auto it = other.data.find(calculateKey(i, j));
@@ -388,6 +461,36 @@ void Peternakan::setJumlahHewan(){
 
 int Peternakan::getJumlahHewan(){
     return this->jumlahHewan;
+}
+
+void Peternakan::addItem(Hewan* hewan) {
+    try{
+        if(this->isFull()){
+            throw peternakanFullException();
+        }
+        for (size_t row = 0; row < this->numRows(); ++row) {
+            for (size_t col = 0; col < this->numCols(); ++col) {
+                if (this->data[calculateKey(row, col)] == nullptr) {
+                    set(row, col, hewan);
+                    return;
+                }
+            }
+        }
+    }catch(peternakanFullException& e){
+        std::cout << e.what();
+    }
+}
+
+void Peternakan::addItemKey(Hewan* hewan, string loc) {
+    try{
+        if(this->isFull()){
+            throw peternakanFullException();
+        }
+
+        setWithKey(loc, hewan);
+    }catch(peternakanFullException& e){
+        std::cout << e.what();
+    }
 }
 
 void Peternakan::print() {

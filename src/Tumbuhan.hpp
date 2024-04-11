@@ -46,7 +46,7 @@ public:
   FruitPlant(FruitPlant& other);
   FruitPlant& operator=(const FruitPlant& other);
 
-  vector<Produk*> harvest(); //TO DO
+  vector<Produk*> harvest();
 };
 
 class MaterialPlant : public Tumbuhan{
@@ -56,7 +56,7 @@ public:
   MaterialPlant(MaterialPlant& other);
   MaterialPlant& operator=(const MaterialPlant& other);
 
-  vector<Produk*> harvest(); //TO DO
+  vector<Produk*> harvest();
 };
 
 #endif

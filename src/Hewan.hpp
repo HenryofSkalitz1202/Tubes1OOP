@@ -2,6 +2,7 @@
 #define HEWAN_HPP
 #include "Produk.hpp"
 #include <string>
+#include <vector>
 #include <map>
 using namespace std;
 
@@ -37,7 +38,7 @@ public:
 
   bool isReadyToHarvest();
   virtual void makan(Produk*) = 0;
-  //virtual void harvest(Pemain* player) = 0;
+  vector<Produk*> harvest();
 };
 
 class Herbivore : public Hewan{
@@ -47,10 +48,9 @@ public:
   Herbivore(Herbivore& other);
   Herbivore& operator=(const Herbivore& other);
 
-  bool isHerbivore(const std::string& kodeHuruf);
+  //bool isHerbivore(const std::string& kodeHuruf);
 
   void makan(Produk*);
-  //void harvest(Pemain *player);
 };
 
 class Carnivore : public Hewan{
@@ -60,10 +60,9 @@ public:
   Carnivore(Carnivore& other);
   Carnivore& operator=(const Carnivore& other);
 
-  bool isCarnivore(const std::string& kodeHuruf);
+  //bool isCarnivore(const std::string& kodeHuruf);
 
   void makan(Produk*);
-  //void harvest(Pemain *player);
 };
 
 class Omnivore : public Hewan{
@@ -73,10 +72,9 @@ public:
   Omnivore(Omnivore& other);
   Omnivore& operator=(const Omnivore& other);
 
-  bool isOmnivore(const std::string& kodeHuruf);
+  //bool isOmnivore(const std::string& kodeHuruf);
 
   void makan(Produk*);
-  //void harvest(Pemain *player);
 };
 
 #endif

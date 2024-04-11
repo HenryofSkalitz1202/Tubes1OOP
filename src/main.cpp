@@ -50,28 +50,57 @@ int main() {
         Controller::GameConfig(filePathMisc);
         fileMisc.close();
 
-        // Create a MaterialPlant object
-        int tumbuhanID = 1; // Assign a suitable ID
-        string kodeHuruf = "ALT"; // Assign a suitable code
-        string namaTumbuhan = "ALOE_TREE"; // Assign a suitable name
-        string type = "MATERIAL_PLANT"; // Assign the type (assuming Material)
-        size_t durationToHarvest = 5; // Assign the duration to harvest
-        int price = 10; // Assign the price
-        size_t turnInstantiated = 0; // Assign the turn instantiated (assuming starting from turn 0)
+        // Create an Inventory object
+        Inventory inventory;
 
-        MaterialPlant materialPlant(tumbuhanID, kodeHuruf, namaTumbuhan, type, durationToHarvest, price, turnInstantiated);
+        // Create some assets
+        // Define the materials list
+        Asset* asset1 = new Bangunan(1, "SMH", "SMALL_HOUSE", 1000, {{"Wood", 10}, {"Brick", 20}});
+        Asset* asset2 = new Bangunan(2, "MDH", "MEDIUM_HOUSE", 1000, {{"Wood", 10}, {"Brick", 20}});
+        Asset* asset3 = new Bangunan(4, "HTL", "HOTEL", 1000, {{"Wood", 10}, {"Brick", 20}});
 
-        // Harvest materials
-        vector<Produk*> harvestedMaterials = materialPlant.harvest();
+        // Add assets to the inventory
+        inventory.addItemKey(asset1, "D04");
+        inventory.addItem(asset2);
+        inventory.addItemKey(asset3, "D04");
 
-        // Display harvested materials
-        cout << "Harvested Materials:" << endl;
-        for (Produk* material : harvestedMaterials) {
-            cout << "Name: " << material->getNamaAsset() << ", Origin: " << material->getOrigin() << endl;
-        }
+        // Print the inventory
+        std::cout << "Inventory:" << std::endl;
+        inventory.print();
 
-        return 0;
+        // Create a Ladang object
+        Ladang ladang;
 
+        // Create some Tumbuhan objects
+        Tumbuhan* tumbuhan1 = new FruitPlant(1, "APL", "APPLE_TREE", "FRUIT_PLANT", 5, 5, 2);
+        Tumbuhan* tumbuhan2 = new MaterialPlant(1, "IRN", "IRONWOOD_TREE", "MATERIAL_PLANT", 8, 8, 2);
+        Tumbuhan* tumbuhan3 = new FruitPlant(1, "ORG", "ORANGE_TREE", "FRUIT_PLANT", 3, 7, 2);
+
+        // Add Tumbuhan to the ladang
+        ladang.addItem(tumbuhan1);
+        ladang.addItemKey(tumbuhan2, "B03");
+        ladang.addItemKey(tumbuhan3, "C02");
+
+        // Print the ladang
+        std::cout << "\nLadang:" << std::endl;
+        ladang.print();
+
+        // Create a Peternakan object
+        Peternakan peternakan;
+
+        // Create some Hewan objects
+        Hewan* hewan1 = new Herbivore(1, "COW", "COW", "HERBIVORE", 10, 500);
+        Hewan* hewan2 = new Omnivore(1, "CHK", "CHICKEN", "OMNIVORE", 10, 500);
+        Hewan* hewan3 = new Carnivore(3, "SNK", "SNAKE", "CARNIVORE", 10, 50);
+
+        // Add Hewan to the peternakan
+        peternakan.addItem(hewan1);
+        peternakan.addItemKey(hewan2, "B01");
+        peternakan.addItemKey(hewan3, "C01");
+
+        // Print the peternakan
+        std::cout << "\nPeternakan:" << std::endl;
+        peternakan.print();
     } catch(UnknownProductTypeException& e){
         cout << e.what() << endl;
     } catch(FilePathProdukNotFoundException& e){

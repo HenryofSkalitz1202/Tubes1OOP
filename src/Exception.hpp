@@ -136,4 +136,28 @@ struct inventoryFullException : public exception{
     }
 };
 
+struct ladangEmptyException : public exception{
+    const char* what() const throw(){
+        return "Ladang is empty!\n";
+    }
+};
+
+struct ladangFullException : public exception{
+    const char* what() const throw(){
+        return "Ladang is full!\n";
+    }
+};
+
+struct peternakanEmptyException : public exception{
+    const char* what() const throw(){
+        return "Peternakan is empty!\n";
+    }
+};
+
+struct peternakanFullException : public exception{
+    const char* what() const throw(){
+        return "Peternakan is full!\n";
+    }
+};
+
 #endif

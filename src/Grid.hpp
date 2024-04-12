@@ -31,6 +31,7 @@ public:
   size_t numRows();
   size_t numCols();
   int countAvailableCapacity();
+  int getTotalWorth();
 
   bool isEmpty();
   bool isFull();

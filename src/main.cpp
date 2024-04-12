@@ -3,7 +3,7 @@
 int Pemain::defaultBerat;
 int Pemain::defaultUang;
 
-int main() {
+int main(){
     std::string filePathProduk = "produk.txt";
     std::string filePathHewan = "animal.txt";
     std::string filePathTumbuhan = "plant.txt";

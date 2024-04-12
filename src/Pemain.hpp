@@ -1,9 +1,7 @@
 #ifndef PEMAIN_HPP
 #define PEMAIN_HPP
 #include <string>
-#include "Asset.hpp"
-#include "Bangunan.hpp"
-#include "Produk.hpp"
+#include "Grid.cpp"
 
 using namespace std;
 
@@ -13,25 +11,26 @@ protected:
   int uang;
   int beratBadan;
   string status;
-  //static map<Asset> inventory;
+  Inventory inventory;
 public:
   static int beratWin;
   static int uangWin;
   static int defaultBerat;
   static int defaultUang;
-  static int inventoryRowSize;
-  static int inventoryColumnSize;
 
-  ~Pemain();
+  Pemain();
+  virtual ~Pemain();
 
   virtual void setStatus() = 0;
   void setUsername(string username);
   void setUang(int uang);
   void setberatBadan(int beratBadan);
+  void addToInventory(Asset* item);
   string getStatus();
   string getUsername() const;
   int getUang();
   int getBeratBadan();
+  Asset* getFromInventory(string key);
 
   // virtual void countPajak() = 0;
 };
@@ -39,11 +38,8 @@ public:
 class Petani : public Pemain{
 private:
   int petaniID;
-  //static map<Tumbuhan> lahan;
+  Ladang ladang;
 public:
-  static int lahanRowSize;
-  static int lahanColumnSize;
-
   Petani();
   Petani(string username, int uang, int beratBadan);
   ~Petani();
@@ -52,9 +48,7 @@ public:
 
   void setStatus();
   void setPetaniID(int petaniID);
-  //void setLadang();
   int getPetaniID();
-  //map<Tumbuhan> getLadang();
 
   void tanamTanaman();
   void panenTanaman();
@@ -89,11 +83,8 @@ public:
 class Peternak : public Pemain{
 private:
   int peternakID;
-  //static map<Hewan> peternakan;
+  Peternakan peternakan;
 public:
-  static int peternakanRowSize;
-  static int peternakanColumnSize;
-  
   Peternak();
   Peternak(string username, int uang, int beratBadan);
   ~Peternak();
@@ -102,10 +93,7 @@ public:
 
   void setStatus();
   void setPeternakID(int peternakID);
-  //void setLadang();
   int getPeternakID();
-  //map<Hewan> getPeternakan();
-  //void printPeternakan();
 
   void taruhHewan();
   void beriMakan();
@@ -113,4 +101,5 @@ public:
   void beliBangunan();
   // void countPajak();
 };
+
 #endif

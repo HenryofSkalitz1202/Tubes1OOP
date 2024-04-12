@@ -9,10 +9,6 @@ using namespace std;
 
 class Bangunan : public Asset, public Items {
 protected:
-  int bangunanID;
-  string kodeHuruf;
-  string namaBangunan;
-  int hargaBangunan;
   map<string, int> listBahan;
 
 public:
@@ -23,15 +19,7 @@ public:
   Bangunan& operator=(const Bangunan& other);
 
   void setAssetType(string assetType);
-  void setBangunanID(int bangunanID);
-  void setKodeHuruf(string kodeHuruf);
-  void setNamaBangunan(string namaBangunan);
-  void setHargaBangunan(int hargaBangunan);
   void setListBahan(map<string, int> listBahan);
-  int getBangunanID();
-  string getKodeHuruf();
-  string getNamaBangunan();
-  int getHargaBangunan();
   map<string, int> getListBahan();
   //void print();
 };

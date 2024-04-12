@@ -1,61 +1,106 @@
 #include "Grid.hpp"
-#include "Tumbuhan.hpp"
+#include "Exception.hpp"
 #include <iostream>
 #include <iomanip>
-#include <string>
-#include <typeinfo>
+#include <sstream>
+#include <map>
+
+#define NORMAL "\x1B[0m"
+#define RED "\x1B[31m"
+#define GREEN "\x1B[32m"
+#define BLUE "\x1B[34m"
+
+template <typename T>
+string Grid<T>::calculateKey(size_t row, size_t col){
+    std::ostringstream oss;
+    char key_alphabet = 'A' + col;
+    oss << std::setw(2) << std::setfill('0') << row + 1;
+    std::string final_key = key_alphabet + oss.str();
+
+    oss.str("");
+    oss.clear();
+
+    return final_key;
+}
 
 template <typename T>
 Grid<T>::Grid(size_t rows, size_t cols) : rows(rows), cols(cols) {
-    T* initial = new T;
-    this->data.resize(rows, std::vector<T*>(cols, initial));
-}
-
-template <typename T>
-Grid<T>::~Grid() {
-    // INI MASIH ERROR, segfault. belum ketemu alasannya
-    for (int i=0; i < this->rows; i++) {
-        for (int j=0; j < this->cols; j++) {
-            delete this->data[i][j];
-            this->data[i][j] = nullptr;
+    std::ostringstream oss;
+    for(int i = 0; i <= this->rows; i++){
+        for(int j = 0; j < this->cols; j++){
+            std::string kunci = calculateKey(i, j);
+            this->data.insert({kunci, nullptr});
         }
     }
 }
 
 template <typename T>
-T*& Grid<T>::get(size_t row, size_t col) {
-    //T* value = dynamic_cast<T*>(this->data[row][col])
-    return this->data[row][col];
+void Grid<T>::set(size_t row, size_t col, T value){
+    if(row >= this->rows || col >= this->cols) {
+        cout << "Attempted to set value at position (" << row << ", " << col << ").";
+        throw outOfBoundsException();
+    }
+
+    if(this->data[Grid<T>::calculateKey(row, col)] != nullptr){
+        cout << "Value of grid(" << row << ", " << col << ") is not null. ";
+        throw insertIntoUnemptyCellException();
+    }
+    this->data[Grid<T>::calculateKey(row, col)] = value;
 }
 
 template <typename T>
-void Grid<T>::set(size_t row, size_t col, T& value) {
-    T* temp = new T(value);
-    this->data[row][col] = temp;
+void Grid<T>::setWithKey(string key, T value){
+    if(!this->isValidKey(key)) {
+        cout << "Attempted to set value with invalid key: " << key;
+        throw outOfBoundsException();
+    }
+
+    if(this->data[key] != nullptr){
+        cout << "Value of grid " << key << " is not null. ";
+        throw insertIntoUnemptyCellException();
+    }else{
+        this->data[key] = value;
+    }
 }
 
-template <typename T>
-void Grid<T>::set_first_empty(T& value) {
-    bool set = false;
-    int i=0;
-    int j=0;
-    while (i < this->rows && !set) {
-        while (j<this->cols && !set) {
-            if (this->data[i][j]->getKodeHuruf() == "   ") {
-                T* temp = new T(value);
-                this->data[i][j] = temp;
-                set = true;
-            }
-            j++;
+template<typename T>
+void Grid<T>::setNull(string key){
+    try{
+        if(!this->isValidKey(key)){
+            cout << "Attempted to set value with invalid key: " << key;
+            throw outOfBoundsException();
         }
-        i++;
+
+        if(this->data[key] == nullptr){
+            throw isAlreadyNullException();
+        }
+
+        this->data[key] = nullptr;
+    }catch(isAlreadyNullException& e){
+        cout << e.what();
     }
 }
 
 template <typename T>
-void Grid<T>::unset(size_t row, size_t col) {
-    T* a = new T;
-    this->data[row][col] = a;
+T Grid<T>::get(size_t row, size_t col){
+    if(row >= this->rows || col >= this->cols) {
+        cout << "Attempted to set value at position (" << row << ", " << col << ").";
+        throw outOfBoundsException();
+    }
+
+    auto it = this->data.find(calculateKey(row, col));
+    return it->second;
+}
+
+template <typename T>
+T Grid<T>::get(string key){
+    if(!this->isValidKey(key)) {
+        cout << "Attempted to set value with invalid key: " << key;
+        throw outOfBoundsException();
+    }
+
+    auto it = this->data.find(key);
+    return it->second;
 }
 
 template <typename T>
@@ -63,47 +108,18 @@ bool Grid<T>::is_empty(size_t row, size_t col) {
     return (this->data[row][col]->getKodeHuruf() == "-");
 }
 template <typename T>
-size_t Grid<T>::numRows() const {
-    return this->rows;
+size_t Grid<T>::numRows(){
+    return rows;
 }
 
 template <typename T>
-size_t Grid<T>::numCols() const {
-    return this->cols;
+size_t Grid<T>::numCols(){
+    return cols;
 }
 
 template <typename T>
-bool Grid<T>::is_full() {
-    bool full = true;
-    int i = 0;
-    int j = 0;
-    while (i<this->rows && full) {
-        while (j<this->cols && full) {
-            if (this->data[i][j].getKodeHuruf != "   ") full = false;
-            j++;
-        }
-        i++;
-    }
-    return full;
-}
-
-template <typename T>
-bool Grid<T>::has_type(T& value) {
-    bool exists = false;
-    int i = 0;
-    int j = 0;
-    while (i<this->rows && !exists) {
-        while (j<this->cols && !exists) {
-            if (this->data[i][j]->getType().compare(value.getType()) == 0) exists=true;
-            j++;
-        }
-        i++;
-    }
-    return exists;
-}
-
-void printLexicalOrder(ostream& st, int n) {
-    char current = 'A'; // Start from 'A' (uppercase)
+void Grid<T>::printLexicalOrder(int n) {
+    char current = 'A';
     int count = 0;
 
     while (count < n) {
@@ -115,7 +131,6 @@ void printLexicalOrder(ostream& st, int n) {
         count++;
         current++;
 
-        // If current character reaches 'Z', reset it to 'A'
         if (current > 'Z') {
             current = 'A';
         }
@@ -123,64 +138,511 @@ void printLexicalOrder(ostream& st, int n) {
     st << std::endl;
 }
 
-void printBorder(ostream& st, int n) {
-    st << "   ";
+template <typename T>
+void Grid<T>::printBorder(int n) {
+    std::cout << "   ";
     for(int i = 0; i < n; i++) {
         st << "+-----";
     }
     st << "+" << std::endl;
 }
 
-template <typename T>
-ostream& operator<<(ostream& st, Grid<T> &grid) {
-    st << " ";
-    printLexicalOrder(st, grid.numCols());
-    for (int i = 0; i < grid.numRows(); ++i){
-        printBorder(st, grid.numCols());
-        st << std::setw(2) << std::setfill('0') << i+1;
-
-        st << " | " ;
-        for (int j = 0; j < grid.numCols(); ++j) {
-            if (grid.is_empty(i,j)) st << "   " << " | ";
-            else st << std::setw(3) << std::setfill(' ') << grid.get(i,j)->getKodeHuruf() << " | ";
+template<typename T>
+int Grid<T>::countAvailableCapacity() {
+    size_t count = 0;
+    for (size_t i = 0; i < numRows(); ++i) {
+        for (size_t j = 0; j < numCols(); ++j) {
+            if (get(i, j) == nullptr) {
+                ++count;
+            }
         }
-        st << "  " << endl;
+    }
+    return count;
+}
+
+template<typename T>
+bool Grid<T>::isEmpty(){
+    if(this->countAvailableCapacity() == (this->rows * this->cols)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+template<typename T>
+bool Grid<T>::isFull(){
+    if(this->countAvailableCapacity() == 0){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+template<typename T>
+bool Grid<T>::isValidKey(string key){
+    return this->data.find(key) != this->data.end();
+}
+//<---------------INVENTORY----------------->
+int Inventory::inventoryRowSize;
+int Inventory::inventoryColumnSize;
+
+Inventory::Inventory() : Grid<Asset*>(inventoryRowSize, inventoryColumnSize) {}
+
+Inventory::~Inventory() {
+    for (size_t i = 0; i < this->rows; ++i) {
+        for (size_t j = 0; j < this->cols; ++j) {
+            Asset* asset = get(i, j);
+            if (asset != nullptr) {
+                delete asset;
+            }
+        }
+    }
+}
+
+Inventory::Inventory(Inventory& other) : Grid<Asset*>(other.numRows(), other.numCols()) {
+    try{
+        for (size_t i = 0; i < other.numRows(); ++i) {
+            for (size_t j = 0; j < other.numCols(); ++j) {
+                Asset* asset = other.get(i, j);
+                if (asset != nullptr) {
+                    if (Produk* produk = dynamic_cast<Produk*>(asset)) {
+                        Produk* newProduk = nullptr;
+                        if (ProductMaterial* material = dynamic_cast<ProductMaterial*>(produk)) {
+                            newProduk = new ProductMaterial(*material);
+                        } else if (ProductFruit* fruit = dynamic_cast<ProductFruit*>(produk)) {
+                            newProduk = new ProductFruit(*fruit);
+                        } else if (ProductHewan* hewan = dynamic_cast<ProductHewan*>(produk)) {
+                            newProduk = new ProductHewan(*hewan);
+                        }
+                        newProduk->setProdukType(produk->getProdukType());
+                        set(i, j, newProduk);
+                    } else if (Bangunan* bangunan = dynamic_cast<Bangunan*>(asset)) {
+                        set(i, j, new Bangunan(*bangunan));
+                    }
+                }
+            }
+        }
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
+    }
+}
+
+Inventory& Inventory::operator=(const Inventory& other) {
+    if (this == &other)
+        return *this;
+
+    for (size_t i = 0; i < numRows(); ++i) {
+        for (size_t j = 0; j < numCols(); ++j) {
+            Asset* asset = get(i, j);
+            if (asset != nullptr) {
+                delete asset;
+            }
+        }
+    }
+
+    try{
+        for (size_t i = 0; i < numRows(); ++i) {
+            for (size_t j = 0; j < numCols(); ++j) {
+                auto it = other.data.find(calculateKey(i, j));
+                Asset* asset = it->second;
+                if (asset != nullptr) {
+                    if (Produk* produk = dynamic_cast<Produk*>(asset)) {
+                        Produk* newProduk = nullptr;
+                        if (ProductMaterial* material = dynamic_cast<ProductMaterial*>(produk)) {
+                            newProduk = new ProductMaterial(*material);
+                        } else if (ProductFruit* fruit = dynamic_cast<ProductFruit*>(produk)) {
+                            newProduk = new ProductFruit(*fruit);
+                        } else if (ProductHewan* hewan = dynamic_cast<ProductHewan*>(produk)) {
+                            newProduk = new ProductHewan(*hewan);
+                        }
+
+                        newProduk->setProdukType(produk->getProdukType());
+                        set(i, j, newProduk);
+                    } else if (Bangunan* bangunan = dynamic_cast<Bangunan*>(asset)) {
+                        set(i, j, new Bangunan(*bangunan));
+                    }
+                }
+            }
+        }
+        return *this;
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
+    }
+}
+
+void Inventory::addItem(Asset* asset) {
+    try{
+        if(this->isFull()){
+            throw inventoryFullException();
+        }
+        for (size_t row = 0; row < this->numRows(); ++row) {
+            for (size_t col = 0; col < this->numCols(); ++col) {
+                if (this->data[calculateKey(row, col)] == nullptr) {
+                    set(row, col, asset);
+                    return;
+                }
+            }
+        }
+    }catch(inventoryFullException& e){
+        std::cout << e.what();
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
+    }
+}
+
+void Inventory::addItemKey(Asset* asset, string loc) {
+    try{
+        if(this->isFull()){
+            throw inventoryFullException();
+        }
+
+        setWithKey(loc, asset);
+    }catch(inventoryFullException& e){
+        std::cout << e.what();
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
+    }catch(outOfBoundsException& e){
+        std::cout << e.what();
+    }
+}
+
+void Inventory::rekapInventory() {
+    this->jumlahBangunan = 0;
+    this->jumlahProductMaterial = 0;
+    this->jumlahProductFruit = 0;
+    this->jumlahProductHewan = 0;
+
+    for (size_t i = 0; i < inventoryRowSize; ++i) {
+        for (size_t j = 0; j < inventoryColumnSize; ++j) {
+            Asset* asset = this->get(i, j);
+            
+            if (asset) {
+                if (dynamic_cast<Bangunan*>(asset)) {
+                    this->jumlahBangunan++;
+                } else if (dynamic_cast<ProductMaterial*>(asset)) {
+                    this->jumlahProductMaterial++;
+                } else if (dynamic_cast<ProductFruit*>(asset)) {
+                    this->jumlahProductFruit++;
+                } else if (dynamic_cast<ProductHewan*>(asset)) {
+                    this->jumlahProductHewan++;
+                }
+            }
+        }
+    }
+
+    std::cout << "Inventory Summary:" << endl;
+    std::cout << "Bangunan: " << jumlahBangunan << endl;
+    std::cout << "ProductMaterial: " << jumlahProductMaterial << endl;
+    std::cout << "ProductFruit: " << jumlahProductFruit << endl;
+    std::cout << "ProductHewan: " << jumlahProductHewan << endl;
+}
+
+void Inventory::print() {
+    //std::cout << ==============[ PENYIMPANAN ]==================
+    std::cout << " ";
+    printLexicalOrder(this->cols);
+    for (int i = 0; i < this->rows; ++i) {
+        printBorder(this->cols);
+        std::cout << std::setw(2) << std::setfill('0') << i+1;
+
+        std::cout << " | ";
+        for (int j = 0; j < this->cols; ++j) {
+            Asset* asset = get(i, j);
+            if (asset != nullptr) {
+                std::cout << std::setw(3) << std::setfill('0') << asset->getKodeHuruf();
+            } else {
+                std::cout << "   ";
+            }
+            std::cout << " | ";
+        }
+        std::cout << "  " << std::endl;
     }
     printBorder(st, grid.numCols());
     return st;
 }
 
-int main() {
-    // Create a 3x3 grid of integers
-    Grid<Tumbuhan> grid(6, 6);
+//<---------------LADANG----------------->
+int Ladang::lahanRowSize;
+int Ladang::lahanColumnSize;
 
-    cout << grid;
-    // Set values in the grid
-    FruitPlant a(1, "AAA", "jambu", "froot", 3, 3, 0);
-    FruitPlant b(2, "AAC", "apel", "froot", 3, 3, 0);
-    MaterialPlant c(3, "BBB", "JATI", "mat", 3, 3, 0);
-    grid.set(2,2,a);
-    grid.set(0,0,b);
-    grid.set_first_empty(c);
+Ladang::Ladang() : Grid<Tumbuhan*>(lahanRowSize, lahanColumnSize) {}
 
-    // Print the grid
-    cout << grid;
-
-    // Test the get method
-    cout << "Value at position (1, 1): " << grid.get(0, 0)->getNamaTumbuhan() << endl;
-
-    //FruitPlant d(grid.get(2,2));
-    FruitPlant d;
-    //grid.get2(2,2,&d);
-    d = grid.get(2,2);
-    cout << d.getNamaTumbuhan() << endl;
-    cout << typeid(d).name() << endl;
-    FruitPlant e(a);
-    if (grid.has_type(a)) cout<<" has FruitPlant "<<endl;
-    if (grid.has_type(c)) cout << "has MaterialPlant" << endl;
-    grid.unset(0,1);
-    cout << grid << endl;
-    if (grid.has_type(c)) cout << "has MaterialPlant" << endl; 
-    return 0;
+Ladang::Ladang(Ladang& other) : Grid<Tumbuhan*>(other.numRows(), other.numCols()) {
+    try{
+        for (size_t i = 0; i < other.numRows(); ++i) {
+            for (size_t j = 0; j < other.numCols(); ++j) {
+                set(i, j, other.get(i, j));
+            }
+        }
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
+    }
 }
 
+Ladang& Ladang::operator=(const Ladang& other) {
+    if (this == &other)
+        return *this;
+
+    for (size_t i = 0; i < numRows(); ++i) {
+        for (size_t j = 0; j < numCols(); ++j) {
+            Tumbuhan* tumbuhan = get(i, j);
+            if (tumbuhan != nullptr) {
+                delete tumbuhan;
+            }
+        }
+    }
+
+    try{
+        for (size_t i = 0; i < numRows(); ++i) {
+            for (size_t j = 0; j < numCols(); ++j) {
+                auto it = other.data.find(calculateKey(i, j));
+                set(i, j, it->second);
+            }
+        }
+        return *this;
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
+    }
+}
+
+Ladang::~Ladang() {
+    for (size_t i = 0; i < numRows(); ++i) {
+        for (size_t j = 0; j < numCols(); ++j) {
+            Tumbuhan* tumbuhan = get(i, j);
+            if (tumbuhan != nullptr) {
+                delete tumbuhan;
+            }
+        }
+    }
+}
+
+void Ladang::addItem(Tumbuhan* tumbuhan) {
+    try{
+        if(this->isFull()){
+            throw ladangFullException();
+        }
+        for (size_t row = 0; row < this->numRows(); ++row) {
+            for (size_t col = 0; col < this->numCols(); ++col) {
+                if (this->data[calculateKey(row, col)] == nullptr) {
+                    set(row, col, tumbuhan);
+                    return;
+                }
+            }
+        }
+    }catch(ladangFullException& e){
+        std::cout << e.what();
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
+    }
+}
+
+void Ladang::addItemKey(Tumbuhan* tumbuhan, string loc) {
+    try{
+        if(this->isFull()){
+            throw ladangFullException();
+        }
+
+        setWithKey(loc, tumbuhan);
+    }catch(ladangFullException& e){
+        std::cout << e.what();
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
+    }catch(outOfBoundsException& e){
+        std::cout << e.what();
+    }
+}
+
+bool Ladang::isAvailablePanen(){
+    for(const auto& pair : this->data){
+        if(pair.second->isReadyToHarvest()){
+            return true;
+        }
+    }
+    return false;
+}
+
+map<string, int> Ladang::rekapLadang(){
+    map<string, int> siapPanen;
+    
+    for (const auto& pair : this->data) {
+        siapPanen[pair.second->getKodeHuruf()] = 0;
+    }
+
+    for (const auto& pair : this->data) {
+        if (pair.second->isReadyToHarvest()) {
+            siapPanen[pair.second->getKodeHuruf()]++;
+        }
+    }
+
+    return siapPanen;
+}
+
+void Ladang::print() {
+    std::cout << " ";
+    printLexicalOrder(this->cols);
+    for (int i = 0; i < this->rows; ++i) {
+        printBorder(this->cols);
+        std::cout << std::setw(2) << std::setfill('0') << i+1;
+
+        std::cout << " | ";
+        for (int j = 0; j < this->cols; ++j) {
+            Tumbuhan* tumbuhan = get(i, j);
+            if (tumbuhan != nullptr) {
+                if(tumbuhan->isReadyToHarvest()){
+                    std::cout << GREEN << tumbuhan->getKodeHuruf() << NORMAL;
+                }else{
+                    std::cout << RED << tumbuhan->getKodeHuruf() << NORMAL;
+                }
+            } else {
+                std::cout << "   ";
+            }
+            std::cout << " | ";
+        }
+        std::cout << "  " << std::endl;
+    }
+    printBorder(this->cols);
+}
+//<---------------PETERNAKAN----------------->
+int Peternakan::peternakanRowSize;
+int Peternakan::peternakanColumnSize;
+
+Peternakan::Peternakan() : Grid<Hewan*>(peternakanRowSize, peternakanColumnSize) {}
+
+Peternakan::Peternakan(Peternakan& other) : Grid<Hewan*>(other.numRows(), other.numCols()) {
+    try{
+        for (size_t i = 0; i < other.numRows(); ++i) {
+            for (size_t j = 0; j < other.numCols(); ++j) {
+                set(i, j, other.get(i, j));
+            }
+        }
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
+    }
+}
+
+Peternakan& Peternakan::operator=(const Peternakan& other) {
+    if (this == &other)
+        return *this;
+
+    for (size_t i = 0; i < numRows(); ++i) {
+        for (size_t j = 0; j < numCols(); ++j) {
+            Hewan* hewan = get(i, j);
+            if (hewan != nullptr) {
+                delete hewan;
+            }
+        }
+    }
+
+    try{
+        for (size_t i = 0; i < numRows(); ++i) {
+            for (size_t j = 0; j < numCols(); ++j) {
+                auto it = other.data.find(calculateKey(i, j));
+                set(i, j, it->second);
+            }
+        }
+        return *this;
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
+    }
+}
+
+Peternakan::~Peternakan() {
+    for (size_t i = 0; i < numRows(); ++i) {
+        for (size_t j = 0; j < numCols(); ++j) {
+            Hewan* hewan = get(i, j);
+            if (hewan != nullptr) {
+                delete hewan;
+            }
+        }
+    }
+}
+
+void Peternakan::addItem(Hewan* hewan) {
+    try{
+        if(this->isFull()){
+            throw peternakanFullException();
+        }
+        for (size_t row = 0; row < this->numRows(); ++row) {
+            for (size_t col = 0; col < this->numCols(); ++col) {
+                if (this->data[calculateKey(row, col)] == nullptr) {
+                    set(row, col, hewan);
+                    return;
+                }
+            }
+        }
+    }catch(peternakanFullException& e){
+        std::cout << e.what();
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
+    }
+}
+
+void Peternakan::addItemKey(Hewan* hewan, string loc) {
+    try{
+        if(this->isFull()){
+            throw peternakanFullException();
+        }
+
+        setWithKey(loc, hewan);
+    }catch(peternakanFullException& e){
+        std::cout << e.what();
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
+    }catch(outOfBoundsException& e){
+        std::cout << e.what();
+    }
+}
+
+bool Peternakan::isAvailablePanen(){
+    for(const auto& pair : this->data){
+        if(pair.second->isReadyToHarvest()){
+            return true;
+        }
+    }
+    return false;
+}
+
+
+std::map<std::string, int> Peternakan::rekapPeternakan() {
+    std::map<std::string, int> siapPanen;
+
+    // Initialize count for all kodeHuruf
+    for (const auto& pair : this->data) {
+        siapPanen[pair.second->getKodeHuruf()] = 0;
+    }
+
+    // Update count for ready-to-harvest animals
+    for (const auto& pair : this->data) {
+        if (pair.second->isReadyToHarvest()) {
+            siapPanen[pair.second->getKodeHuruf()]++;
+        }
+    }
+
+    return siapPanen;
+}
+
+void Peternakan::print() {
+    std::cout << " ";
+    printLexicalOrder(this->cols);
+    for (int i = 0; i < this->rows; ++i) {
+        printBorder(this->cols);
+        std::cout << std::setw(2) << std::setfill('0') << i+1;
+
+        std::cout << " | ";
+        for (int j = 0; j < this->cols; ++j) {
+            Hewan* hewan = get(i, j);
+            if (hewan != nullptr) {
+                if(hewan->isReadyToHarvest()){
+                    std::cout << GREEN << hewan->getKodeHuruf() << NORMAL;
+                }else{
+                    std::cout << RED << hewan->getKodeHuruf() << NORMAL;
+                }
+            } else {
+                std::cout << "   ";
+            }
+            std::cout << " | ";
+        }
+        std::cout << "  " << std::endl;
+    }
+    printBorder(this->cols);
+}

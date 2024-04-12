@@ -1,43 +1,34 @@
 #ifndef HEWAN_HPP
 #define HEWAN_HPP
+#include "Produk.cpp"
 #include <string>
+#include <vector>
 #include <map>
 #include "Items.hpp"
 using namespace std;
 
-class Hewan : public Items {
+class Hewan : public Asset{
 protected:
-  int hewanID;
-  string kodeHuruf;
-  string namaHewan;
   string type;
   size_t weightToHarvest;
-  int price;
   int weight;
 
 public:
   static map<string, Hewan*> configHewan;
   ~Hewan();
 
-  void setHewanID(int hewanID);
-  void setKodeHuruf(string kodeHuruf);
-  void setNamaHewan(string namaHewan);
+  void setAssetType(string assetType);
   void setType(string type);
   void setWeightToHarvest(size_t weightToHarvest);
-  void setPrice(int price);
   void setWeight(int weight);
 
-  int getHewanID();
-  string getKodeHuruf();
-  string getNamaHewan();
   string getType();
   size_t getWeightToHarvest();
-  int getPrice();
   int getWeight();
 
   bool isReadyToHarvest();
-  virtual void makan() = 0;
-  virtual void harvest() = 0;
+  virtual void makan(Produk*) = 0;
+  vector<Produk*> harvest();
 };
 
 class Herbivore : public Hewan{
@@ -47,10 +38,7 @@ public:
   Herbivore(Herbivore& other);
   Herbivore& operator=(const Herbivore& other);
 
-  bool isHerbivore(const std::string& kodeHuruf);
-
-  void makan(){} //TO DO
-  void harvest(){} //TO DO
+  void makan(Produk*);
 };
 
 class Carnivore : public Hewan{
@@ -60,10 +48,7 @@ public:
   Carnivore(Carnivore& other);
   Carnivore& operator=(const Carnivore& other);
 
-  bool isCarnivore(const std::string& kodeHuruf);
-
-  void makan(){} //TO DO
-  void harvest(){} //TO DO
+  void makan(Produk*);
 };
 
 class Omnivore : public Hewan{
@@ -73,10 +58,7 @@ public:
   Omnivore(Omnivore& other);
   Omnivore& operator=(const Omnivore& other);
 
-  bool isOmnivore(const std::string& kodeHuruf);
-
-  void makan(){} //TO DO
-  void harvest(){} //TO DO
+  void makan(Produk*);
 };
 
 #endif

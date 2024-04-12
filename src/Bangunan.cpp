@@ -8,10 +8,10 @@ map<string, Bangunan*> Bangunan::resepBangunan;
 
 Bangunan::Bangunan(int bangunanID, string kodeHuruf, string namaBangunan, int hargaBangunan, map<string, int> listBahan){
     this->setAssetType("BANGUNAN");
-    this->setBangunanID(bangunanID);
-    this->setKodeHuruf(kodeHuruf);
-    this->setNamaBangunan(namaBangunan);
-    this->setHargaBangunan(hargaBangunan);
+    this->setAssetID(bangunanID);
+    this->setKodeHuruf(kodeBangunan);
+    this->setNamaAsset(namaBangunan);
+    this->setPrice(hargaBangunan);
     this->setListBahan(listBahan);
 }
 
@@ -19,19 +19,19 @@ Bangunan::~Bangunan(){}
 
 Bangunan::Bangunan(Bangunan& other){
     this->setAssetType(other.getAssetType());
-    this->setBangunanID(other.getBangunanID());
+    this->setAssetID(other.getAssetID());
     this->setKodeHuruf(other.getKodeHuruf());
-    this->setNamaBangunan(other.getNamaBangunan());
-    this->setHargaBangunan(other.getHargaBangunan());
+    this->setNamaAsset(other.getNamaAsset());
+    this->setPrice(other.getPrice());
     this->setListBahan(other.getListBahan());
 }
 
 Bangunan& Bangunan::operator=(const Bangunan& other){
     this->setAssetType(other.assetType);
-    this->setBangunanID(other.bangunanID);
+    this->setAssetID(other.assetID);
     this->setKodeHuruf(other.kodeHuruf);
-    this->setNamaBangunan(other.namaBangunan);
-    this->setHargaBangunan(other.hargaBangunan);
+    this->setNamaAsset(other.namaAsset);
+    this->setPrice(other.price);
     this->setListBahan(other.listBahan);
 }
 
@@ -47,43 +47,11 @@ void Bangunan::setAssetType(string assetType){
     }
 }
 
-void Bangunan::setBangunanID(int bangunanID){
-    this->bangunanID = bangunanID;
-}
-
-void Bangunan::setKodeHuruf(string kodeHuruf){
-    this->kodeHuruf = kodeHuruf;
-}
-
-void Bangunan::setNamaBangunan(string namaBangunan){
-    this->namaBangunan = namaBangunan;
-}
-
-void Bangunan::setHargaBangunan(int hargaBangunan){
-    this->hargaBangunan = hargaBangunan;
-}
-
 void Bangunan::setListBahan(map<string, int> listBahan){
     this->listBahan.clear();
     for (const auto& pair : listBahan) {
         this->listBahan.insert({pair.first, pair.second});
     }
-}
-
-int Bangunan::getBangunanID(){
-    return this->bangunanID;
-}
-
-string Bangunan::getKodeHuruf(){
-    return this->kodeHuruf;
-}
-
-string Bangunan::getNamaBangunan(){
-    return this->namaBangunan;
-}
-
-int Bangunan::getHargaBangunan(){
-    return this->hargaBangunan;
 }
 
 map<string, int> Bangunan::getListBahan(){

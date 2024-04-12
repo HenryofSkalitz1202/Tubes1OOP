@@ -314,7 +314,7 @@ void Walikota::bangunBangunan(){
             found = true;
         }
     }
-    
+
     map<string, int> materialKurang;
     bool uangCukup = true;
     bool materialCukup = true;
@@ -333,15 +333,27 @@ void Walikota::bangunBangunan(){
 
     if(materialCukup && uangCukup){
         Bangunan* new_building = Bangunan::resepBangunan[namaBangunan];
-        this->inventory.addItem(new_building);
+
+        this->uang -= new_building->getPrice();
 
         for(const auto& pair : myMaterial){
             for(int i = 0; i < pair.second; i++){
                 this->inventory.findAndRemoveItem(pair.first);
             }
         }
+
+        this->inventory.addItem(new_building);
     }else{
         cout << "Kamu tidak punya sumber daya yang cukup! Masih memerlukan ";
+        bool first = true;
+        for (const auto& pair : materialKurang) {
+            if (!first) {
+                cout << ", ";
+            }
+            cout << pair.second << " " << pair.first;
+            first = false;
+        }
+        cout << endl;
     }
 }
 

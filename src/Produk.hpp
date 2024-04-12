@@ -5,7 +5,7 @@
 #include <map>
 using namespace std;
 
-class Produk : public Asset, public Items {
+class Produk : public Asset{
 protected:
   string produkType;
   string origin;

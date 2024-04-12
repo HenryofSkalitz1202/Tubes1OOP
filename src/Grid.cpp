@@ -104,10 +104,6 @@ T Grid<T>::get(string key){
 }
 
 template <typename T>
-bool Grid<T>::is_empty(size_t row, size_t col) {
-    return (this->data[row][col]->getKodeHuruf() == "-");
-}
-template <typename T>
 size_t Grid<T>::numRows(){
     return rows;
 }
@@ -124,10 +120,10 @@ void Grid<T>::printLexicalOrder(int n) {
 
     while (count < n) {
         for(int i = 0; i < 5; i++){
-            st << " ";
+            std::cout << " ";
         }
         
-        st << current;
+        std::cout << current;
         count++;
         current++;
 
@@ -135,16 +131,16 @@ void Grid<T>::printLexicalOrder(int n) {
             current = 'A';
         }
     }
-    st << std::endl;
+    std::cout << std::endl;
 }
 
 template <typename T>
 void Grid<T>::printBorder(int n) {
     std::cout << "   ";
     for(int i = 0; i < n; i++) {
-        st << "+-----";
+        std::cout << "+-----";
     }
-    st << "+" << std::endl;
+    std::cout << "+" << std::endl;
 }
 
 template<typename T>
@@ -306,6 +302,28 @@ void Inventory::addItemKey(Asset* asset, string loc) {
     }
 }
 
+bool Inventory::hasType(string type) {
+    try {
+        if (this->isEmpty()) {
+            throw inventoryEmptyException();
+        }
+        size_t i = 0;
+        size_t j = 0;
+        bool found = false;
+        while (i<this->numRows() && !found) {
+            while (j<this->numCols() && !found) {
+                if (this->data[calculateKey(i,j)]->getAssetType() == type) found = true;
+                j++;
+            }
+            i++;
+        }
+        return found;
+    }
+    catch (inventoryEmptyException& e) {
+        std::cout << e.what();
+    }
+}
+
 void Inventory::rekapInventory() {
     this->jumlahBangunan = 0;
     this->jumlahProductMaterial = 0;
@@ -357,8 +375,7 @@ void Inventory::print() {
         }
         std::cout << "  " << std::endl;
     }
-    printBorder(st, grid.numCols());
-    return st;
+    printBorder(this->cols);
 }
 
 //<---------------LADANG----------------->

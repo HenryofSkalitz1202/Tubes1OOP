@@ -214,6 +214,15 @@ struct ternakNotHewanException : public exception{
     }
 };
 
+class InvalidMakananException : public exception{
+    public:
+        InvalidMakananException(): exception() {}
+
+        const char* what() const throw(){
+            return "Makanan tidak sesuai. Mohon masukkan makanan yang sesuai.\n";
+        }
+};
+
 struct invalidNomorTanamanException : public exception{
     const char* what() const throw(){
         return "Nomor tanaman is invalid!\n";

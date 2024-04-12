@@ -61,6 +61,7 @@ public:
 
   void addItem(Asset*);
   void addItemKey(Asset*, string loc);
+  bool hasType(string type);
   void rekapInventory();
   void print();
 };

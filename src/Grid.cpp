@@ -312,6 +312,28 @@ void Inventory::addItemKey(Asset* asset, string loc) {
     }
 }
 
+bool Inventory::hasType(string type) {
+    try {
+        if (this->isEmpty()) {
+            throw inventoryEmptyException();
+        }
+        size_t i = 0;
+        size_t j = 0;
+        bool found = false;
+        while (i<this->numRows() && !found) {
+            while (j<this->numCols() && !found) {
+                if (this->data[calculateKey(i,j)]->getAssetType() == type) found = true;
+                j++;
+            }
+            i++;
+        }
+        return found;
+    }
+    catch (inventoryEmptyException& e) {
+        std::cout << e.what();
+    }
+}
+
 void Inventory::rekapInventory() {
     this->jumlahBangunan = 0;
     this->jumlahProductMaterial = 0;

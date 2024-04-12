@@ -12,6 +12,10 @@ protected:
   int addedWeight;
 
 public:
+  static map<string, Produk*> configProduk;
+
+  Produk();
+  Produk(string kodeHuruf, string namaProduk, string origin, int addedWeight, int price);
   ~Produk();
 
   void setAssetType(string assetType);
@@ -21,6 +25,10 @@ public:
   string getProdukType();
   string getOrigin();
   int getAddedWeight();
+  int getPrice();
+  bool isEdibleHerbivore();
+  bool isEdibleCarnivore();
+  bool isBuildable();
 
   virtual void useProduct() = 0;
 };

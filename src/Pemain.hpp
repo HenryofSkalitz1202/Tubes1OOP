@@ -28,7 +28,7 @@ public:
   void addToInventory(Asset* item);
 
   string getStatus();
-  string getUsername();
+  string getUsername() const;
   int getUang();
   int getBeratBadan();
   Asset* getFromInventory(string key);

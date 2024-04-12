@@ -7,6 +7,11 @@
 #include <vector>
 #include <algorithm>
 #include "Pemain.cpp"
+#include "Hewan/Hewan.hpp"
+#include "Hewan/Carnivore.hpp"
+#include "Hewan/Herbivore.hpp"
+#include "Hewan/Omnivore.hpp"
+#include "Tumbuhan.hpp"
 using namespace std;
 
 class Controller

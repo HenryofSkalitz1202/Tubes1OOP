@@ -28,7 +28,7 @@ string Pemain::getStatus(){
     return this->status;
 }
 
-string Pemain::getUsername(){
+string Pemain::getUsername() const{
     return this->username;
 }
 

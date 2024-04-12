@@ -1,7 +1,7 @@
 #ifndef PEMAIN_HPP
 #define PEMAIN_HPP
 #include <string>
-#include "Grid.cpp"
+#include "Toko.cpp"
 
 using namespace std;
 
@@ -55,7 +55,7 @@ public:
 
   void tanamTanaman();
   void panenTanaman();
-  void beliBangunan();
+  void beliBangunan(Toko* store);
 
   int getNetWorth();
   int countPajak();
@@ -76,12 +76,12 @@ public:
   void setWalikotaID(int walikotaID);
   int getWalikotaID();
 
-  void tagihPajak();
   void bangunBangunan();
-  void tambahAkun();
+  void tambahAkun(vector<Pemain*> players);
   void jualBangunan();
 
   int getNetWorth();
+  int pungutPajak(vector<Pemain*> players);
   int countPajak();
 };
 

@@ -12,13 +12,14 @@ using namespace std;
 class Controller
 {
 private:
-    std::vector<Pemain*> players;
+    //std::vector<Pemain*> players;
     size_t current_player_index;
     Pemain* current_player;
     int turn_number;
     bool game_over;
 
 public:
+    static vector<Pemain*> players;
     Controller();
     ~Controller();
 

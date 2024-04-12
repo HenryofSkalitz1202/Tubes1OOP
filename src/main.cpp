@@ -40,6 +40,17 @@ int main(){
         Controller::populateConfigTumbuhan(filePathTumbuhan);
         fileTumbuhan.close();
 
+
+        std::ifstream fileBangunan(filePathBangunan);
+        if (!fileBangunan.is_open()) {
+            cout << "File config bangunan '" << filePathBangunan;
+            throw FilePathBangunanNotFoundException();
+        }
+
+        cout << endl;
+        Controller::populateConfigBangunan(filePathBangunan);
+        fileBangunan.close();
+
         std::ifstream fileMisc(filePathMisc);
         if (!fileMisc.is_open()) {
             cout << "File config bangunan '" << filePathBangunan;

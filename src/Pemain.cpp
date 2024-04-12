@@ -228,8 +228,8 @@ void Petani::panenTanaman(){
     }
 }
 
-void Petani::beliBangunan(){
-    //TO DO
+void Petani::beliBangunan(Toko* store){
+    
 }
 
 int Petani::getNetWorth(){
@@ -297,17 +297,69 @@ void Walikota::setWalikotaID(int walikotaID){
 int Walikota::getWalikotaID(){
     return this->walikotaID;
 }
-
-void Walikota::tagihPajak(){
-    //TO DO
-}
   
 void Walikota::bangunBangunan(){
-    //TO DO
+    Bangunan::printResep();
+    map<string, int> myMaterial = this->inventory.rekapMaterial();
+    bool found = false;
+    string namaBangunan = "";
+
+    while(!found){
+        cout << "\nBangunan yang ingin dibangun: ";
+        cin >> namaBangunan;
+
+        if(Bangunan::resepBangunan.find(namaBangunan) == Bangunan::resepBangunan.end()){
+            cout << "Kamu tidak punya resep bangunan tersebut!" << endl;
+        }else{
+            found = true;
+        }
+    }
+    
+    map<string, int> materialKurang;
+    bool uangCukup = true;
+    bool materialCukup = true;
+
+    if(this->uang < Bangunan::resepBangunan[namaBangunan]->getPrice()){
+        materialKurang.insert({"gulden", Bangunan::resepBangunan[namaBangunan]->getPrice() - this->uang});
+        uangCukup = false;
+    }
+
+    for(const auto& pair : Bangunan::resepBangunan[namaBangunan]->getListBahan()){
+        if(myMaterial[pair.first] < pair.second){
+            materialCukup = false;
+            materialKurang.insert({pair.first, pair.second - myMaterial[pair.first]});
+        }
+    }
+
+    if(materialCukup && uangCukup){
+        Bangunan* new_building = Bangunan::resepBangunan[namaBangunan];
+        this->inventory.addItem(new_building);
+
+        for(const auto& pair : myMaterial){
+            for(int i = 0; i < pair.second; i++){
+                this->inventory.findAndRemoveItem(pair.first);
+            }
+        }
+    }else{
+        cout << "Kamu tidak punya sumber daya yang cukup! Masih memerlukan ";
+    }
 }
 
-void Walikota::tambahAkun(){
-    //TO DO
+
+void Walikota::tambahAkun(vector<Pemain*> players){
+    if(this->uang < 50){
+        throw uangInsufficientException();
+    }  
+
+    string jenis_pemain;
+    cout << "Masukkan jenis pemain: ";
+    cin >> jenis_pemain;
+
+    string nama_pemain;
+    cout << "Masukkan nama pemain: ";
+    cin >> nama_pemain;
+
+    cout << "Pemain baru ditambahkan!\nSelamat datang \"" << nama_pemain << "\" di kota ini!" << endl;
 }
 
 void Walikota::jualBangunan(){
@@ -318,10 +370,42 @@ int Walikota::getNetWorth(){
     return this->inventory.getTotalWorth() + this->uang;
 }
 
-int Walikota::countPajak(){
-    //TO DO
+int Walikota::pungutPajak(vector<Pemain*> players){
+    int total_pajak = 0;
+
+    for(Pemain* player : players){
+        int tax_deduction;
+
+        if(player->countPajak() > player->getUang()){
+            tax_deduction = player->getUang();
+        }else{
+            tax_deduction = player->countPajak();
+        }
+
+        total_pajak += tax_deduction;
+        int taxed_money = player->getUang() - tax_deduction;
+        player->setUang(taxed_money);
+    }
+
+    return total_pajak;
 }
 
+int Walikota::countPajak(){
+    int kkp = this->getNetWorth();
+    if(kkp <= 0){
+        return 0;
+    }else if(kkp <= 6){
+        return 0.05 * kkp;
+    }else if(kkp <= 25){
+        return 0.15 * kkp;
+    }else if(kkp <= 50){
+        return 0.25 * kkp;
+    }else if(kkp <= 500){
+        return 0.3 * kkp;
+    }else{
+        return 0.35 * kkp;
+    }
+}
 //<---------------PETERNAK----------------->
 Peternak::Peternak(){
     this->username = "Peternak";

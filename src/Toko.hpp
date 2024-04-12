@@ -7,6 +7,7 @@ using namespace std;
 
 class Toko{
 private:
+  ~Toko();
   Inventory inventoryToko;
 };
 

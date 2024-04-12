@@ -7,6 +7,8 @@
 #include <fstream>
 #include <stdexcept>
 
+vector<Pemain*> Controller::players;
+
 Controller::Controller()
 {
     this->current_player_index = 0;
@@ -206,7 +208,7 @@ void Controller::populateConfigBangunan(string filePathBangunan){
             }
 
             bangunanPtr = new Bangunan(std::stoi(str_arr[0]), str_arr[1], str_arr[2], std::stoi(str_arr[3]), mp_bahan);
-            mp.insert({str_arr[1], bangunanPtr});
+            mp.insert({str_arr[2], bangunanPtr});
 
             std::cout << "ListBahan:" << std::endl;
             for (const auto& pair : mp_bahan) {

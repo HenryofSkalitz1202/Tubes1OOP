@@ -312,6 +312,32 @@ void Inventory::addItemKey(Asset* asset, string loc) {
     }
 }
 
+void Inventory::findAndRemoveItem(string item_key){
+    for(const auto& pair : this->data){
+        if(pair.second->getNamaAsset() == item_key){
+            this->setNull(pair.first);
+            return;
+        }
+    }
+}
+
+map<string, int> Inventory::rekapMaterial(){
+    map<string, int> mapMaterial;
+    
+    for (const auto& pair : this->data){
+        if(dynamic_cast<ProductMaterial*>(pair.second)){
+            auto it = mapMaterial.find(pair.second->getNamaAsset());
+            if(it != mapMaterial.end()){
+                mapMaterial[pair.second->getNamaAsset()]++;
+            }else{
+                mapMaterial[pair.second->getNamaAsset()] = 1;
+            }
+        }
+    }
+
+    return mapMaterial;
+}
+
 void Inventory::rekapInventory() {
     this->jumlahBangunan = 0;
     this->jumlahProductMaterial = 0;

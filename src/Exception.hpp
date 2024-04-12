@@ -244,4 +244,16 @@ struct invalidPetakException : public exception{
     }
 };
 
+struct invalidNamaBangunanException : public exception{
+    const char* what() const throw(){
+        return "Pilihan petak is invalid!\n";
+    }
+};
+
+struct uangInsufficientException : public exception{
+    const char* what() const throw(){
+        return "Uang tidak cukup!\n";
+    }
+};
+
 #endif

@@ -61,6 +61,9 @@ public:
 
   void addItem(Asset*);
   void addItemKey(Asset*, string loc);
+  void findAndRemoveItem(string key);
+
+  map<string, int> rekapMaterial();
   void rekapInventory();
   void print();
 };

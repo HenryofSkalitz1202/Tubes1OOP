@@ -58,4 +58,19 @@ map<string, int> Bangunan::getListBahan(){
     return this->listBahan;
 }
 
-//void Bangunan::print(){ //TO DO}
+void Bangunan::printBahan(){
+    cout << "(" << this->price << " gulden";
+    for(const auto& pair : this->listBahan){
+        cout << ", " << pair.first << " " << pair.second;
+    }
+    cout << ")" << endl;
+}
+
+void Bangunan::printResep(){
+    cout << "Resep bangunan yang ada adalah sebagai berikut" << endl;
+    int idx = 0;
+    for(const auto& pair : Bangunan::resepBangunan){
+        cout << "   " << ++idx << ". " << pair.first << " ";
+        pair.second->printBahan();
+    }
+}

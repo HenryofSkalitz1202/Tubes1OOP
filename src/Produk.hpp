@@ -1,11 +1,12 @@
 #ifndef PRODUK_HPP
 #define PRODUK_HPP
 #include "Asset.hpp"
+#include "Items.hpp"
 #include <string>
 #include <map>
 using namespace std;
 
-class Produk : public Asset{
+class Produk : public Asset, public Items {
 protected:
   int produkID;
   string kodeHuruf;

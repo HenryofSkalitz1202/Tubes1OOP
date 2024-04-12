@@ -2,9 +2,10 @@
 #define HEWAN_HPP
 #include <string>
 #include <map>
+#include "Items.hpp"
 using namespace std;
 
-class Hewan{
+class Hewan : public Items {
 protected:
   int hewanID;
   string kodeHuruf;

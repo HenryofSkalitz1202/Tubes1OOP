@@ -2,36 +2,31 @@
 #define GRID_HPP
 #include <string>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
 template <typename T>
 class Grid{
 protected:
-  std::vector<std::vector<T>> data; 
+  std::vector<std::vector<T*>> data; 
   size_t rows;
   size_t cols;
 
 public:
   Grid(size_t rows, size_t cols);
-  T get(size_t row, size_t col) const;
-  void set(size_t row, size_t col, const T& value);
+  ~Grid();
+  T*& get(size_t row, size_t col);
+  void set(size_t row, size_t col, T& value);
+  void set_first_empty(T& value);
+  void unset(size_t row, size_t col);
+  bool is_empty(size_t row, size_t col);
   size_t numRows() const;
   size_t numCols() const;
-  static void printLexicalOrder(int n);
-  void print() const;
+  bool is_full();
+  bool has_type(T& value);
+  //void printLexicalOrder(ostream& st, int n);
+  template <class u> friend ostream& operator<<(ostream& st, Grid<u> &grid);
 };
-
-// template<>
-// class Ladang : public Grid<Tumbuhan>{
-// public:
-//   void printLadang();
-// };
-
-// template<>
-// class Peternakan : public Grid<Hewan>{
-// public:
-//   void printPeternakan();
-// };
 
 #endif

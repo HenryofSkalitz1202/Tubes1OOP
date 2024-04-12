@@ -6,10 +6,10 @@ using namespace std;
 
 map<string, Bangunan*> Bangunan::resepBangunan;
 
-Bangunan::Bangunan(int bangunanID, string kodeBangunan, string namaBangunan, int hargaBangunan, map<string, int> listBahan){
+Bangunan::Bangunan(int bangunanID, string kodeHuruf, string namaBangunan, int hargaBangunan, map<string, int> listBahan){
     this->setAssetType("BANGUNAN");
     this->setBangunanID(bangunanID);
-    this->setKodeBangunan(kodeBangunan);
+    this->setKodeHuruf(kodeHuruf);
     this->setNamaBangunan(namaBangunan);
     this->setHargaBangunan(hargaBangunan);
     this->setListBahan(listBahan);
@@ -20,7 +20,7 @@ Bangunan::~Bangunan(){}
 Bangunan::Bangunan(Bangunan& other){
     this->setAssetType(other.getAssetType());
     this->setBangunanID(other.getBangunanID());
-    this->setKodeBangunan(other.getKodeBangunan());
+    this->setKodeHuruf(other.getKodeHuruf());
     this->setNamaBangunan(other.getNamaBangunan());
     this->setHargaBangunan(other.getHargaBangunan());
     this->setListBahan(other.getListBahan());
@@ -29,7 +29,7 @@ Bangunan::Bangunan(Bangunan& other){
 Bangunan& Bangunan::operator=(const Bangunan& other){
     this->setAssetType(other.assetType);
     this->setBangunanID(other.bangunanID);
-    this->setKodeBangunan(other.kodeBangunan);
+    this->setKodeHuruf(other.kodeHuruf);
     this->setNamaBangunan(other.namaBangunan);
     this->setHargaBangunan(other.hargaBangunan);
     this->setListBahan(other.listBahan);
@@ -51,8 +51,8 @@ void Bangunan::setBangunanID(int bangunanID){
     this->bangunanID = bangunanID;
 }
 
-void Bangunan::setKodeBangunan(string kodeBangunan){
-    this->kodeBangunan = kodeBangunan;
+void Bangunan::setKodeHuruf(string kodeHuruf){
+    this->kodeHuruf = kodeHuruf;
 }
 
 void Bangunan::setNamaBangunan(string namaBangunan){
@@ -74,8 +74,8 @@ int Bangunan::getBangunanID(){
     return this->bangunanID;
 }
 
-string Bangunan::getKodeBangunan(){
-    return this->kodeBangunan;
+string Bangunan::getKodeHuruf(){
+    return this->kodeHuruf;
 }
 
 string Bangunan::getNamaBangunan(){

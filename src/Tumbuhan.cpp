@@ -2,6 +2,14 @@
 
 map<string, Tumbuhan*> Tumbuhan::configTumbuhan;
 //<---------------TUMBUHAN----------------->
+Tumbuhan::Tumbuhan(): Items() {
+    this->tumbuhanID = -1;
+    this->namaTumbuhan = "-";
+    this->duration_to_harvest = -1;
+    this->price = -1;
+    this->turn_instantiated = -1;
+}
+
 Tumbuhan::~Tumbuhan(){
     this->kodeHuruf.erase();
     this->namaTumbuhan.erase();
@@ -40,17 +48,17 @@ int Tumbuhan::getTumbuhanID(){
     return this->tumbuhanID;
 }
 
-string Tumbuhan::getKodeHuruf(){
+/*string Tumbuhan::getKodeHuruf(){
     return this->kodeHuruf;
-}
+}*/
 
 string Tumbuhan::getNamaTumbuhan(){
     return this->namaTumbuhan;
 }
 
-string Tumbuhan::getType(){
+/*string Tumbuhan::getType(){
     return this->type;
-}
+}*/
 
 size_t Tumbuhan::getDurationToHarvest(){
     return this->duration_to_harvest;
@@ -65,10 +73,29 @@ size_t Tumbuhan::getTurnInstantiated(){
 }
 
 bool Tumbuhan::isReadyToHarvest(){
-    return (current_turn == this->getTurnInstantiated() + this->getDurationToHarvest());
+    return (1 == this->getTurnInstantiated() + this->getDurationToHarvest());
 }
 
+void Tumbuhan::operator=(Tumbuhan& other) {
+    this->tumbuhanID = other.tumbuhanID;
+    this->namaTumbuhan = other.namaTumbuhan;
+    this->type = other.type;
+    this->duration_to_harvest = other.duration_to_harvest;
+    this->price = other.price;
+    this->turn_instantiated = other.turn_instantiated;
+}
+
+void Tumbuhan::operator=(Tumbuhan*& other) {
+    this->tumbuhanID = other->tumbuhanID;
+    this->namaTumbuhan = other->namaTumbuhan;
+    this->type = other->type;
+    this->duration_to_harvest = other->duration_to_harvest;
+    this->price = other->price;
+    this->turn_instantiated = other->turn_instantiated;
+}
 //<---------------FRUIT PLANT----------------->
+FruitPlant::FruitPlant() : Tumbuhan(){};
+
 FruitPlant::FruitPlant(int TumbuhanID, string kodeHuruf, string namaTumbuhan, string type, size_t durationToHarvest, int price, size_t turn_instantiated){
     this->setTumbuhanID(tumbuhanID);
     this->setKodeHuruf(kodeHuruf);
@@ -91,21 +118,31 @@ FruitPlant::FruitPlant(FruitPlant& other){
     this->setTurnInstantiated(other.getTurnInstantiated());
 }
 
-FruitPlant& FruitPlant::operator=(const FruitPlant& other){
-    this->setTumbuhanID(other.tumbuhanID);
-    this->setKodeHuruf(other.kodeHuruf);
-    this->setNamaTumbuhan(other.namaTumbuhan);
-    this->setType(other.type);
-    this->setDurationToHarvest(other.duration_to_harvest);
-    this->setPrice(other.price);
-    this->setTurnInstantiated(other.turn_instantiated);
+void FruitPlant::operator=(FruitPlant& other) {
+    this->tumbuhanID = other.tumbuhanID;
+    this->namaTumbuhan = other.namaTumbuhan;
+    this->type = other.type;
+    this->duration_to_harvest = other.duration_to_harvest;
+    this->price = other.price;
+    this->turn_instantiated = other.turn_instantiated;
 }
 
-void FruitPlant::harvest(){
-    //TO DO
+void FruitPlant::operator=(Tumbuhan*& other) {
+    this->tumbuhanID = other->getTumbuhanID();
+    this->namaTumbuhan = other->getNamaTumbuhan();
+    this->type = other->getType();
+    this->duration_to_harvest = other->getDurationToHarvest();
+    this->price = other->getPrice();
+    this->turn_instantiated = other->getTurnInstantiated();
 }
+
+//void FruitPlant::harvest(){
+    //TO DO
+//}
 
 //<---------------MATERIAL PLANT----------------->
+MaterialPlant::MaterialPlant() : Tumbuhan() {};
+
 MaterialPlant::MaterialPlant(int TumbuhanID, string kodeHuruf, string namaTumbuhan, string type, size_t durationToHarvest, int price, size_t turn_instantiated){
     this->setTumbuhanID(tumbuhanID);
     this->setKodeHuruf(kodeHuruf);
@@ -128,16 +165,24 @@ MaterialPlant::MaterialPlant(MaterialPlant& other){
     this->setTurnInstantiated(other.getTurnInstantiated());
 }
 
-MaterialPlant& MaterialPlant::operator=(const MaterialPlant& other){
-    this->setTumbuhanID(other.tumbuhanID);
-    this->setKodeHuruf(other.kodeHuruf);
-    this->setNamaTumbuhan(other.namaTumbuhan);
-    this->setType(other.type);
-    this->setDurationToHarvest(other.duration_to_harvest);
-    this->setPrice(other.price);
-    this->setTurnInstantiated(other.turn_instantiated);
+void MaterialPlant::operator=(MaterialPlant& other) {
+    this->tumbuhanID = other.tumbuhanID;
+    this->namaTumbuhan = other.namaTumbuhan;
+    this->type = other.type;
+    this->duration_to_harvest = other.duration_to_harvest;
+    this->price = other.price;
+    this->turn_instantiated = other.turn_instantiated;
 }
 
-void MaterialPlant::harvest(){
-    //TO DO
+void MaterialPlant::operator=(Tumbuhan*& other) {
+    this->tumbuhanID = other->getTumbuhanID();
+    this->namaTumbuhan = other->getNamaTumbuhan();
+    this->type = other->getType();
+    this->duration_to_harvest = other->getDurationToHarvest();
+    this->price = other->getPrice();
+    this->turn_instantiated = other->getTurnInstantiated();
 }
+
+//void MaterialPlant::harvest(){
+    //TO DO
+//}

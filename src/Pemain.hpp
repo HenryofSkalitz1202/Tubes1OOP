@@ -19,26 +19,29 @@ public:
   static int defaultUang;
 
   Pemain();
-  virtual ~Pemain();
+  ~Pemain();
 
   virtual void setStatus() = 0;
   void setUsername(string username);
   void setUang(int uang);
   void setberatBadan(int beratBadan);
   void addToInventory(Asset* item);
+
   string getStatus();
   string getUsername();
   int getUang();
   int getBeratBadan();
   Asset* getFromInventory(string key);
 
-  virtual void countPajak() = 0;
+  virtual int getNetWorth() = 0;
+  virtual int countPajak() = 0;
 };
 
 class Petani : public Pemain{
 private:
   int petaniID;
   Ladang ladang;
+  const int ktkp = 13;
 public:
   Petani();
   Petani(string username, int uang, int beratBadan);
@@ -54,7 +57,8 @@ public:
   void panenTanaman();
   void beliBangunan();
 
-  void countPajak();
+  int getNetWorth();
+  int countPajak();
 };
 
 class Walikota : public Pemain{
@@ -77,13 +81,15 @@ public:
   void tambahAkun();
   void jualBangunan();
 
-  void countPajak();
+  int getNetWorth();
+  int countPajak();
 };
 
 class Peternak : public Pemain{
 private:
   int peternakID;
   Peternakan peternakan;
+  const int ktkp = 11;
 public:
   Peternak();
   Peternak(string username, int uang, int beratBadan);
@@ -99,7 +105,9 @@ public:
   void beriMakan();
   void panenHewan();
   void beliBangunan();
-  void countPajak();
+
+  int getNetWorth();
+  int countPajak();
 };
 
 #endif

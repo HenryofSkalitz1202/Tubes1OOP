@@ -157,6 +157,16 @@ int Grid<T>::countAvailableCapacity() {
 }
 
 template<typename T>
+int Grid<T>::getTotalWorth(){
+    int worth = 0;
+    for(const auto& pair : this->data){
+        worth += pair.second->getPrice();
+    }
+
+    return worth;
+}
+
+template<typename T>
 bool Grid<T>::isEmpty(){
     if(this->countAvailableCapacity() == (this->rows * this->cols)){
         return true;

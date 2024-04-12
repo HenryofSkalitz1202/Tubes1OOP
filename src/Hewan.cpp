@@ -102,16 +102,12 @@ Herbivore& Herbivore::operator=(const Herbivore& other){
 }
 
 void Herbivore::makan(Produk* pakan){
-    try{
-        ProductFruit* fruit = dynamic_cast<ProductFruit*>(pakan);
-        if (fruit){
-            this->weight += fruit->getAddedWeight();
-        } else {
-            cout << "Herbivore is fed " << pakan->getNamaAsset() << " which is not of ProductFruit type. ";
-            throw HerbivoreWrongFoodTypeException();
-        }
-    }catch(HerbivoreWrongFoodTypeException& e){
-        cout << e.what();
+    ProductFruit* fruit = dynamic_cast<ProductFruit*>(pakan);
+    if (fruit){
+        this->weight += fruit->getAddedWeight();
+    } else {
+        cout << "Herbivore is fed " << pakan->getNamaAsset() << " which is not of ProductFruit type. ";
+        throw HerbivoreWrongFoodTypeException();
     }
 }
 
@@ -154,16 +150,12 @@ Carnivore& Carnivore::operator=(const Carnivore& other){
 }
 
 void Carnivore::makan(Produk* pakan){
-    try{
-        ProductHewan* hewan = dynamic_cast<ProductHewan*>(pakan);
-        if (hewan){
-            this->weight += hewan->getAddedWeight();
-        } else {
-            cout << "Carnivore is fed " << pakan->getNamaAsset() << " which is not of ProductHewan type. ";
-            throw CarnivoreWrongFoodTypeException();
-        }
-    }catch(CarnivoreWrongFoodTypeException& e){
-        cout << e.what();
+    ProductHewan* hewan = dynamic_cast<ProductHewan*>(pakan);
+    if (hewan){
+        this->weight += hewan->getAddedWeight();
+    } else {
+        cout << "Carnivore is fed " << pakan->getNamaAsset() << " which is not of ProductHewan type. ";
+        throw CarnivoreWrongFoodTypeException();
     }
 }
 
@@ -207,20 +199,16 @@ Omnivore& Omnivore::operator=(const Omnivore& other){
 }
 
 void Omnivore::makan(Produk* pakan){
-    try{
-        ProductHewan* hewan = dynamic_cast<ProductHewan*>(pakan);
-        if (hewan){
-            this->weight += hewan->getAddedWeight();
+    ProductHewan* hewan = dynamic_cast<ProductHewan*>(pakan);
+    if (hewan){
+        this->weight += hewan->getAddedWeight();
+    } else{
+        ProductFruit* fruit = dynamic_cast<ProductFruit*>(pakan);
+        if(fruit){
+            this->weight += fruit->getAddedWeight();
         } else{
-            ProductFruit* fruit = dynamic_cast<ProductFruit*>(pakan);
-            if(fruit){
-                this->weight += fruit->getAddedWeight();
-            } else{
-                cout << "Omnivore is fed " << pakan->getNamaAsset() << " which is neither of ProductFruit nor ProductHewan type. ";
-                throw OmnivoreWrongFoodTypeException();
-            }
+            cout << "Omnivore is fed " << pakan->getNamaAsset() << " which is neither of ProductFruit nor ProductHewan type. ";
+            throw OmnivoreWrongFoodTypeException();
         }
-    }catch(OmnivoreWrongFoodTypeException& e){
-        cout << e.what();
     }
 }

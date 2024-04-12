@@ -112,6 +112,12 @@ struct MaterialBangunanNotProductMaterialException : public exception{
     }
 };
 
+struct HewanWrongFoodTypeException : public exception{
+    const char* what() const throw(){
+        return ". Hewan can only eat Produk type.\n";
+    }
+};
+
 struct HerbivoreWrongFoodTypeException : public exception{
     const char* what() const throw(){
         return "Herbivore can only eat ProductFruit type.\n";
@@ -205,6 +211,36 @@ struct tanamNotTumbuhanException : public exception{
 struct ternakNotHewanException : public exception{
     const char* what() const throw(){
         return " You can only raise object of Hewan type.\n";
+    }
+};
+
+struct invalidNomorTanamanException : public exception{
+    const char* what() const throw(){
+        return "Nomor tanaman is invalid!\n";
+    }
+};
+
+struct invalidNomorHewanException : public exception{
+    const char* what() const throw(){
+        return "Nomor hewan is invalid!\n";
+    }
+};
+
+struct invalidJumlahPetakException : public exception{
+    const char* what() const throw(){
+        return "Jumlah petak is invalid!\n";
+    }
+};
+
+struct invalidKeyException : public exception{
+    const char* what() const throw(){
+        return "Key is invalid!\n";
+    }
+};
+
+struct invalidPetakException : public exception{
+    const char* what() const throw(){
+        return "Pilihan petak is invalid!\n";
     }
 };
 

@@ -5,9 +5,10 @@ Hewan::Hewan(){
 }
 
 Hewan::Hewan(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int weight, int price){
-    this->hewanID = hewanID;
+    this->assetType = "Hewan";
+    this->assetID = hewanID;
     this->kodeHuruf = kodeHuruf;
-    this->namaHewan = namaHewan;
+    this->namaAsset = namaHewan;
     this->type = type;
     this->weightToHarvest = weightToHarvest;
     this->weight = weight;
@@ -16,15 +17,18 @@ Hewan::Hewan(int hewanID, string kodeHuruf, string namaHewan, string type, size_
 
 Hewan::~Hewan(){}
 
-void Hewan::setHewanID(int hewanID){
-    this->hewanID = hewanID;
+void Hewan::setAssetType(string assetType){
+    try{
+        if(assetType != "Hewan"){
+            throw HewanFalseTypeException();
+        }
+
+        this->assetType = assetType;
+    }catch(HewanFalseTypeException& e){
+        cout << e.what();
+    }
 }
-void Hewan::setKodeHuruf(string kodeHuruf){
-    this->kodeHuruf = kodeHuruf;
-}
-void Hewan::setNamaHewan(string namaHewan){
-    this->namaHewan = namaHewan;
-}
+
 void Hewan::setType(string type){
     this->type = type;
 }
@@ -37,15 +41,7 @@ void Hewan::setWeight(int weight){
 void Hewan::setPrice(int price){
     this->price = price;
 }
-int Hewan::getHewanID() const{
-    return this->hewanID;
-}
-string Hewan::getKodeHuruf() const{
-    return this->kodeHuruf;
-}
-string Hewan::getNamaHewan() const{
-    return this->namaHewan;
-}
+
 string Hewan::getType() const{
     return this->type;
 }
@@ -65,7 +61,7 @@ vector<Produk*> Hewan::harvest(){
     vector<Produk*> harvestedMaterials;
 
     for (const auto& pair : Produk::configProduk) {
-        if (pair.second->getOrigin() == this->namaHewan) {
+        if (pair.second->getOrigin() == this->namaAsset) {
             harvestedMaterials.push_back(pair.second);
         }
     }

@@ -6,8 +6,9 @@
 #include <map>
 #include <iostream>
 
-#include "../Exception/Exception.hpp"
+#include "../Exception.hpp"
 #include "../Produk.hpp"
+#include "../Asset.hpp"
 
 using namespace std;
 
@@ -21,11 +22,8 @@ using namespace std;
 //     Duck = 7
 // };
 
-class Hewan{
+class Hewan: public Asset {
   protected:
-    int hewanID;
-    string kodeHuruf;
-    string namaHewan;
     string type;
     size_t weightToHarvest;
     int weight;
@@ -38,18 +36,13 @@ class Hewan{
     virtual ~Hewan();
 
     // setter
-    void setHewanID(int hewanID);
-    void setKodeHuruf(string kodeHuruf);
-    void setNamaHewan(string namaHewan);
+    void setAssetType(string AssetType);
     void setType(string type);
     void setWeightToHarvest(size_t weightToHarvest);
     void setWeight(int weight);
     void setPrice(int price);
 
     // getter
-    int getHewanID() const;
-    string getKodeHuruf() const;
-    string getNamaHewan() const;
     string getType() const;
     size_t getWeightToHarvest() const;
     int getWeight() const;

@@ -7,9 +7,9 @@ Carnivore::Carnivore(int hewanID, string kodeHuruf, string namaHewan, string typ
 }
 
 Carnivore& Carnivore::operator=(Carnivore& other){
-    this->hewanID == other.hewanID;
+    this->assetID == other.assetID;
     this->kodeHuruf == other.kodeHuruf;
-    this->namaHewan == other.namaHewan;
+    this->namaAsset == other.namaAsset;
     this->type == other.type;
     this->weightToHarvest == other.weightToHarvest;
     this->weight == other.weight;

@@ -1,4 +1,5 @@
 #include "Tumbuhan.hpp"
+#include "Exception.hpp"
 #include <iostream>
 
 using namespace std;
@@ -31,9 +32,9 @@ void Tumbuhan::setTurnInstantiated(size_t turn_instantiated){
     this->turn_instantiated = turn_instantiated;
 }
 
-/*string Tumbuhan::getType(){
+string Tumbuhan::getType(){
     return this->type;
-}*/
+}
 
 size_t Tumbuhan::getDurationToHarvest(){
     return this->duration_to_harvest;
@@ -44,26 +45,9 @@ size_t Tumbuhan::getTurnInstantiated(){
 }
 
 bool Tumbuhan::isReadyToHarvest(){
-    return (1 == this->getTurnInstantiated() + this->getDurationToHarvest());
+    return (current_turn == this->getTurnInstantiated() + this->getDurationToHarvest());
 }
 
-void Tumbuhan::operator=(Tumbuhan& other) {
-    this->tumbuhanID = other.tumbuhanID;
-    this->namaTumbuhan = other.namaTumbuhan;
-    this->type = other.type;
-    this->duration_to_harvest = other.duration_to_harvest;
-    this->price = other.price;
-    this->turn_instantiated = other.turn_instantiated;
-}
-
-void Tumbuhan::operator=(Tumbuhan*& other) {
-    this->tumbuhanID = other->tumbuhanID;
-    this->namaTumbuhan = other->namaTumbuhan;
-    this->type = other->type;
-    this->duration_to_harvest = other->duration_to_harvest;
-    this->price = other->price;
-    this->turn_instantiated = other->turn_instantiated;
-}
 //<---------------FRUIT PLANT----------------->
 FruitPlant::FruitPlant(int tumbuhanID, string kodeHuruf, string namaTumbuhan, string type, size_t durationToHarvest, int price, size_t turn_instantiated){
     this->setAssetType("Tumbuhan");

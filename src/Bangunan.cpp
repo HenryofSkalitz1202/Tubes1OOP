@@ -6,7 +6,7 @@ using namespace std;
 
 map<string, Bangunan*> Bangunan::resepBangunan;
 
-Bangunan::Bangunan(int bangunanID, string kodeHuruf, string namaBangunan, int hargaBangunan, map<string, int> listBahan){
+Bangunan::Bangunan(int bangunanID, string kodeBangunan, string namaBangunan, int hargaBangunan, map<string, int> listBahan){
     this->setAssetType("BANGUNAN");
     this->setAssetID(bangunanID);
     this->setKodeHuruf(kodeBangunan);

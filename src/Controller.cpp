@@ -358,4 +358,57 @@ void Controller::next()
     this->current_player_index = (this->current_player_index + 1) % this->players.size();
     this->current_player = this->players[this->current_player_index];
     this->turn_number++;
+    Tumbuhan::current_turn++;
+}
+
+void Controller::cetak_penyimpanan(Pemain* player){
+    player->getInventory().print();
+}
+
+void Controller::pungut_pajak(Walikota* walikota){
+    walikota->pungutPajak(Controller::players);
+}
+
+void Controller::cetak_ladang(Petani* petani){
+    petani->getLadang().print();
+}
+
+void Controller::cetak_peternakan(Peternak* peternak){
+    peternak->getPeternakan().print();
+}
+
+void Controller::tanam(Petani* petani){
+    petani->tanamTanaman();
+}
+
+void Controller::ternak(Peternak* peternak){
+    peternak->taruhHewan();
+}
+
+void Controller::bangun(Walikota* walikota){
+    walikota->bangunBangunan();
+}
+
+void Controller::makan(Pemain* player){
+    //player.ma
+}
+
+void Controller::kasih_makan(Peternak* peternak){
+    peternak->beriMakan();
+}
+
+void beli(Pemain* player){
+    //player.be
+}
+
+void Controller::jual(Pemain* player){
+    player->jualAsset();
+}
+
+void Controller::panen(Petani* petani){
+    petani->panenTanaman();
+}
+
+void Controller::tambah_pemain(Walikota* walikota){
+    walikota->tambahAkun(Controller::players);
 }

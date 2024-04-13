@@ -52,22 +52,21 @@ public:
     bool is_walikota(Pemain* player);
 
     void next();
-    void cetak_penyimpanan();
-    void pungut_pajak();
-    void cetak_ladang();
-    void cetak_peternakan();
-    void tanam();
-    void ternak();
-    void bangun();
-    void makan();
-    void kasih_makan();
-    void beli();
-    void jual();
-    void panen();
+    void cetak_penyimpanan(Pemain* player);
+    void pungut_pajak(Walikota* walikota);
+    void cetak_ladang(Petani* petani);
+    void cetak_peternakan(Peternak* peternak);
+    void tanam(Petani* petani);
+    void ternak(Peternak* peternak);
+    void bangun(Walikota* walikota);
+    void makan(Pemain* player);
+    void kasih_makan(Peternak* peternak);
+    void beli(Pemain* player);
+    void jual(Pemain* player);
+    void panen(Petani* petani);
+    void tambah_pemain(Walikota* walikota);
     void muat();
     void simpan();
-    void tambah_pemain();
-
 };
 
 #endif

@@ -47,9 +47,11 @@ public:
   string getUsername();
   int getUang();
   int getBeratBadan();
+  Inventory getInventory();
   Asset* getFromInventory(string key);
 
   void jualAsset();
+  void makan();
 
   virtual int getNetWorth() = 0;
   virtual int countPajak() = 0;
@@ -69,6 +71,7 @@ public:
 
   void setPetaniID(int petaniID);
   int getPetaniID();
+  Ladang getLadang();
 
   void tanamTanaman();
   void panenTanaman();
@@ -114,6 +117,7 @@ public:
 
   void setPeternakID(int peternakID);
   int getPeternakID();
+  Peternakan getPeternakan();
 
   void taruhHewan();
   void beriMakan();

@@ -57,6 +57,10 @@ Asset* Pemain::getFromInventory(string key){
     return this->inventory.get(key);
 }
 
+Inventory Pemain::getInventory(){
+    return this->inventory;
+}
+
 void Pemain::jualAsset(){
     try{
         if(this->inventory.isEmpty()){
@@ -148,6 +152,10 @@ void Petani::setPetaniID(int petaniID){
 
 int Petani::getPetaniID(){
     return this->petaniID;
+}
+
+Ladang Petani::getLadang(){
+    return this->ladang;
 }
 
 void Petani::tanamTanaman(){
@@ -721,6 +729,10 @@ void Peternak::setPeternakID(int peternakID){
 
 int Peternak::getPeternakID(){
     return this->peternakID;
+}
+
+Peternakan Peternak::getPeternakan(){
+    return this->peternakan;
 }
 
 void Peternak::taruhHewan(){

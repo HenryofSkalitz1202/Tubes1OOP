@@ -25,7 +25,7 @@ public:
 
     static vector<string> stringToArrayEnter(const string& input);
     static vector<string> stringToArraySpace(const string& input);
-    static void printVector(const vector<string>& vec);
+    static void printMap(const std::map<std::string, int>& myMap);
     static void populateConfigProduk(string filePathProduk);
     static void populateConfigHewan(string filePathHewan);
     static void populateConfigTumbuhan(string filePathTumbuhan);

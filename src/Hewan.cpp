@@ -10,7 +10,7 @@ Hewan::~Hewan(){}
 
 void Hewan::setAssetType(string assetType){
     try{
-        if(assetType != "Hewan"){
+        if(assetType != "HEWAN"){
             throw HewanFalseTypeException();
         }
 
@@ -65,7 +65,7 @@ vector<Produk*> Hewan::harvest(){
 
 //<---------------HERBIVORE----------------->
 Herbivore::Herbivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price){
-    this->setAssetType("Hewan");
+    this->setAssetType("HEWAN");
     this->setAssetID(hewanID);
     this->setKodeHuruf(kodeHuruf);
     this->setNamaAsset(namaHewan);
@@ -112,7 +112,7 @@ void Herbivore::makan(Produk* pakan){
 
 //<---------------CARNIVORE----------------->
 Carnivore::Carnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price){
-    this->setAssetType("Hewan");
+    this->setAssetType("HEWAN");
     this->setAssetID(hewanID);
     this->setKodeHuruf(kodeHuruf);
     this->setNamaAsset(namaHewan);
@@ -160,7 +160,7 @@ void Carnivore::makan(Produk* pakan){
 //<---------------OMNIVORE----------------->
 
 Omnivore::Omnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price){
-    this->setAssetType("Hewan");
+    this->setAssetType("HEWAN");
     this->setAssetID(hewanID);
     this->setKodeHuruf(kodeHuruf);
     this->setNamaAsset(namaHewan);

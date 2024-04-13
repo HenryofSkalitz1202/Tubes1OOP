@@ -8,6 +8,11 @@
 #include <stdexcept>
 
 vector<Pemain*> Controller::players;
+map<string, int> Toko::catalogPrice;
+map<string, int> Toko::catalogBangunan;
+map<string, int> Toko::catalogProduk;
+vector<string> Toko::catalogHewan;
+vector<string> Toko::catalogTumbuhan;
 
 Controller::Controller()
 {
@@ -44,15 +49,10 @@ vector<string> Controller::stringToArraySpace(const string& input) {
     return result;
 }
 
-void Controller::printVector(const vector<string>& vec) {
-    cout << "<";
-    for (size_t i = 0; i < vec.size(); ++i) {
-        cout << vec[i];
-        if (i < vec.size() - 1) {
-            cout << ", ";
-        }
+void Controller::printMap(const std::map<std::string, int>& myMap) {
+    for (const auto& pair : myMap) {
+        std::cout << pair.first << ": " << pair.second << std::endl;
     }
-    cout << ">" << endl;
 }
 
 void Controller::populateConfigProduk(string filePathProduk){
@@ -73,29 +73,35 @@ void Controller::populateConfigProduk(string filePathProduk){
         if(str_arr[3] == "PRODUCT_MATERIAL_PLANT"){
             produkMaterialPtr = new ProductMaterial(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], std::stoi(str_arr[5]), std::stoi(str_arr[6]));
             mp_material.insert({str_arr[2], produkMaterialPtr});
+            Toko::catalogPrice.insert({str_arr[2], std::stoi(str_arr[6])});
+            Toko::catalogProduk.insert({str_arr[2], 0});
         }else if(str_arr[3] == "PRODUCT_FRUIT_PLANT"){
             produkFruitPtr = new ProductFruit(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], std::stoi(str_arr[5]), std::stoi(str_arr[6]));
             mp_fruit.insert({str_arr[1], produkFruitPtr});
+            Toko::catalogPrice.insert({str_arr[1], std::stoi(str_arr[6])});
+            Toko::catalogProduk.insert({str_arr[1], 0});
         }else if(str_arr[3] == "PRODUCT_ANIMAL"){
             produkHewanPtr = new ProductHewan(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], std::stoi(str_arr[5]), std::stoi(str_arr[6]));
             mp_hewan.insert({str_arr[1], produkHewanPtr});
+            Toko::catalogPrice.insert({str_arr[1], std::stoi(str_arr[6])});
+            Toko::catalogProduk.insert({str_arr[1], 0});
         }else{
             cout << "Type " << str_arr[3];
             throw UnknownProductTypeException();
         }
     }
 
-    ProductMaterial::configProdukMaterial.clear(); // Clear the existing configProduk map if needed
+    ProductMaterial::configProdukMaterial.clear();
     for (const auto& pair : mp_material) {
         ProductMaterial::configProdukMaterial.insert({pair.first, pair.second});
     }
 
-    ProductFruit::configProdukFruit.clear(); // Clear the existing configProduk map if needed
+    ProductFruit::configProdukFruit.clear();
     for (const auto& pair : mp_fruit) {
         ProductFruit::configProdukFruit.insert({pair.first, pair.second});
     }
 
-    ProductHewan::configProdukHewan.clear(); // Clear the existing configProduk map if needed
+    ProductHewan::configProdukHewan.clear();
     for (const auto& pair : mp_hewan) {
         ProductHewan::configProdukHewan.insert({pair.first, pair.second});
     }
@@ -139,9 +145,11 @@ void Controller::populateConfigHewan(string filePathHewan){
             throw UnknownAnimalTypeException();
         }
         mp.insert({str_arr[1], hewanPtr});
+        Toko::catalogHewan.push_back(str_arr[1]);
+        Toko::catalogPrice.insert({str_arr[1], std::stoi(str_arr[5])});
     }
 
-    Hewan::configHewan.clear(); // Clear the existing configProduk map if needed
+    Hewan::configHewan.clear();
     for (const auto& pair : mp) {
         Hewan::configHewan.insert({pair.first, pair.second});
     }
@@ -171,6 +179,8 @@ void Controller::populateConfigTumbuhan(string filePathTumbuhan){
             throw UnknownPlantTypeException();
         }
         mp.insert({str_arr[1], tumbuhanPtr});
+        Toko::catalogTumbuhan.push_back(str_arr[1]);
+        Toko::catalogPrice.insert({str_arr[1], std::stoi(str_arr[5])});
     }
 
     Tumbuhan::configTumbuhan.clear(); // Clear the existing configProduk map if needed
@@ -209,6 +219,8 @@ void Controller::populateConfigBangunan(string filePathBangunan){
 
             bangunanPtr = new Bangunan(std::stoi(str_arr[0]), str_arr[1], str_arr[2], std::stoi(str_arr[3]), mp_bahan);
             mp.insert({str_arr[2], bangunanPtr});
+            Toko::catalogBangunan.insert({str_arr[2], 0});
+            Toko::catalogPrice.insert({str_arr[2], std::stoi(str_arr[3])});
 
             std::cout << "ListBahan:" << std::endl;
             for (const auto& pair : mp_bahan) {
@@ -229,7 +241,8 @@ void Controller::populateConfigBangunan(string filePathBangunan){
 
     std::cout << "Map content:" << std::endl;
     for (const auto& pair : Bangunan::resepBangunan) {
-        std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
+        std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << ", Bahan: ";
+        printMap(pair.second->getListBahan());
     }
 }
 

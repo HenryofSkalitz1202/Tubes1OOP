@@ -118,7 +118,7 @@ public:
   void taruhHewan();
   void beriMakan();
   void panenHewan();
-  void beliBangunan();
+  void beliAsset(Toko* store);
 
   int getNetWorth();
   int countPajak();

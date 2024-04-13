@@ -228,7 +228,7 @@ struct invalidNamaBangunanException : public exception{
 
 struct uangInsufficientException : public exception{
     const char* what() const throw(){
-        return "Uang tidak cukup!\n";
+        return "Uang tidak cukup untuk apapun!\n";
     }
 };
 

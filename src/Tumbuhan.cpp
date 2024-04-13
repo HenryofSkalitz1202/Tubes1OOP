@@ -9,7 +9,7 @@ Tumbuhan::~Tumbuhan(){}
 
 void Tumbuhan::setAssetType(string assetType){
     try{
-        if(assetType != "Tumbuhan"){
+        if(assetType != "TUMBUHAN"){
             throw TumbuhanFalseTypeException();
         }
 
@@ -49,7 +49,7 @@ bool Tumbuhan::isReadyToHarvest(){
 
 //<---------------FRUIT PLANT----------------->
 FruitPlant::FruitPlant(int tumbuhanID, string kodeHuruf, string namaTumbuhan, string type, size_t durationToHarvest, int price, size_t turn_instantiated){
-    this->setAssetType("Tumbuhan");
+    this->setAssetType("TUMBUHAN");
     this->setAssetID(tumbuhanID);
     this->setKodeHuruf(kodeHuruf);
     this->setNamaAsset(namaTumbuhan);
@@ -97,7 +97,7 @@ vector<Produk*> FruitPlant::harvest(){
 
 //<---------------MATERIAL PLANT----------------->
 MaterialPlant::MaterialPlant(int tumbuhanID, string kodeHuruf, string namaTumbuhan, string type, size_t durationToHarvest, int price, size_t turn_instantiated){
-    this->setAssetType("Tumbuhan");
+    this->setAssetType("TUMBUHAN");
     this->setAssetID(tumbuhanID);
     this->setKodeHuruf(kodeHuruf);
     this->setNamaAsset(namaTumbuhan);

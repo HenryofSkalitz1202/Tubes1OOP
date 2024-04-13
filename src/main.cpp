@@ -1,4 +1,4 @@
-#include "Controller.cpp"
+#include "Controller.hpp"
 
 int Pemain::defaultBerat;
 int Pemain::defaultUang;
@@ -9,6 +9,7 @@ int main(){
     std::string filePathTumbuhan = "plant.txt";
     std::string filePathBangunan = "recipe.txt";
     std::string filePathMisc = "misc.txt";
+    std::string filePathMuat = "state.txt";
 
     try {
         std::ifstream fileProduk(filePathProduk);

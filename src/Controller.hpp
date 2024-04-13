@@ -6,18 +6,26 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "Pemain.cpp"
+#include <sstream>
+#include <fstream>
+#include <stdexcept>
+#include "Exception.hpp"
+#include "input.cpp"
+#include "Pemain.hpp"
 #include "Hewan/Hewan.hpp"
 #include "Hewan/Carnivore.hpp"
 #include "Hewan/Herbivore.hpp"
 #include "Hewan/Omnivore.hpp"
 #include "Tumbuhan.hpp"
+
 using namespace std;
+
+class Import;
 
 class Controller
 {
 private:
-    std::vector<Pemain*> players;
+    vector<Pemain*> players;
     size_t current_player_index;
     Pemain* current_player;
     int turn_number;
@@ -48,8 +56,8 @@ public:
     bool is_game_over();
     void is_won();
 
+    void start_option(string filePathState);
     void start_default();
-    void start_load();
 
     bool is_petani(Pemain* player);
     bool is_peternak(Pemain* player);
@@ -68,7 +76,7 @@ public:
     void beli();
     void jual();
     void panen();
-    void muat();
+    void muat(string filePathState);
     void simpan();
     void tambah_pemain();
 

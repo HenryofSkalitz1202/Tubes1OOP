@@ -4,6 +4,12 @@
 #include <exception>
 using namespace std;
 
+struct FilePathStateNotFoundException : public exception{
+    const char* what() const throw(){
+        return "' is not found.";
+    }
+};
+
 struct FilePathProdukNotFoundException : public exception{
     const char* what() const throw(){
         return "' is not found.";

@@ -1,11 +1,5 @@
 #include "Controller.hpp"
-#include "Exception.hpp"
-#include "input.cpp"
-#include <iostream>
-#include <vector>
-#include <sstream>
-#include <fstream>
-#include <stdexcept>
+#include "Muat.hpp"
 
 Controller::Controller()
 {
@@ -312,6 +306,27 @@ void Controller::is_won()
     }
 }
 
+void Controller::start_option(string filePathState)
+{
+    int option;
+
+    cout << "Choose an option to start the game" << endl;
+    cout << "1. Default" << endl;
+    cout << "2. Load" << endl;
+    
+    do {
+        cout << "Choose option: ";
+        cin >> option;
+        cin.ignore();
+    } while (option != 1 && option != 2);
+
+    if (option == 1) {
+        this->start_default();
+    } else if (option == 2) {
+        this->muat(filePathState);
+    }
+}
+
 void Controller::start_default()
 {
     Petani* p1 = new Petani("Petani1", 50, 40);
@@ -344,4 +359,20 @@ void Controller::next()
     this->current_player_index = (this->current_player_index + 1) % this->players.size();
     this->current_player = this->players[this->current_player_index];
     this->turn_number++;
+}
+
+void Controller::muat(string filePathState)
+{
+    try {
+        ifstream fileState(filePathState);
+        if (!fileState) {
+            throw FilePathStateNotFoundException();
+        }
+
+        Muat Muat(filePathState, *this);
+        Muat.read();
+
+    } catch (FilePathStateNotFoundException& e) {
+        cout << e.what() << endl;
+    }
 }

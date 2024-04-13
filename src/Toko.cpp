@@ -2,22 +2,17 @@
 #include "Exception.hpp"
 
 Toko::Toko() {
-    this->jumlahBangunan = 0;
-    this->jumlahProduk = 0;
-}
-
-Toko::Toko(vector<Bangunan*> listBangunan, vector<Produk*> listProduk, vector<Hewan*> listHewan, vector<Tumbuhan*> listTumbuhan) {
-    for (auto bangunan: listBangunan) {
-        this->listJumlahAsset[bangunan->getKodeHuruf()] = 0;
+    for (auto const& [key,_]: Bangunan::resepBangunan) {
+        this->listJumlahAsset[key] = 0;
     }
-    for (auto produk: listProduk) {
-        this->listJumlahAsset[produk->getKodeHuruf()] = 0;
+    for (auto const& [key,_]: Produk::configProduk) {
+        this->listJumlahAsset[key] = 0;
     }
-    for (auto hewan: listHewan) {
-        this->listAssetTersedia.push_back(hewan);
+    for (auto const& [_,value]: Hewan::configHewan) {
+        this->listAssetTersedia.push_back(value);
     }
-    for (auto tumbuhan: listTumbuhan) {
-        this->listAssetTersedia.push_back(tumbuhan);
+    for (auto const& [_,value]: Tumbuhan::configTumbuhan) {
+        this->listAssetTersedia.push_back(value);
     }
     this->jumlahBangunan = 0;
     this->jumlahProduk = 0;

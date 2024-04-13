@@ -19,7 +19,6 @@ class Toko {
         int jumlahProduk;
     public:
         Toko();
-        Toko(vector<Bangunan*>, vector<Produk*>, vector<Hewan*>, vector<Tumbuhan*>);
         ~Toko();
 
         Asset* beli(int, int);

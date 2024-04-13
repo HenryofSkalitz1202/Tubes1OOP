@@ -1,14 +1,17 @@
 #ifndef TOKO_HPP
 #define TOKO_HPP
+#include <iostream>
 #include <string>
-#include "Grid.cpp"
+#include <map>
 
 using namespace std;
 
 class Toko{
 private:
   ~Toko();
-  Inventory inventoryToko;
+
+public:
+  static map<string, int> catalog;
 };
 
 #endif

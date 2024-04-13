@@ -16,7 +16,6 @@ protected:
   map<string, T> data; 
   size_t rows;
   size_t cols;
-  //int available_capacity;
 
 public:
   Grid(size_t rows, size_t cols);
@@ -50,6 +49,8 @@ private:
   int jumlahProductMaterial;
   int jumlahProductFruit;
   int jumlahProductHewan;
+  int jumlahHewan;
+  int jumlahTumbuhan;
 public:
   static int inventoryRowSize;
   static int inventoryColumnSize;
@@ -62,6 +63,13 @@ public:
   void addItem(Asset*);
   void addItemKey(Asset*, string loc);
   void findAndRemoveItem(string key);
+
+  int getJumlahBangunan();
+  int getJumlahProductMaterial();
+  int getJumlahProductFruit();
+  int getJumlahProductHewan();
+  int getJumlahTumbuhan();
+  int getJumlahHewan();
 
   map<string, int> rekapMaterial();
   void rekapInventory();

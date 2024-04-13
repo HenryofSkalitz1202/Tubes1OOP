@@ -28,6 +28,12 @@ struct FilePathBangunanNotFoundException : public exception{
     }
 };
 
+struct FilePathMiscNotFoundException : public exception{
+    const char* what() const throw(){
+        return "' is not found.";
+    }
+};
+
 struct BangunanFalseTypeException : public exception{
     const char* what() const throw(){
         return "Object of Bangunan type doesn't have type 'BANGUNAN\n";
@@ -67,24 +73,6 @@ struct ProductFruitFalseTypeException : public exception{
 struct ProductHewanFalseTypeException : public exception{
     const char* what() const throw(){
         return "Object of ProductHewan type doesn't have type 'PRODUCT_ANIMAL\n";
-    }
-};
-
-struct NotHerbivoreException : public exception{
-    const char* what() const throw(){
-        return " bukan herbivore.\n";
-    }
-};
-
-struct NotCarnivoreException : public exception{
-    const char* what() const throw(){
-        return " bukan carnivore.\n";
-    }
-};
-
-struct NotOmnivoreException : public exception{
-    const char* what() const throw(){
-        return " bukan omnivore.\n";
     }
 };
 
@@ -160,6 +148,12 @@ struct inventoryEmptyException : public exception{
     }
 };
 
+struct inventoryNotEnoughException : public exception{
+    const char* what() const throw(){
+        return "Available inventory capacity is not enough!\n";
+    }
+};
+
 struct inventoryFullException : public exception{
     const char* what() const throw(){
         return "Inventory is full!\n";
@@ -178,18 +172,6 @@ struct ladangFullException : public exception{
     }
 };
 
-struct noneSiapPanenLadangException : public exception{
-    const char* what() const throw(){
-        return "\\('u')/ Sing sabar, sing tenang \\('u')/\nNo tanaman is ready for panen yet!\n";
-    }
-};
-
-struct noneSiapPanenPeternakanException : public exception{
-    const char* what() const throw(){
-        return "\\('u')/ Sing sabar, sing tenang \\('u')/\nNo hewan is ready for panen yet!\n";
-    }
-};
-
 struct peternakanEmptyException : public exception{
     const char* what() const throw(){
         return "Peternakan is empty!\n";
@@ -202,9 +184,33 @@ struct peternakanFullException : public exception{
     }
 };
 
+struct noneSiapPanenLadangException : public exception{
+    const char* what() const throw(){
+        return "\\('u')/ Sing sabar, sing tenang \\('u')/\nNo tanaman is ready for panen yet!\n";
+    }
+};
+
+struct noneSiapPanenPeternakanException : public exception{
+    const char* what() const throw(){
+        return "\\('u')/ Sing sabar, sing tenang \\('u')/\nNo hewan is ready for panen yet!\n";
+    }
+};
+
 struct tanamNotTumbuhanException : public exception{
     const char* what() const throw(){
         return " You can only plant object of Tumbuhan type.\n";
+    }
+};
+
+struct noHewanAvailableException : public exception{
+    const char* what() const throw(){
+        return "You don't have any Hewan on your inventory!\n";
+    }
+};
+
+struct noTumbuhanAvailableException : public exception{
+    const char* what() const throw(){
+        return "You don't have any Hewan on your inventory!\n";
     }
 };
 

@@ -53,8 +53,8 @@ int main(){
 
         std::ifstream fileMisc(filePathMisc);
         if (!fileMisc.is_open()) {
-            cout << "File config bangunan '" << filePathBangunan;
-            throw FilePathBangunanNotFoundException();
+            cout << "File config misc '" << filePathMisc;
+            throw FilePathMiscNotFoundException();
         }
 
         cout << endl;

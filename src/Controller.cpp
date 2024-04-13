@@ -238,7 +238,6 @@ void Controller::GameConfig(string filePathMisc){
     std::string fileContent = fileReader.readText();
 
     vector<string> fileContentarr = stringToArrayEnter(fileContent);
-    //vector<string> str_arr = stringToArraySpace(str);
 
     Pemain::uangWin = std::stoi(fileContentarr[0]);
     Pemain::beratWin = std::stoi(fileContentarr[1]);

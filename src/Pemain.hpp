@@ -1,7 +1,9 @@
 #ifndef PEMAIN_HPP
 #define PEMAIN_HPP
 #include <string>
+#include <vector>
 #include "Toko.cpp"
+#include "Grid.cpp"
 
 using namespace std;
 
@@ -18,6 +20,8 @@ public:
   static int defaultBerat;
   static int defaultUang;
 
+  static vector<string> stringToArrayComma(const string& input);
+
   Pemain();
   ~Pemain();
 
@@ -32,6 +36,8 @@ public:
   int getUang();
   int getBeratBadan();
   Asset* getFromInventory(string key);
+
+  void jualAsset();
 
   virtual int getNetWorth() = 0;
   virtual int countPajak() = 0;
@@ -55,7 +61,7 @@ public:
 
   void tanamTanaman();
   void panenTanaman();
-  void beliBangunan(Toko* store);
+  void beliAsset(Toko* store);
 
   int getNetWorth();
   int countPajak();
@@ -78,7 +84,6 @@ public:
 
   void bangunBangunan();
   void tambahAkun(vector<Pemain*> players);
-  void jualBangunan();
 
   int getNetWorth();
   int pungutPajak(vector<Pemain*> players);

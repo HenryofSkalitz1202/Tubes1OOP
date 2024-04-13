@@ -94,10 +94,10 @@ T Grid<T>::get(size_t row, size_t col){
 
 template <typename T>
 T Grid<T>::get(string key){
-    if(!this->isValidKey(key)) {
-        cout << "Attempted to set value with invalid key: " << key;
-        throw outOfBoundsException();
-    }
+    // if(!this->isValidKey(key)) {
+    //     cout << "Attempted to set value with invalid key: " << key;
+    //     throw outOfBoundsException();
+    // }
 
     auto it = this->data.find(key);
     return it->second;
@@ -321,6 +321,30 @@ void Inventory::findAndRemoveItem(string item_key){
     }
 }
 
+int Inventory::getJumlahBangunan(){
+    return this->jumlahBangunan;
+}
+
+int Inventory::getJumlahProductMaterial(){
+    return this->jumlahProductMaterial;
+}
+
+int Inventory::getJumlahProductFruit(){
+    return this->jumlahProductFruit;
+}
+
+int Inventory::getJumlahProductHewan(){
+    return this->jumlahProductHewan;
+}
+
+int Inventory::getJumlahTumbuhan(){
+    return this->jumlahTumbuhan;
+}
+
+int Inventory::getJumlahHewan(){
+    return this->jumlahHewan;
+}
+
 map<string, int> Inventory::rekapMaterial(){
     map<string, int> mapMaterial;
     
@@ -357,6 +381,10 @@ void Inventory::rekapInventory() {
                     this->jumlahProductFruit++;
                 } else if (dynamic_cast<ProductHewan*>(asset)) {
                     this->jumlahProductHewan++;
+                } else if (dynamic_cast<Tumbuhan*>(asset)){
+                    this->jumlahTumbuhan++;
+                } else if (dynamic_cast<Hewan*>(asset)){
+                    this->jumlahHewan++;
                 }
             }
         }
@@ -367,6 +395,8 @@ void Inventory::rekapInventory() {
     std::cout << "ProductMaterial: " << jumlahProductMaterial << endl;
     std::cout << "ProductFruit: " << jumlahProductFruit << endl;
     std::cout << "ProductHewan: " << jumlahProductHewan << endl;
+    std::cout << "Hewan: " << jumlahHewan << endl;
+    std::cout << "Tumbuhan: " << jumlahTumbuhan << endl;
 }
 
 void Inventory::print() {

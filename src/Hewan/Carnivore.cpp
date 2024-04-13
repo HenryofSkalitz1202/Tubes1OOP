@@ -1,6 +1,8 @@
 #include "Carnivore.hpp"
 
-Carnivore::Carnivore(): Hewan() {}
+Carnivore::Carnivore(): Hewan() {
+    
+}
 
 Carnivore::Carnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price): 
     Hewan(hewanID, kodeHuruf, namaHewan, type, weightToHarvest, 0, price) {

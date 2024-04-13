@@ -110,8 +110,6 @@ void Pemain::jualAsset(){
         }
     }catch(inventoryEmptyException& e){
         cout << e.what();
-    }catch(outOfBoundsException& e){
-        cout << e.what();
     }
 }
 
@@ -242,6 +240,10 @@ void Petani::panenTanaman(){
             throw noneSiapPanenLadangException();
         }
 
+        if(!this->inventory.isFull()){
+            throw inventoryFullException();
+        }
+
         this->ladang.print();
 
         map<string, int> rekapLadang = this->ladang.rekapLadang();
@@ -259,23 +261,37 @@ void Petani::panenTanaman(){
             }
         }
 
-        int nomor_tanaman = 0;
-        int jumlah_petak = 0;
+        int nomor_tanaman;
+        bool validNomorTanaman = false;
+        while(!validNomorTanaman){
+            nomor_tanaman = 0;
+            std::cout << "Nomor tanaman yang ingin dipanen: ";
+            std::cin >> nomor_tanaman;
 
-        std::cout << "Nomor tanaman yang ingin dipanen: ";
-        std::cin >> nomor_tanaman;
-
-        if(mapIdxKode.find(nomor_tanaman) == mapIdxKode.end()){
-            throw invalidNomorTanamanException();
+            if(mapIdxKode.find(nomor_tanaman) == mapIdxKode.end()){
+                cout << "Nomor tanaman is invalid!\n" << endl;
+            }else{
+                validNomorTanaman = true;
+            }
         }
-        
-        std::cout << "\nJumlah petak yang ingin dipanen: ";
-        std::cin >> jumlah_petak;
 
-        if(jumlah_petak > rekapLadang[mapIdxKode[nomor_tanaman]] || jumlah_petak <= 0){
-            throw invalidJumlahPetakException();
-        }else if(this->inventory.countAvailableCapacity() < jumlah_petak){
-            throw inventoryNotEnoughException();
+        int jumlah_petak;
+        bool validJumlahPetak = false;
+
+        while(!validJumlahPetak){
+            jumlah_petak = 0;
+            std::cout << "\nJumlah petak yang ingin dipanen: ";
+            std::cin >> jumlah_petak;
+
+            if(jumlah_petak <= 0){
+                cout << "Jumlah petak is invalid!\n";
+            }else if(jumlah_petak > rekapLadang[mapIdxKode[nomor_tanaman]]){
+                cout << "You are trying to harvest more than the amount of petak that is currently available to harvest!\n";
+            }else if(this->inventory.countAvailableCapacity() < jumlah_petak){
+                cout << "Available inventory capacity is not enough!\n";
+            }else{
+                validJumlahPetak = true;
+            }
         }
 
         std::cout << "\nPilih petak yang ingin dipanen:" << std::endl;
@@ -283,22 +299,24 @@ void Petani::panenTanaman(){
         vector<string> key_vec;
 
         for(int i = 1; i <= jumlah_petak; i++){
-            string temp_key = "";
-            std::cout << "Petak ke-" << i << ": ";
-            std::cin >> temp_key;
+            string temp_key;
+            bool validTempKey = false;
+            while(!validTempKey){
+                temp_key = "";
 
-            if(this->ladang.isValidKey(temp_key)){
-                key_vec.push_back(temp_key);
-            }else{
-                throw invalidKeyException();
-            }
+                std::cout << "Petak ke-" << i << ": ";
+                std::cin >> temp_key;
 
-            if(this->ladang.get(temp_key) == nullptr){
-                std::cout << "Petak " << temp_key << " is still vacant. ";
-                throw invalidPetakException();
-            } else if(this->ladang.get(temp_key)->getKodeHuruf() != mapIdxKode[nomor_tanaman]){
-                std::cout << "Petak " << temp_key << " doesn't contain hewan " << mapIdxKode[nomor_tanaman] << ". ";
-                throw invalidPetakException();
+                if(!this->ladang.isValidKey(temp_key)){
+                    cout << temp_key << " is invalid" << endl;
+                }else if(this->ladang.get(temp_key) == nullptr){
+                    cout << temp_key << " is empty" << endl;
+                }else if(this->ladang.get(temp_key)->getKodeHuruf() != mapIdxKode[nomor_tanaman]){
+                    cout << temp_key << " doesn't contain " << mapIdxKode[nomor_tanaman] << "." << endl;
+                }else{
+                    key_vec.push_back(temp_key);
+                    validTempKey = true;
+                }
             }
 
             if(i == 1){
@@ -318,13 +336,7 @@ void Petani::panenTanaman(){
         std::cout << e.what();
     }catch(noneSiapPanenLadangException& e){
         std::cout << e.what();
-    }catch(invalidNomorTanamanException& e){
-        std::cout << e.what();
-    }catch(invalidJumlahPetakException& e){
-        std::cout << e.what();
-    }catch(invalidKeyException& e){
-        std::cout << e.what();
-    }catch(invalidPetakException& e){
+    }catch(inventoryFullException& e){
         std::cout << e.what();
     }
 }
@@ -638,19 +650,53 @@ void Peternak::taruhHewan(){
 }
 
 void Peternak::beriMakan(){
-    std::cout << "Pilih petak kandang yang akan diberi makan" << std::endl;
-    this->peternakan.print();
-
-    string key_peternakan;
-    std::cout << "Petak peternakan: ";
-    std::cin >> key_peternakan;
-
     try{
-        if(!this->peternakan.isValidKey(key_peternakan)){
-            throw invalidKeyException();
-        }else if(this->peternakan.get(key_peternakan) == nullptr){
-            std::cout << "Petak " << key_peternakan << " is still vacant. ";
-            throw invalidPetakException();
+        if(this->inventory.isEmpty()){
+            throw inventoryEmptyException();
+        }
+
+        this->inventory.rekapInventory();
+
+        if(this->inventory.getJumlahProductFruit() == 0 && this->inventory.getJumlahProductHewan() == 0){
+            throw noFoodException();
+        }
+
+        this->peternakan.cekPeternakan();
+
+        if(this->peternakan.hasCarnivore()){
+            if(!this->peternakan.hasHerbivore() && !this->peternakan.hasOmnivore()){
+                if(this->inventory.getJumlahProductHewan() == 0){
+                    throw noMatchingFoodException();
+                }
+            }
+        }else{
+            if(this->peternakan.hasHerbivore() && !this->peternakan.hasOmnivore()){
+                if(this->inventory.getJumlahProductFruit() == 0){
+                    throw noMatchingFoodException();
+                }
+            }
+        }
+
+        if(this->peternakan.isEmpty()){
+            throw peternakanEmptyException();
+        }
+
+        std::cout << "Pilih petak kandang yang akan diberi makan" << std::endl;
+        this->peternakan.print();
+
+        string key_peternakan;
+        bool validPet = false;
+        while(!validPet){
+            std::cout << "Petak peternakan: ";
+            std::cin >> key_peternakan;
+
+            if(!this->peternakan.isValidKey(key_peternakan)){
+                cout << key_peternakan << " is invalid" << endl;
+            }else if(this->peternakan.get(key_peternakan) == nullptr){
+                cout << key_peternakan << " is empty";
+            }else{
+                validPet = true;
+            }
         }
 
         std::cout << "Kamu memilih " << this->peternakan.get(key_peternakan)->getNamaAsset() << " untuk diberi makan." << std::endl;
@@ -658,31 +704,39 @@ void Peternak::beriMakan(){
         this->inventory.print();
 
         string slot;
-        std::cout << "Slot: ";
-        std::cin >> slot;
+        bool validInv = false;
+        while(!validInv){
+            std::cout << "Slot: ";
+            std::cin >> slot;
+
+            if(!this->inventory.isValidKey(slot)){
+                cout << slot << " is invalid" << endl;
+            }else if(this->getFromInventory(slot) == nullptr){
+                cout << slot << " is empty" << endl;
+            }else if(!dynamic_cast<ProductFruit*>(this->getFromInventory(slot)) && !dynamic_cast<ProductHewan*>(this->getFromInventory(slot))){
+                cout << this->getFromInventory(slot)->getNamaAsset() << " is inedible" << endl;
+            }else if(dynamic_cast<ProductFruit*>(this->getFromInventory(slot)) && dynamic_cast<Carnivore*>(this->peternakan.get(key_peternakan))){
+                cout << "You are feeding " << this->getFromInventory(slot)->getNamaAsset() << " to "<< this->peternakan.get(key_peternakan) << ". Carnivore can't eat ProductFruit." << endl;
+            }else if(dynamic_cast<ProductHewan*>(this->getFromInventory(slot)) && dynamic_cast<Herbivore*>(this->peternakan.get(key_peternakan))){
+                cout << "You are feeding " << this->getFromInventory(slot)->getNamaAsset() << " to "<< this->peternakan.get(key_peternakan) << ". Herbivore can't eat ProductHewan." << endl;
+            }else{
+                validInv = true;
+            }
+        }
 
         Produk* pakan = dynamic_cast<Produk*>(this->getFromInventory(slot));
-        if(pakan){
-            this->peternakan.get(key_peternakan)->makan(pakan);
-            std::cout << this->peternakan.get(key_peternakan)->getNamaAsset() << " sudah diberi makan dan beratnya menjadi " << this->peternakan.get(key_peternakan)->getWeight() << "." << std::endl;
+        this->peternakan.get(key_peternakan)->makan(pakan);
+        this->inventory.setNull(slot);
 
-            this->inventory.setNull(slot);
-        }else{
-            cout << "An attempt is detected to feed " << this->peternakan.get(key_peternakan)->getNamaAsset() << " with " << this->inventory.get(slot)->getNamaAsset();
-            throw HewanWrongFoodTypeException();
-        }
-    }catch(invalidKeyException& e){
+        std::cout << this->peternakan.get(key_peternakan)->getNamaAsset() << " sudah diberi makan dan beratnya menjadi " << this->peternakan.get(key_peternakan)->getWeight() << "." << std::endl;
+    }catch(inventoryEmptyException& e){
         std::cout << e.what();
-    }catch(invalidPetakException& e){
+    }catch(peternakanEmptyException& e){
         std::cout << e.what();
-    }catch(HewanWrongFoodTypeException& e){
-        cout << e.what();
-    }catch(HerbivoreWrongFoodTypeException& e){
-        cout << e.what();
-    }catch(CarnivoreWrongFoodTypeException& e){
-        cout << e.what();
-    }catch(OmnivoreWrongFoodTypeException& e){
-        cout << e.what();
+    }catch(noFoodException& e){
+        std::cout << e.what();
+    }catch(noMatchingFoodException& e){
+        std::cout << e.what();
     }
 }
   
@@ -694,6 +748,10 @@ void Peternak::panenHewan(){
 
         if(!this->peternakan.isAvailablePanen()){
             throw noneSiapPanenPeternakanException();
+        }
+
+        if(!this->inventory.isFull()){
+            throw inventoryFullException();
         }
 
         this->peternakan.print();
@@ -713,23 +771,36 @@ void Peternak::panenHewan(){
             }
         }
 
-        int nomor_hewan = 0;
-        int jumlah_petak = 0;
+        int nomor_hewan;
+        bool validNomorHewan = false;
+        while(!validNomorHewan){
+            nomor_hewan = 0;
+            std::cout << "Nomor hewan yang ingin dipanen: ";
+            std::cin >> nomor_hewan;
 
-        std::cout << "Nomor hewan yang ingin dipanen: ";
-        std::cin >> nomor_hewan;
-
-        if(mapIdxKode.find(nomor_hewan) == mapIdxKode.end()){
-            throw invalidNomorHewanException();
+            if(mapIdxKode.find(nomor_hewan) == mapIdxKode.end()){
+                cout << "Nomor hewan is invalid!\n" << endl;
+            }else{
+                validNomorHewan = true;
+            }
         }
         
-        std::cout << "\nJumlah petak yang ingin dipanen: ";
-        std::cin >> jumlah_petak;
+        int jumlah_petak;
+        bool validJumlahPetak = false;
+        while(!validJumlahPetak){
+            jumlah_petak = 0;
+            std::cout << "\nJumlah petak yang ingin dipanen: ";
+            std::cin >> jumlah_petak;
 
-        if(jumlah_petak > rekapPeternakan[mapIdxKode[nomor_hewan]] || jumlah_petak <= 0){
-            throw invalidJumlahPetakException();
-        }else if(this->inventory.countAvailableCapacity() < jumlah_petak){
-            throw inventoryNotEnoughException();
+            if(jumlah_petak <= 0){
+                cout << "Jumlah petak is invalid!\n";
+            }else if(jumlah_petak > rekapPeternakan[mapIdxKode[nomor_hewan]]){
+                cout << "You are trying to harvest more than the amount of petak that is currently available to harvest!\n";
+            }else if(this->inventory.countAvailableCapacity() < jumlah_petak){
+                cout << "Available inventory capacity is not enough!\n";
+            }else{
+                validJumlahPetak = true;
+            }
         }
 
         std::cout << "\nPilih petak yang ingin dipanen:" << std::endl;
@@ -737,22 +808,24 @@ void Peternak::panenHewan(){
         vector<string> key_vec;
 
         for(int i = 1; i <= jumlah_petak; i++){
-            string temp_key = "";
-            std::cout << "Petak ke-" << i << ": ";
-            std::cin >> temp_key;
+            string temp_key;
+            bool validTempKey = false;
+            while(!validTempKey){
+                temp_key = "";
+                
+                std::cout << "Petak ke-" << i << ": ";
+                std::cin >> temp_key;
 
-            if(this->peternakan.isValidKey(temp_key)){
-                key_vec.push_back(temp_key);
-            }else{
-                throw invalidKeyException();
-            }
-
-            if(this->peternakan.get(temp_key) == nullptr){
-                std::cout << "Petak " << temp_key << " is still vacant. ";
-                throw invalidPetakException();
-            } else if(this->peternakan.get(temp_key)->getKodeHuruf() != mapIdxKode[nomor_hewan]){
-                std::cout << "Petak " << temp_key << " doesn't contain hewan " << mapIdxKode[nomor_hewan] << ". ";
-                throw invalidPetakException();
+                if(!this->peternakan.isValidKey(temp_key)){
+                    cout << temp_key << " is invalid" << endl;
+                }else if(this->peternakan.get(temp_key) == nullptr){
+                    cout << temp_key << " is empty" << endl;
+                }else if(this->peternakan.get(temp_key)->getKodeHuruf() != mapIdxKode[nomor_hewan]){
+                    cout << temp_key << " doesn't contain " << mapIdxKode[nomor_hewan] << "." << endl;
+                }else{
+                    key_vec.push_back(temp_key);
+                    validTempKey = true;
+                }
             }
 
             if(i == 1){
@@ -772,13 +845,7 @@ void Peternak::panenHewan(){
         std::cout << e.what();
     }catch(noneSiapPanenPeternakanException& e){
         std::cout << e.what();
-    }catch(invalidNomorHewanException& e){
-        std::cout << e.what();
-    }catch(invalidJumlahPetakException& e){
-        std::cout << e.what();
-    }catch(invalidKeyException& e){
-        std::cout << e.what();
-    }catch(invalidPetakException& e){
+    }catch(inventoryFullException& e){
         std::cout << e.what();
     }
 }

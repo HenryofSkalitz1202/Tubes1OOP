@@ -95,6 +95,10 @@ public:
 };
 
 class Peternakan : public Grid<Hewan*>{
+private:
+  bool existCarnivore;
+  bool existHerbivore;
+  bool existOmnivore;
 public:
   static int peternakanRowSize;
   static int peternakanColumnSize;
@@ -107,6 +111,11 @@ public:
   void addItemKey(Hewan*, string loc);
 
   bool isAvailablePanen();
+  bool hasCarnivore();
+  bool hasHerbivore();
+  bool hasOmnivore();
+
+  void cekPeternakan();
   map<string, int> rekapPeternakan();
   void print();
 };

@@ -100,45 +100,15 @@ struct MaterialBangunanNotProductMaterialException : public exception{
     }
 };
 
-struct HewanWrongFoodTypeException : public exception{
+struct noFoodException : public exception{
     const char* what() const throw(){
-        return ". Hewan can only eat Produk type.\n";
+        return "You don't have any food.\n";
     }
 };
 
-struct HerbivoreWrongFoodTypeException : public exception{
+struct noMatchingFoodException : public exception{
     const char* what() const throw(){
-        return "Herbivore can only eat ProductFruit type.\n";
-    }
-};
-
-struct CarnivoreWrongFoodTypeException : public exception{
-    const char* what() const throw(){
-        return "Carnivore can only eat ProductHewan type.\n";
-    }
-};
-
-struct OmnivoreWrongFoodTypeException : public exception{
-    const char* what() const throw(){
-        return "Omnivore can only eat ProductFruit or ProductHewan type.\n";
-    }
-};
-
-struct insertIntoUnemptyCellException : public exception{
-    const char* what() const throw(){
-        return "Value can only be inserted on empty cells.\n";
-    }
-};
-
-struct isAlreadyNullException : public exception{
-    const char* what() const throw(){
-        return "Value of given cell is already null!\n";
-    }
-};
-
-struct outOfBoundsException : public exception{
-    const char* what() const throw(){
-        return " .Index is out of bounds!\n";
+        return "You don't have any matching food for your animals.\n";
     }
 };
 

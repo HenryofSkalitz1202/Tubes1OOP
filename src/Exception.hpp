@@ -253,6 +253,24 @@ struct invalidPetakException : public exception{
     }
 };
 
+class InvalidJumlahAssetTokoException : public exception{
+    public:
+        InvalidJumlahAssetTokoException(): exception() {}
+
+        const char* what() const throw(){
+            return "Jumlah barang tidak sesuai.";
+        }
+};
+
+class InvalidPilihanBeliException : public exception{
+    public:
+        InvalidPilihanBeliException(): exception() {}
+
+        const char* what() const throw(){
+            return "Pilihan barang yang ingin dibeli tidak sesuai.\n";
+        }
+};
+
 struct gameNotStartedException : public exception{
     const char* what() const throw(){
         return "Game sedang tidak berjalan!\n";

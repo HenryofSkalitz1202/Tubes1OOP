@@ -6,6 +6,7 @@
 #include <sstream>
 #include <fstream>
 #include <stdexcept>
+#include <typeinfo>
 
 Controller::Controller()
 {
@@ -344,4 +345,223 @@ void Controller::next()
     this->current_player_index = (this->current_player_index + 1) % this->players.size();
     this->current_player = this->players[this->current_player_index];
     this->turn_number++;
+}
+
+void Controller::cetak_penyimpanan() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        current_player->printInventory();
+    }
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }
+}
+void Controller::pungut_pajak() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        if (!this->is_walikota(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        current_player->tagihPajak();
+    }
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }
+    catch (wrongPlayerTypeException& e) {
+        std::cout << e.what();
+    }
+}
+
+void Controller::cetak_ladang() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        if (!this->is_petani(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        current_player->printLadang();
+    }
+    catch (wrongPlayerTypeException& e) {
+        std::cout << e.what();
+    }
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }
+}
+
+void Controller::cetak_peternakan() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        if (!this->is_peternak(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        current_player->printPeternakan();
+    }
+    catch (wrongPlayerTypeException& e) {
+        std::cout << e.what();
+    }
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }
+}
+
+void Controller::tanam() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        if (!this->is_petani(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        current_player->tanamTanaman();
+    }
+    catch (wrongPlayerTypeException& e) {
+        std::cout << e.what();
+    }    
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }
+}
+
+void Controller::ternak() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }    
+        if (!this->is_petani(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        current_player->taruhHewan();
+    }
+    catch (wrongPlayerTypeException& e) {
+        std::cout << e.what();
+    }    
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }
+}
+
+void Controller::bangun() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        if (!this->is_walikota(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        current_player->bangunBangunan();
+    }
+    catch (wrongPlayerTypeException& e) {
+        std::cout << e.what();
+    }  
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }  
+}
+
+void Controller::makan() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        current_player->makan();
+    }
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }
+}
+
+void Controller::kasih_makan() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        if (!this->is_peternak(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        current_player->beriMakan();
+    }
+    catch (wrongPlayerTypeException& e) {
+        std::cout << e.what();
+    }   
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    } 
+}
+void Controller::beli() {
+    //TODO
+}
+
+void Controller::jual() {
+    //TODO
+}
+
+void Controller::panen() {
+    // TODO
+}
+
+void Controller::simpan() {
+    // TODO
+}
+
+void Controller::tambah_pemain() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        if (!this->is_walikota(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        if (current_player->getUang() < 50) {
+            throw notEnoughMoneyException();
+        }
+        string type;
+        string usn;
+        std::cout << "Masukkan jenis pemain: ";
+        std::cin >> type;
+        for (auto& x : type) x = tolower(x); // mengubah string input menjadi lowercase untuk pengecekan
+        if (type.compare("peternak") && type.compare("petani")) {
+            throw pemainFalseTypeException();
+        }
+        std::cout << "Masukkan nama pemain: ";
+        std::cin >> usn;
+        for (auto x : players) {
+            if (!usn.compare(x->getUsername())) {
+                throw usernameNotUniqueException();
+            }
+        }
+        if (type.compare("peternak")==0) {
+            Peternak newPlayer(usn, Pemain::defaultUang, Pemain::defaultBerat);
+        }
+        else {
+            Petani newPlayer(usn, Pemain::defaultUang, Pemain::defaultBerat);
+        }
+        std::cout << "Pemain ditambahkan!" << endl;
+        std::cout << "Selamat datang \"" << usn << "\" di kota ini!" << endl;
+    }
+    catch (wrongPlayerTypeException& e) {
+        std::cout << e.what();
+    }   
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }   
+    catch (notEnoughMoneyException& e) {
+        std::cout << e.what();
+    }   
+    catch (pemainFalseTypeException& e) {
+        std::cout << e.what();
+    }   
+    catch (usernameNotUniqueException& e) {
+        std::cout << e.what();
+    }   
 }

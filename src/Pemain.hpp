@@ -33,6 +33,8 @@ public:
   int getBeratBadan();
   Asset* getFromInventory(string key);
 
+  void printInventory();
+  void makan();
   virtual int getNetWorth() = 0;
   virtual int countPajak() = 0;
 };
@@ -57,6 +59,7 @@ public:
   void panenTanaman();
   void beliBangunan();
 
+  void printLadang();
   int getNetWorth();
   int countPajak();
 };
@@ -106,6 +109,7 @@ public:
   void panenHewan();
   void beliBangunan();
 
+  void printPeternakan();
   int getNetWorth();
   int countPajak();
 };

@@ -68,7 +68,6 @@ public:
     void beli();
     void jual();
     void panen();
-    void muat();
     void simpan();
     void tambah_pemain();
 

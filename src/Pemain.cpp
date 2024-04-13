@@ -44,6 +44,9 @@ Asset* Pemain::getFromInventory(string key){
     return this->inventory.get(key);
 }
 
+void Pemain::printInventory() {
+    this->inventory.print();
+}
 //<---------------PETANI----------------->
 Petani::Petani(){
     this->username = "Petani";
@@ -230,6 +233,10 @@ void Petani::panenTanaman(){
 
 void Petani::beliBangunan(){
     //TO DO
+}
+
+void Petani::printLadang() {
+    this->inventory.print();
 }
 
 int Petani::getNetWorth(){
@@ -553,6 +560,10 @@ void Peternak::panenHewan(){
 
 void Peternak::beliBangunan(){
     //TO DO
+}
+
+void Peternak::printPeternakan() {
+    this->inventory.print();
 }
 
 int Peternak::getNetWorth(){

@@ -253,4 +253,34 @@ struct invalidPetakException : public exception{
     }
 };
 
+struct gameNotStartedException : public exception{
+    const char* what() const throw(){
+        return "Game sedang tidak berjalan!\n";
+    }
+};
+
+struct wrongPlayerTypeException : public exception{
+    const char* what() const throw(){
+        return "Kamu tidak bisa melakukan itu!\n";
+    }
+};
+
+struct notEnoughMoneyException : public exception{
+    const char* what() const throw(){
+        return "Uang tidak cukup!\n";
+    }
+};
+
+struct pemainFalseTypeException : public exception{
+    const char* what() const throw(){
+        return "Kamu hanya bisa menambahkan pemain dengan tipe \"peternak\" atau \"petani\"!\n";
+    }
+};
+
+struct usernameNotUniqueException : public exception{
+    const char* what() const throw(){
+        return "Username tersebut sudah digunakan pemain lain!\n";
+    }
+};
+
 #endif

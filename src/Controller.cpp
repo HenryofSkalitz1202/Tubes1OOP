@@ -106,22 +106,22 @@ void Controller::populateConfigProduk(string filePathProduk){
         ProductHewan::configProdukHewan.insert({pair.first, pair.second});
     }
 
-    std::cout << "Map content Material:" << std::endl;
-    for (const auto& pair : ProductMaterial::configProdukMaterial) {
-        std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
-    }
+    // std::cout << "Map content Material:" << std::endl;
+    // for (const auto& pair : ProductMaterial::configProdukMaterial) {
+    //     std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
+    // }
 
-    std::cout << std::endl;
-    std::cout << "Map content Plant:" << std::endl;
-    for (const auto& pair : ProductFruit::configProdukFruit) {
-        std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
-    }
+    // std::cout << std::endl;
+    // std::cout << "Map content Plant:" << std::endl;
+    // for (const auto& pair : ProductFruit::configProdukFruit) {
+    //     std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
+    // }
 
-    std::cout << std::endl;
-    std::cout << "Map content Hewan:" << std::endl;
-    for (const auto& pair : ProductHewan::configProdukHewan) {
-        std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
-    }
+    // std::cout << std::endl;
+    // std::cout << "Map content Hewan:" << std::endl;
+    // for (const auto& pair : ProductHewan::configProdukHewan) {
+    //     std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
+    // }
 }
 
 void Controller::populateConfigHewan(string filePathHewan){
@@ -154,10 +154,10 @@ void Controller::populateConfigHewan(string filePathHewan){
         Hewan::configHewan.insert({pair.first, pair.second});
     }
 
-    std::cout << "Map content:" << std::endl;
-    for (const auto& pair : Hewan::configHewan) {
-        std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
-    }
+    // std::cout << "Map content:" << std::endl;
+    // for (const auto& pair : Hewan::configHewan) {
+    //     std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
+    // }
 }
 
 void Controller::populateConfigTumbuhan(string filePathTumbuhan){
@@ -188,10 +188,10 @@ void Controller::populateConfigTumbuhan(string filePathTumbuhan){
         Tumbuhan::configTumbuhan.insert({pair.first, pair.second});
     }
 
-    std::cout << "Map content:" << std::endl;
-    for (const auto& pair : Tumbuhan::configTumbuhan) {
-        std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
-    }
+    // std::cout << "Map content:" << std::endl;
+    // for (const auto& pair : Tumbuhan::configTumbuhan) {
+    //     std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
+    // }
 }
 
 void Controller::populateConfigBangunan(string filePathBangunan){
@@ -222,11 +222,11 @@ void Controller::populateConfigBangunan(string filePathBangunan){
             Toko::catalogBangunan.insert({str_arr[2], 0});
             Toko::catalogPrice.insert({str_arr[2], std::stoi(str_arr[3])});
 
-            std::cout << "ListBahan:" << std::endl;
-            for (const auto& pair : mp_bahan) {
-                std::cout << "Key: " << pair.first << ", Value: " << pair.second << std::endl;
-            }
-            std::cout << "=====================" << std::endl;
+            // std::cout << "ListBahan:" << std::endl;
+            // for (const auto& pair : mp_bahan) {
+            //     std::cout << "Key: " << pair.first << ", Value: " << pair.second << std::endl;
+            // }
+            // std::cout << "=====================" << std::endl;
         }catch(MaterialBangunanNotProductMaterialException& e){
             cout << e.what() << endl;
         }catch(exception& e){
@@ -239,11 +239,11 @@ void Controller::populateConfigBangunan(string filePathBangunan){
         Bangunan::resepBangunan.insert({pair.first, pair.second});
     }
 
-    std::cout << "Map content:" << std::endl;
-    for (const auto& pair : Bangunan::resepBangunan) {
-        std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << ", Bahan: ";
-        printMap(pair.second->getListBahan());
-    }
+    // std::cout << "Map content:" << std::endl;
+    // for (const auto& pair : Bangunan::resepBangunan) {
+    //     std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << ", Bahan: ";
+    //     printMap(pair.second->getListBahan());
+    // }
 }
 
 void Controller::GameConfig(string filePathMisc){

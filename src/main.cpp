@@ -1,65 +1,155 @@
 #include "Controller.cpp"
 
+// ANSI color codes
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
+
 int Pemain::defaultBerat;
 int Pemain::defaultUang;
 
 int main(){
-    std::string filePathProduk = "produk.txt";
-    std::string filePathHewan = "animal.txt";
-    std::string filePathTumbuhan = "plant.txt";
-    std::string filePathBangunan = "recipe.txt";
-    std::string filePathMisc = "misc.txt";
+    std::cout << ".------..------..------..------..------..------." << endl;
+    std::cout << "|W.--. ||H.--. ||O.--. ||O.--. ||P.--. ||S.--. |" << endl;
+    std::cout << "| :" << ANSI_COLOR_RED << "/\\" << ANSI_COLOR_RESET <<  ": || :" << ANSI_COLOR_RED << "/\\" << ANSI_COLOR_RESET <<  ": || :" << ANSI_COLOR_RED << "/\\" << ANSI_COLOR_RESET <<  ": || :" << ANSI_COLOR_RED << "/\\" << ANSI_COLOR_RESET <<  ": || :" << ANSI_COLOR_RED << "/\\" << ANSI_COLOR_RESET <<  ": || :" << ANSI_COLOR_RED << "/\\" << ANSI_COLOR_RESET <<  ": |" << endl;
+    std::cout << "| :" << ANSI_COLOR_RED << "\\/" << ANSI_COLOR_RESET <<  ": || " << ANSI_COLOR_RED << "(__)" << ANSI_COLOR_RESET << " || :" << ANSI_COLOR_RED << "\\/" << ANSI_COLOR_RESET <<  ": || :" << ANSI_COLOR_RED << "\\/" << ANSI_COLOR_RESET <<  ": || " << ANSI_COLOR_RED << "(__)" << ANSI_COLOR_RESET << " || :" << ANSI_COLOR_RED << "\\/" << ANSI_COLOR_RESET <<  ": |" << endl;
+    std::cout << "| '--'W|| '--'H|| '--'O|| '--'O|| '--'P|| '--'S|" << endl;
+    std::cout << "`------'`------'`------'`------'`------'`------'" << endl;
+    std::cout << "================================================" << endl;
+    std::cout << ANSI_COLOR_GREEN << "10023634 Yudi Kurniawan" << ANSI_COLOR_RESET << endl;
+    std::cout << ANSI_COLOR_GREEN << "13522010 Maria Flora Renata S" << ANSI_COLOR_RESET << endl;
+    std::cout << ANSI_COLOR_GREEN << "13522010 Kayla Namira Mariadi" << ANSI_COLOR_RESET << endl;
+    std::cout << ANSI_COLOR_GREEN << "13522062 Salsabiila" << ANSI_COLOR_RESET << endl;
+    std::cout << ANSI_COLOR_GREEN << "13522097 Ellijah Darrellshane Suryanegara" << ANSI_COLOR_RESET << endl;
+    std::cout << ANSI_COLOR_GREEN << "13522102 Hayya Zuhailii Kinasih" << ANSI_COLOR_RESET << endl;
+    std::cout << "================================================" << endl;
+
+    std::cout << " _  _____ _  _  ___ ___   ___  __  __   __  __   _   _  _   _   ___ ___ ___ "<< endl;
+    std::cout << "| |/ /_ _| \\| |/ __|   \\ / _ \\|  \\/  | |  \\/  | /_\\ | \\| | /_\\ / __| __| _ \\" << endl;
+    std::cout <<"| ' < | || .` | (_ | |) | (_) | |\\/| | | |\\/| |/ _ \\| .` |/ _ \\ (_ | _||   /" << endl;
+    std::cout << "|_|\\_\\___|_|\\_|\\___|___/ \\___/|_|  |_| |_|  |_/_/ \\_\\_|\\_/_/ \\_\\___|___|_|_\\" << endl;
+    std::cout << "\n" << endl;
 
     try {
-        std::ifstream fileProduk(filePathProduk);
-        if (!fileProduk.is_open()) {
-            cout << "File config produk '" << filePathProduk;
-            throw FilePathProdukNotFoundException();
-        }
+        string filePathProduk;
+        bool validPathProduk = false;
+        while(!validPathProduk){
+            filePathProduk = "";
 
+            cout << "Masukkan file path produk: " << endl;
+            cin >> filePathProduk;                                                
+
+            std::ifstream fileProduk(filePathProduk);
+            cout << "\nOpening " << filePathProduk << "....." << endl;
+
+            if (!fileProduk.is_open()) {
+                cout << ANSI_COLOR_RED << "File config produk '" << filePathProduk << "' is not found\n" << ANSI_COLOR_RESET << endl;
+            }else{
+                cout << ANSI_COLOR_GREEN << "Success! File '" << filePathProduk << "' is found" << ANSI_COLOR_RESET << endl;
+                std::cin.get();
+                std::cout << "Press any key to continue..." << endl;
+                std::cin.get();
+                validPathProduk = true;
+            }
+        }
         Controller::populateConfigProduk(filePathProduk);
-        fileProduk.close();
 
-        std::ifstream fileHewan(filePathHewan);
-        if (!fileHewan.is_open()) {
-            cout << "File config hewan '" << filePathHewan;
-            throw FilePathHewanNotFoundException();
+        std::string filePathHewan;
+        bool validPathHewan = false;
+        while(!validPathHewan){
+            filePathHewan = "";
+
+            cout << "Masukkan file path hewan: " << endl;
+            cin >> filePathHewan;
+
+            std::ifstream fileHewan(filePathHewan);
+            cout << "\nOpening " << filePathHewan << "....." << endl;
+
+            if (!fileHewan.is_open()) {
+                cout << ANSI_COLOR_RED << "File config hewan '" << filePathHewan << "' is not found\n" << ANSI_COLOR_RESET << endl;
+            }else{
+                cout << ANSI_COLOR_GREEN << "Success! File '" << filePathHewan << "' is found" << ANSI_COLOR_RESET << endl;
+                std::cin.get();
+                std::cout << "Press any key to continue..." << endl;
+                std::cin.get();
+                validPathHewan = true;
+            }
         }
-
-        cout << endl;
         Controller::populateConfigHewan(filePathHewan);
-        fileHewan.close();
 
-        std::ifstream fileTumbuhan(filePathTumbuhan);
-        if (!fileTumbuhan.is_open()) {
-            cout << "File config tumbuhan '" << filePathTumbuhan;
-            throw FilePathTumbuhanNotFoundException();
+        std::string filePathTumbuhan;
+        bool validPathTumbuhan = false;
+        while(!validPathTumbuhan){
+            filePathTumbuhan = "";
+
+            cout << "Masukkan file path tumbuhan: " << endl;
+            cin >> filePathTumbuhan;
+
+            std::ifstream fileTumbuhan(filePathTumbuhan);
+            cout << "\nOpening " << filePathTumbuhan << "....." << endl;
+
+            if (!fileTumbuhan.is_open()) {
+                cout << ANSI_COLOR_RED << "File config tumbuhan '" << filePathTumbuhan << "' is not found\n" << ANSI_COLOR_RESET << endl;
+            }else{
+                cout << ANSI_COLOR_GREEN << "Success! File '" << filePathTumbuhan << "' is found" << ANSI_COLOR_RESET << endl;
+                std::cin.get();
+                std::cout << "Press any key to continue..." << endl;
+                std::cin.get();
+                validPathTumbuhan = true;
+            }
         }
-
-        cout << endl;
         Controller::populateConfigTumbuhan(filePathTumbuhan);
-        fileTumbuhan.close();
 
+        std::string filePathBangunan;
+        bool validPathBangunan = false;
 
-        std::ifstream fileBangunan(filePathBangunan);
-        if (!fileBangunan.is_open()) {
-            cout << "File config bangunan '" << filePathBangunan;
-            throw FilePathBangunanNotFoundException();
+        while(!validPathBangunan){
+            filePathBangunan = "";
+
+            cout << "Masukkan file path bangunan: " << endl;
+            cin >> filePathBangunan;
+
+            std::ifstream fileBangunan(filePathBangunan);
+            cout << "\nOpening " << filePathBangunan << "....." << endl;
+
+            if (!fileBangunan.is_open()) {
+                cout << ANSI_COLOR_RED << "File config bangunan '" << filePathBangunan << "' is not found\n" << ANSI_COLOR_RESET << endl;
+            }else{
+                cout << ANSI_COLOR_GREEN << "Success! File '" << filePathBangunan << "' is found" << ANSI_COLOR_RESET << endl;
+                std::cin.get();
+                std::cout << "Press any key to continue..." << endl;
+                std::cin.get();
+                validPathBangunan = true;
+            }
         }
-
-        cout << endl;
         Controller::populateConfigBangunan(filePathBangunan);
-        fileBangunan.close();
 
-        std::ifstream fileMisc(filePathMisc);
-        if (!fileMisc.is_open()) {
-            cout << "File config misc '" << filePathMisc;
-            throw FilePathMiscNotFoundException();
+        std::string filePathMisc;
+        bool validPathMisc = false;
+        while(!validPathMisc){
+            filePathMisc = "";
+
+            cout << "Masukkan file path misc: " << endl;
+            cin >> filePathMisc;
+
+            std::ifstream fileMisc(filePathMisc);
+            cout << "\nOpening " << filePathMisc << "....." << endl;
+
+            if (!fileMisc.is_open()) {
+                cout << ANSI_COLOR_RED << "File config misc '" << filePathMisc << "' is not found\n" << ANSI_COLOR_RESET << endl;
+            }else{
+                cout << ANSI_COLOR_GREEN << "Success! File '" << filePathMisc << "' is found" << ANSI_COLOR_RESET << endl;
+                std::cin.get();
+                std::cout << "Press any key to continue..." << endl;
+                std::cin.get();
+                validPathMisc = true;
+            }
         }
-
-        cout << endl;
         Controller::GameConfig(filePathMisc);
-        fileMisc.close();
 
         // Create an Inventory object
         Inventory inventory;

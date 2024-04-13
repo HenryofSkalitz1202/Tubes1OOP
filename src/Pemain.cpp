@@ -3,6 +3,7 @@
 
 using namespace std;
 
+
 int Pemain::uangWin;
 int Pemain::beratWin;
 //<---------------PEMAIN----------------->

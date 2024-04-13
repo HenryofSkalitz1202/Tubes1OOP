@@ -2,7 +2,7 @@
 #define GRID_HPP
 #include "Exception.hpp"
 #include "Tumbuhan.cpp"
-#include "Hewan.cpp"
+#include "Hewan/Hewan.hpp"
 #include "Bangunan.cpp"
 #include <string>
 #include <vector>

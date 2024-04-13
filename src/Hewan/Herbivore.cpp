@@ -7,13 +7,13 @@ Herbivore::Herbivore(int hewanID, string kodeHuruf, string namaHewan, string typ
 }
 
 Herbivore& Herbivore::operator=(Herbivore& other){
-    this->assetID == other.assetID;
-    this->kodeHuruf == other.kodeHuruf;
-    this->namaAsset == other.namaAsset;
-    this->type == other.type;
-    this->weightToHarvest == other.weightToHarvest;
-    this->weight == other.weight;
-    this->price == other.price;
+    this->assetID = other.assetID;
+    this->kodeHuruf = other.kodeHuruf;
+    this->namaAsset = other.namaAsset;
+    this->type = other.type;
+    this->weightToHarvest = other.weightToHarvest;
+    this->weight = other.weight;
+    this->price = other.price;
     return *this;
 }
 

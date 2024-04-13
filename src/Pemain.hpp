@@ -1,7 +1,7 @@
 #ifndef PEMAIN_HPP
 #define PEMAIN_HPP
 #include <string>
-#include "Grid.cpp"
+#include "Grid.hpp"
 
 using namespace std;
 
@@ -27,10 +27,10 @@ public:
   void setberatBadan(int beratBadan);
   void addToInventory(Asset* item);
 
-  string getStatus();
+  string getStatus() const;
   string getUsername() const;
-  int getUang();
-  int getBeratBadan();
+  int getUang() const;
+  int getBeratBadan() const;
   Asset* getFromInventory(string key);
 
   void printInventory();
@@ -50,6 +50,7 @@ public:
   ~Petani();
   Petani(Petani& other);
   Petani& operator=(const Petani& other);
+  Petani& operator=(const Pemain* other);
 
   void setStatus();
   void setPetaniID(int petaniID);
@@ -74,6 +75,7 @@ public:
   ~Walikota();
   Walikota(Walikota& other);
   Walikota& operator=(const Walikota& other);
+  Walikota& operator=(const Pemain* other);
 
   void setStatus();
   void setWalikotaID(int walikotaID);
@@ -99,6 +101,7 @@ public:
   ~Peternak();
   Peternak(Peternak& other);
   Peternak& operator=(const Peternak& other);
+  Peternak& operator=(const Pemain* other);
 
   void setStatus();
   void setPeternakID(int peternakID);

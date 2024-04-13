@@ -1,6 +1,6 @@
 #ifndef PRODUK_HPP
 #define PRODUK_HPP
-#include "Asset.cpp"
+#include "Asset.hpp"
 #include <string>
 #include <map>
 using namespace std;
@@ -15,7 +15,7 @@ public:
   static map<string, Produk*> configProduk;
 
   Produk();
-  Produk(string kodeHuruf, string namaProduk, string origin, int addedWeight, int price);
+  //Produk(string kodeHuruf, string namaProduk, string origin, int addedWeight, int price);
   ~Produk();
 
   void setAssetType(string assetType);

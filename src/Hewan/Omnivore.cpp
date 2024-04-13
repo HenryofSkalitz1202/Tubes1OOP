@@ -6,9 +6,9 @@ Omnivore::Omnivore(int hewanID, string kodeHuruf, string namaHewan, string type,
 }
 Omnivore::~Omnivore(){}
 
-void Omnivore::makan(Produk& produk){
-    if (produk.isEdibleHerbivore() && produk.isEdibleCarnivore()){
-        this->weight+=produk.getAddedWeight();
+void Omnivore::makan(Produk*& produk){
+    if (produk->isEdibleHerbivore() && produk->isEdibleCarnivore()){
+        this->weight+=produk->getAddedWeight();
     }
     else{
         throw InvalidMakananException();

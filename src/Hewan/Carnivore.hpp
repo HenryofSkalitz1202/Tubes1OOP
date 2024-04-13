@@ -10,7 +10,7 @@ class Carnivore : public Hewan{
         Carnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price);
         ~Carnivore();
         Carnivore& operator=(Carnivore& other);
-        void makan(Produk&);
+        void makan(Produk*&);
     };
 
 #endif

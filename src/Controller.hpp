@@ -9,7 +9,7 @@
 #include <sstream>
 #include <fstream>
 #include <stdexcept>
-#include "Pemain.cpp"
+#include "Pemain.hpp"
 #include "Hewan/Hewan.hpp"
 #include "Hewan/Carnivore.hpp"
 #include "Hewan/Herbivore.hpp"

@@ -1,5 +1,7 @@
 #include "Hewan.hpp"
 
+map<string, Hewan*> Hewan::configHewan;
+
 Hewan::Hewan(){
     //to do
 }

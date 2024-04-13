@@ -197,7 +197,11 @@ Inventory::Inventory() : Grid<Asset*>(inventoryRowSize, inventoryColumnSize) {}
 Inventory::~Inventory() {
     for (size_t i = 0; i < this->rows; ++i) {
         for (size_t j = 0; j < this->cols; ++j) {
-            Asset* asset = get(i, j);
+            std::ostringstream oss;
+            char key_alphabet = 'A' + j;
+            oss << std::setw(2) << std::setfill('0') << i + 1;
+            std::string final_key = key_alphabet + oss.str();
+            Asset* asset = this->data.find(final_key)->second;
             if (asset != nullptr) {
                 delete asset;
             }
@@ -270,10 +274,10 @@ Inventory& Inventory::operator=(const Inventory& other) {
                 }
             }
         }
-        return *this;
     }catch(insertIntoUnemptyCellException& e){
         std::cout << e.what();
     }
+    return *this;
 }
 
 void Inventory::addItem(Asset* asset) {
@@ -313,13 +317,13 @@ void Inventory::addItemKey(Asset* asset, string loc) {
 }
 
 bool Inventory::hasType(string type) {
+    bool found = false;
     try {
         if (this->isEmpty()) {
             throw inventoryEmptyException();
         }
         size_t i = 0;
         size_t j = 0;
-        bool found = false;
         while (i<this->numRows() && !found) {
             while (j<this->numCols() && !found) {
                 if (this->data[calculateKey(i,j)]->getAssetType() == type) found = true;
@@ -327,11 +331,11 @@ bool Inventory::hasType(string type) {
             }
             i++;
         }
-        return found;
     }
     catch (inventoryEmptyException& e) {
         std::cout << e.what();
     }
+    return found;
 }
 
 void Inventory::rekapInventory() {
@@ -387,7 +391,7 @@ void Inventory::print() {
     }
     printBorder(this->cols);
 }
-
+template struct Grid<Asset*>;
 //<---------------LADANG----------------->
 int Ladang::lahanRowSize;
 int Ladang::lahanColumnSize;
@@ -426,16 +430,20 @@ Ladang& Ladang::operator=(const Ladang& other) {
                 set(i, j, it->second);
             }
         }
-        return *this;
     }catch(insertIntoUnemptyCellException& e){
         std::cout << e.what();
     }
+    return *this;
 }
 
 Ladang::~Ladang() {
     for (size_t i = 0; i < numRows(); ++i) {
         for (size_t j = 0; j < numCols(); ++j) {
-            Tumbuhan* tumbuhan = get(i, j);
+            std::ostringstream oss;
+            char key_alphabet = 'A' + j;
+            oss << std::setw(2) << std::setfill('0') << i + 1;
+            std::string final_key = key_alphabet + oss.str();
+            Tumbuhan* tumbuhan = this->data.find(final_key)->second;
             if (tumbuhan != nullptr) {
                 delete tumbuhan;
             }
@@ -529,6 +537,7 @@ void Ladang::print() {
     }
     printBorder(this->cols);
 }
+template struct Grid<Tumbuhan*>;
 //<---------------PETERNAKAN----------------->
 int Peternakan::peternakanRowSize;
 int Peternakan::peternakanColumnSize;
@@ -567,16 +576,20 @@ Peternakan& Peternakan::operator=(const Peternakan& other) {
                 set(i, j, it->second);
             }
         }
-        return *this;
     }catch(insertIntoUnemptyCellException& e){
         std::cout << e.what();
     }
+    return *this;
 }
 
 Peternakan::~Peternakan() {
     for (size_t i = 0; i < numRows(); ++i) {
         for (size_t j = 0; j < numCols(); ++j) {
-            Hewan* hewan = get(i, j);
+            std::ostringstream oss;
+            char key_alphabet = 'A' + j;
+            oss << std::setw(2) << std::setfill('0') << i + 1;
+            std::string final_key = key_alphabet + oss.str();
+            Hewan* hewan = this->data.find(final_key)->second;
             if (hewan != nullptr) {
                 delete hewan;
             }
@@ -673,3 +686,4 @@ void Peternakan::print() {
     }
     printBorder(this->cols);
 }
+template struct Grid<Hewan*>;

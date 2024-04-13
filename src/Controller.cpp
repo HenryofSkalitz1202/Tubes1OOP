@@ -359,7 +359,11 @@ void Controller::pungut_pajak() {
         if (!this->is_walikota(current_player)) {
             throw wrongPlayerTypeException();
         }
-        current_player->tagihPajak();
+        else {
+            Walikota temp;
+            temp = current_player;
+            temp.tagihPajak();
+        }
     }
     catch (gameNotStartedException& e) {
         std::cout << e.what();
@@ -377,7 +381,11 @@ void Controller::cetak_ladang() {
         if (!this->is_petani(current_player)) {
             throw wrongPlayerTypeException();
         }
-        current_player->printLadang();
+        else {
+            Petani temp;
+            temp = current_player;
+            temp.printLadang();
+        }
     }
     catch (wrongPlayerTypeException& e) {
         std::cout << e.what();
@@ -395,7 +403,11 @@ void Controller::cetak_peternakan() {
         if (!this->is_peternak(current_player)) {
             throw wrongPlayerTypeException();
         }
-        current_player->printPeternakan();
+        else {
+            Peternak temp;
+            temp = current_player;
+            temp.printPeternakan();
+        }
     }
     catch (wrongPlayerTypeException& e) {
         std::cout << e.what();
@@ -413,7 +425,11 @@ void Controller::tanam() {
         if (!this->is_petani(current_player)) {
             throw wrongPlayerTypeException();
         }
-        current_player->tanamTanaman();
+        else {
+            Petani temp;
+            temp = current_player;
+            temp.tanamTanaman();
+        }
     }
     catch (wrongPlayerTypeException& e) {
         std::cout << e.what();
@@ -431,7 +447,11 @@ void Controller::ternak() {
         if (!this->is_petani(current_player)) {
             throw wrongPlayerTypeException();
         }
-        current_player->taruhHewan();
+        else {
+            Peternak temp;
+            temp = current_player;
+            temp.taruhHewan();
+        }
     }
     catch (wrongPlayerTypeException& e) {
         std::cout << e.what();
@@ -449,7 +469,11 @@ void Controller::bangun() {
         if (!this->is_walikota(current_player)) {
             throw wrongPlayerTypeException();
         }
-        current_player->bangunBangunan();
+        else {
+            Walikota temp;
+            temp = current_player;
+            temp.bangunBangunan();
+        }
     }
     catch (wrongPlayerTypeException& e) {
         std::cout << e.what();
@@ -469,9 +493,6 @@ void Controller::makan() {
     catch (gameNotStartedException& e) {
         std::cout << e.what();
     }
-    catch (gameNotStartedException& e) {
-        std::cout << e.what();
-    }
 }
 
 void Controller::kasih_makan() {
@@ -482,7 +503,11 @@ void Controller::kasih_makan() {
         if (!this->is_peternak(current_player)) {
             throw wrongPlayerTypeException();
         }
-        current_player->beriMakan();
+        else {
+            Peternak temp;
+            temp = current_player;
+            temp.beriMakan();
+        }
     }
     catch (wrongPlayerTypeException& e) {
         std::cout << e.what();
@@ -536,11 +561,11 @@ void Controller::tambah_pemain() {
 
         Pemain* newPlayerPoint;
         if (type.compare("peternak")==0) {
-            Peternak newPlayer(usn, Pemain::defaultUang, Pemain::defaultBerat);
+            Peternak newPlayer(usn, 50, 0);
             Pemain* newPlayerPoint = &newPlayer;
         }
         else {
-            Petani newPlayer(usn, Pemain::defaultUang, Pemain::defaultBerat);
+            Petani newPlayer(usn, 50, 0);
             Pemain* newPlayerPoint = &newPlayer;
         }
         players.push_back(newPlayerPoint);

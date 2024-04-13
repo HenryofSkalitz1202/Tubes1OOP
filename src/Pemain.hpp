@@ -53,6 +53,7 @@ public:
   void jualAsset();
   void makan();
 
+  virtual void beliAsset(Toko* store) = 0;
   virtual int getNetWorth() = 0;
   virtual int countPajak() = 0;
 };
@@ -97,6 +98,7 @@ public:
 
   void bangunBangunan();
   void tambahAkun(vector<Pemain*> players);
+  void beliAsset(Toko* store);
 
   int getNetWorth();
   int pungutPajak(vector<Pemain*> players);

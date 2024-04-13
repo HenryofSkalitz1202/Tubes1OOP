@@ -61,7 +61,7 @@ public:
     void bangun(Walikota* walikota);
     void makan(Pemain* player);
     void kasih_makan(Peternak* peternak);
-    void beli(Pemain* player);
+    void beli(Pemain* player, Toko* store);
     void jual(Pemain* player);
     void panen(Petani* petani);
     void tambah_pemain(Walikota* walikota);

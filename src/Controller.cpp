@@ -390,15 +390,15 @@ void Controller::bangun(Walikota* walikota){
 }
 
 void Controller::makan(Pemain* player){
-    //player.ma
+    player->makan();
 }
 
 void Controller::kasih_makan(Peternak* peternak){
     peternak->beriMakan();
 }
 
-void beli(Pemain* player){
-    //player.be
+void Controller::beli(Pemain* player, Toko* store){
+    player->beliAsset(store);
 }
 
 void Controller::jual(Pemain* player){

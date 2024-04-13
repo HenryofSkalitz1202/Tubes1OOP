@@ -107,7 +107,6 @@ void Herbivore::makan(Produk* pakan){
         this->weight += fruit->getAddedWeight();
     } else {
         cout << "Herbivore is fed " << pakan->getNamaAsset() << " which is not of ProductFruit type. ";
-        throw HerbivoreWrongFoodTypeException();
     }
 }
 
@@ -155,7 +154,6 @@ void Carnivore::makan(Produk* pakan){
         this->weight += hewan->getAddedWeight();
     } else {
         cout << "Carnivore is fed " << pakan->getNamaAsset() << " which is not of ProductHewan type. ";
-        throw CarnivoreWrongFoodTypeException();
     }
 }
 
@@ -208,7 +206,6 @@ void Omnivore::makan(Produk* pakan){
             this->weight += fruit->getAddedWeight();
         } else{
             cout << "Omnivore is fed " << pakan->getNamaAsset() << " which is neither of ProductFruit nor ProductHewan type. ";
-            throw OmnivoreWrongFoodTypeException();
         }
     }
 }

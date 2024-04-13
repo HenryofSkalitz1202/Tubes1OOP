@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
+//#include <algorithm>
 #include "Pemain.cpp"
 using namespace std;
 

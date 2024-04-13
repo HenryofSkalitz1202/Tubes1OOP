@@ -2,17 +2,17 @@
 #define PEMAIN_HPP
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <cctype>
+#include <sstream>
 #include "Toko.cpp"
 #include "Grid.cpp"
-
-using namespace std;
 
 class Pemain{
 protected:
   string username;
   int uang;
   int beratBadan;
-  string status;
   Inventory inventory;
 public:
   static int beratWin;
@@ -20,18 +20,30 @@ public:
   static int defaultBerat;
   static int defaultUang;
 
-  static vector<string> stringToArrayComma(const string& input);
+  static vector<string> stringToArrayComma(const string& input){
+    auto isspace = [](int ch) {
+        return !std::isspace(ch);
+    };
+
+    std::vector<std::string> result;
+    std::istringstream iss(input);
+    std::string token;
+    while (std::getline(iss, token, ',')) {
+        token.erase(token.begin(), std::find_if(token.begin(), token.end(), isspace));
+        token.erase(std::find_if(token.rbegin(), token.rend(), isspace).base(), token.end());
+        result.push_back(token);
+    }
+    return result;
+  }
 
   Pemain();
   ~Pemain();
 
-  virtual void setStatus() = 0;
   void setUsername(string username);
   void setUang(int uang);
   void setberatBadan(int beratBadan);
   void addToInventory(Asset* item);
 
-  string getStatus();
   string getUsername();
   int getUang();
   int getBeratBadan();
@@ -55,7 +67,6 @@ public:
   Petani(Petani& other);
   Petani& operator=(const Petani& other);
 
-  void setStatus();
   void setPetaniID(int petaniID);
   int getPetaniID();
 
@@ -78,7 +89,6 @@ public:
   Walikota(Walikota& other);
   Walikota& operator=(const Walikota& other);
 
-  void setStatus();
   void setWalikotaID(int walikotaID);
   int getWalikotaID();
 
@@ -102,7 +112,6 @@ public:
   Peternak(Peternak& other);
   Peternak& operator=(const Peternak& other);
 
-  void setStatus();
   void setPeternakID(int peternakID);
   int getPeternakID();
 

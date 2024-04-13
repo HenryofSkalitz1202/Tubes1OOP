@@ -6,12 +6,17 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <sstream>
+#include <fstream>
+#include <stdexcept>
 #include "Pemain.cpp"
 #include "Hewan/Hewan.hpp"
 #include "Hewan/Carnivore.hpp"
 #include "Hewan/Herbivore.hpp"
 #include "Hewan/Omnivore.hpp"
 #include "Tumbuhan.hpp"
+#include "Exception.hpp"
+#include "input.cpp"
 using namespace std;
 
 class Controller

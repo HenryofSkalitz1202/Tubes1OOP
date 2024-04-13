@@ -82,6 +82,7 @@ FruitPlant& FruitPlant::operator=(const FruitPlant& other){
     this->setDurationToHarvest(other.duration_to_harvest);
     this->setPrice(other.price);
     this->setTurnInstantiated(other.turn_instantiated);
+    return *this;
 }
 
 vector<Produk*> FruitPlant::harvest(){
@@ -130,6 +131,7 @@ MaterialPlant& MaterialPlant::operator=(const MaterialPlant& other){
     this->setDurationToHarvest(other.duration_to_harvest);
     this->setPrice(other.price);
     this->setTurnInstantiated(other.turn_instantiated);
+    return *this;
 }
 
 vector<Produk*> MaterialPlant::harvest(){

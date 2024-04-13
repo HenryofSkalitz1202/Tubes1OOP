@@ -79,6 +79,7 @@ Petani& Petani::operator=(const Petani& other){
     this->uang = other.uang;
     this->beratBadan = other.beratBadan;
     this->status = other.status;
+    return *this;
 }
 
 void Petani::setStatus(){
@@ -291,6 +292,7 @@ Walikota& Walikota::operator=(const Walikota& other){
     this->uang = other.uang;
     this->beratBadan = other.beratBadan;
     this->status = other.status;
+    return *this;
 }
 
 void Walikota::setStatus(){
@@ -327,6 +329,7 @@ int Walikota::getNetWorth(){
 
 int Walikota::countPajak(){
     //TO DO
+    return 0;
 }
 
 //<---------------PETERNAK----------------->

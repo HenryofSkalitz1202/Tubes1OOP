@@ -1,18 +1,10 @@
 #include "Controller.hpp"
-#include "Exception.hpp"
-#include "input.cpp"
-#include <iostream>
-#include <vector>
-#include <sstream>
-#include <fstream>
-#include <stdexcept>
-#include <typeinfo>
 
 Controller::Controller()
 {
     this->current_player_index = 0;
     this->turn_number = 0;
-    this->game_over = false;
+    this->game_over = true;
 }
 
 Controller::~Controller()
@@ -322,6 +314,7 @@ void Controller::start_default()
     this->add_player(p1);
     this->add_player(p2);
     this->set_current_player(this->get_first_player());
+    this->game_over = false;
 }
 
 bool Controller::is_petani(Pemain* player)
@@ -540,12 +533,20 @@ void Controller::tambah_pemain() {
                 throw usernameNotUniqueException();
             }
         }
+
+        Pemain* newPlayerPoint;
         if (type.compare("peternak")==0) {
             Peternak newPlayer(usn, Pemain::defaultUang, Pemain::defaultBerat);
+            Pemain* newPlayerPoint = &newPlayer;
         }
         else {
             Petani newPlayer(usn, Pemain::defaultUang, Pemain::defaultBerat);
+            Pemain* newPlayerPoint = &newPlayer;
         }
+        players.push_back(newPlayerPoint);
+        this->sort_players();
+        // update current index
+        if (current_player->getUsername().compare(usn) > 0) this->current_player_index  = (this->current_player_index + 1) % this->players.size();
         std::cout << "Pemain ditambahkan!" << endl;
         std::cout << "Selamat datang \"" << usn << "\" di kota ini!" << endl;
     }

@@ -17,6 +17,7 @@
 #include "Hewan/Herbivore.hpp"
 #include "Hewan/Omnivore.hpp"
 #include "Tumbuhan.hpp"
+#include "Toko.hpp"
 
 using namespace std;
 
@@ -30,6 +31,7 @@ private:
     Pemain* current_player;
     int turn_number;
     bool game_over;
+    Toko toko;
 
 public:
     Controller();
@@ -62,6 +64,10 @@ public:
     bool is_petani(Pemain* player);
     bool is_peternak(Pemain* player);
     bool is_walikota(Pemain* player);
+
+    vector<Pemain*> getPlayers();
+    Toko getToko();
+    int getTurnNumber();
 
     void next();
     void cetak_penyimpanan();

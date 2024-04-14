@@ -1,5 +1,6 @@
 #include "Controller.hpp"
 #include "Muat.hpp"
+#include "Simpan.hpp"
 
 Controller::Controller()
 {
@@ -353,6 +354,18 @@ bool Controller::is_walikota(Pemain* player)
     return dynamic_cast<Walikota*>(player) != nullptr;
 }
 
+vector<Pemain*> Controller::getPlayers() {
+    return this->players;
+}
+
+Toko Controller::getToko() {
+    return this->toko;
+}
+
+int Controller::getTurnNumber() {
+    return this->turn_number;
+}
+
 void Controller::next()
 {
     this->is_won();
@@ -373,6 +386,24 @@ void Controller::muat(string filePathState)
         Muat.read();
 
     } catch (FilePathStateNotFoundException& e) {
+        cout << e.what() << endl;
+    }
+}
+
+void Controller::simpan() {
+    string filepath;
+    cout << "Masukkan lokasi berkas state:";
+    cin >> filepath;
+    try {
+        ofstream SaveFile(filepath);
+        if (!SaveFile) {
+            throw SavePathNotFoundException();
+        }
+        SaveFile.close();
+        Simpan simpan(filepath, *this);
+        simpan.write();
+        cout << "State berhasil disimpan" << endl;
+    } catch (SavePathNotFoundException& e) {
         cout << e.what() << endl;
     }
 }

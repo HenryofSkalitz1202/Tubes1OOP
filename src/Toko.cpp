@@ -2,17 +2,17 @@
 #include "Exception.hpp"
 
 Toko::Toko() {
-    for (auto const& [key,_]: Bangunan::resepBangunan) {
-        this->listJumlahAsset[key] = 0;
+    for (auto const& x: Bangunan::resepBangunan) {
+        this->listJumlahAsset[x.first] = 0;
     }
-    for (auto const& [key,_]: Produk::configProduk) {
-        this->listJumlahAsset[key] = 0;
+    for (auto const& x: Produk::configProduk) {
+        this->listJumlahAsset[x.first] = 0;
     }
-    for (auto const& [_,value]: Hewan::configHewan) {
-        this->listAssetTersedia.push_back(value);
+    for (auto const& x: Hewan::configHewan) {
+        this->listAssetTersedia.push_back(x.second);
     }
-    for (auto const& [_,value]: Tumbuhan::configTumbuhan) {
-        this->listAssetTersedia.push_back(value);
+    for (auto const& x: Tumbuhan::configTumbuhan) {
+        this->listAssetTersedia.push_back(x.second);
     }
     this->jumlahBangunan = 0;
     this->jumlahProduk = 0;
@@ -26,7 +26,7 @@ Asset* Toko::beli(int n, int jumlah) {
             throw InvalidPilihanBeliException();
         }
         Asset* asset = this->listAssetTersedia[n-1];
-        setJumlah(asset, this->listJumlahAsset[asset->getKodeHuruf()] - jumlah);
+        setJumlah(asset->getNamaAsset(), this->listJumlahAsset[asset->getNamaAsset()] - jumlah);
         return asset;
     } catch(InvalidJumlahAssetTokoException& e) {
         cout << "Jumlah barang yang ingin dibeli tidak sesuai." << endl;
@@ -35,25 +35,33 @@ Asset* Toko::beli(int n, int jumlah) {
 
 int Toko::jual(Asset* asset, int jumlah) {
     try {
-        setJumlah(asset, this->listJumlahAsset[asset->getKodeHuruf()] + jumlah);
+        setJumlah(asset->getNamaAsset(), this->listJumlahAsset[asset->getNamaAsset()] + jumlah);
         return asset->getPrice()*jumlah;
     } catch(InvalidJumlahAssetTokoException& e) {
         cout << "Jumlah barang yang ingin dijual tidak sesuai." << endl;
     }
 }
 
-void Toko::setJumlah(Asset* asset, int n) {
+void Toko::setJumlah(string name, int n) {
     if (n < 0) {
         throw InvalidJumlahAssetTokoException();
     }
-    if (asset->getAssetType() == "BANGUNAN" || asset->getAssetType() == "PRODUK") {
-        if (listJumlahAsset[asset->getKodeHuruf()] == 0 && n > 0) {
-            addTersedia(asset);
+    if (Bangunan::resepBangunan.count(name) != 0) {
+        if (this->listJumlahAsset[name] == 0 && n > 0) {
+            addTersedia(Bangunan::resepBangunan[name]);
         }
-        if (listJumlahAsset[asset->getKodeHuruf()] > 0 && n == 0) {
-            removeTersedia(asset);
+        if (this->listJumlahAsset[name] > 0 && n == 0) {
+            removeTersedia(Bangunan::resepBangunan[name]);
         }
-        listJumlahAsset[asset->getKodeHuruf()] = n;
+        this->listJumlahAsset[name] = n;
+    } else if (Produk::configProduk.count(name) != 0) {
+        if (this->listJumlahAsset[name] == 0 && n > 0) {
+            addTersedia(Produk::configProduk[name]);
+        }
+        if (this->listJumlahAsset[name] > 0 && n == 0) {
+            removeTersedia(Produk::configProduk[name]);
+        }
+        this->listJumlahAsset[name] = n;
     }
 }
 
@@ -71,7 +79,7 @@ void Toko::addTersedia(Asset* asset) {
 void Toko::removeTersedia(Asset* asset) {
     int id = 0;
     for (auto a : this->listAssetTersedia) {
-        if (asset->getKodeHuruf() == a->getKodeHuruf()) {
+        if (asset->getNamaAsset() == a->getNamaAsset()) {
             break;
         }
         id++;
@@ -93,6 +101,10 @@ int Toko::getJumlahProduk() const {
     return this->jumlahProduk;
 }
 
+int Toko::getJumlah(string name) {
+    return this->listJumlahAsset[name];
+}
+
 void Toko::displayToko() {
     cout << "Selamat datang di toko!!" << endl;
     cout << "Berikut merupakan hal yang dapat Anda Beli" << endl;
@@ -100,7 +112,7 @@ void Toko::displayToko() {
     for (int i=0; i<n; i++) {
         cout << i+1 << ". " << this->listAssetTersedia[i]->getNamaAsset() << " - " << this->listAssetTersedia[i]->getPrice();
         if (i < this->jumlahBangunan + this->jumlahProduk) {
-            cout << " (" << this->listJumlahAsset[this->listAssetTersedia[i]->getKodeHuruf()] << ")" << endl;
+            cout << " (" << this->listJumlahAsset[this->listAssetTersedia[i]->getNamaAsset()] << ")" << endl;
         } else {
             cout << endl;
         }

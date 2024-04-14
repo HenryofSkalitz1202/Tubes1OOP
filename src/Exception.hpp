@@ -34,6 +34,12 @@ struct FilePathBangunanNotFoundException : public exception{
     }
 };
 
+struct SavePathNotFoundException : public exception{
+    const char* what() const throw(){
+        return "File path invalid.";
+    }
+};
+
 struct BangunanFalseTypeException : public exception{
     const char* what() const throw(){
         return "Object of Bangunan type doesn't have type 'BANGUNAN\n";

@@ -31,6 +31,7 @@ public:
   string getUsername() const;
   int getUang();
   int getBeratBadan();
+  Inventory getInventory();
   Asset* getFromInventory(string key);
 
   virtual int getNetWorth() = 0;
@@ -52,6 +53,7 @@ public:
   void setStatus();
   void setPetaniID(int petaniID);
   int getPetaniID();
+  Ladang getLadang();
 
   void tanamTanaman();
   void panenTanaman();
@@ -100,6 +102,7 @@ public:
   void setStatus();
   void setPeternakID(int peternakID);
   int getPeternakID();
+  Peternakan getPeternakan();
 
   void taruhHewan();
   void beriMakan();

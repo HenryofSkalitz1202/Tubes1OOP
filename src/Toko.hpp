@@ -6,7 +6,7 @@
 #include "Bangunan.hpp"
 #include "Produk.hpp"
 #include <iostream>
-#include <unordered_map>
+#include <map>
 #include <vector>
 #include <string>
 using namespace std;
@@ -14,7 +14,7 @@ using namespace std;
 class Toko {
     private:
         vector<Asset*> listAssetTersedia;
-        unordered_map<string, int> listJumlahAsset;
+        map<string, int> listJumlahAsset;
         int jumlahBangunan;
         int jumlahProduk;
     public:
@@ -24,13 +24,14 @@ class Toko {
         Asset* beli(int, int);
         int jual(Asset*, int);
 
-        void setJumlah(Asset*, int);
+        void setJumlah(string, int);
 
         void addTersedia(Asset*);
         void removeTersedia(Asset*);
 
         int getJumlahBangunan() const;
         int getJumlahProduk() const;
+        int getJumlah(string);
 
         void displayToko();
 };

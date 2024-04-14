@@ -40,6 +40,10 @@ int Pemain::getBeratBadan(){
     return this->beratBadan;
 }
 
+Inventory Pemain::getInventory() {
+    return this->inventory;
+}
+
 Asset* Pemain::getFromInventory(string key){
     return this->inventory.get(key);
 }
@@ -49,14 +53,14 @@ Petani::Petani(){
     this->username = "Petani";
     this->uang = defaultUang;
     this->beratBadan = defaultBerat;
-    this->status = "petani";
+    this->status = "Petani";
 }
 
 Petani::Petani(string username, int uang, int beratBadan){
     this->username = username;
     this->uang = uang;
     this->beratBadan = beratBadan;
-    this->status = "petani";
+    this->status = "Petani";
 }
 
 Petani::~Petani(){
@@ -79,7 +83,7 @@ Petani& Petani::operator=(const Petani& other){
 }
 
 void Petani::setStatus(){
-    this->status = "petani";
+    this->status = "Petani";
 }
 
 void Petani::setPetaniID(int petaniID){
@@ -91,6 +95,10 @@ int Petani::getPetaniID(){
     return this->petaniID;
 }
   //map<Tumbuhan> getLadang();
+
+Ladang Petani::getLadang() {
+    return this->ladang;
+}
 
 void Petani::tanamTanaman(){
     std::cout << "Pilih tanaman dari penyimpanan" << std::endl;
@@ -258,14 +266,14 @@ Walikota::Walikota(){
     this->username = "Walikota";
     this->uang = defaultUang;
     this->beratBadan = defaultBerat;
-    this->status = "walikota";
+    this->status = "Walikota";
 }
 
 Walikota::Walikota(string username, int uang, int beratBadan){
     this->username = username;
     this->uang = defaultUang;
     this->beratBadan = defaultBerat;
-    this->status = "walikota";
+    this->status = "Walikota";
 }
 
 Walikota::~Walikota(){
@@ -287,7 +295,7 @@ Walikota& Walikota::operator=(const Walikota& other){
 }
 
 void Walikota::setStatus(){
-    this->status = "walikota";
+    this->status = "Walikota";
 }
 
 void Walikota::setWalikotaID(int walikotaID){
@@ -327,14 +335,14 @@ Peternak::Peternak(){
     this->username = "Peternak";
     this->uang = defaultUang;
     this->beratBadan = defaultBerat;
-    this->status = "peternak";
+    this->status = "Peternak";
 }
 
 Peternak::Peternak(string username, int uang, int beratBadan){
     this->username = username;
     this->uang = defaultUang;
     this->beratBadan = defaultBerat;
-    this->status = "walikota";
+    this->status = "Peternak";
 }
 
 Peternak::~Peternak(){
@@ -357,7 +365,7 @@ Peternak& Peternak::operator=(const Peternak& other){
 }
 
 void Peternak::setStatus(){
-    this->status = "peternak";
+    this->status = "Peternak";
 }
 
 void Peternak::setPeternakID(int peternakID){
@@ -366,6 +374,10 @@ void Peternak::setPeternakID(int peternakID){
 
 int Peternak::getPeternakID(){
     return this->peternakID;
+}
+
+Peternakan Peternak::getPeternakan() {
+    return this->peternakan;
 }
 
 void Peternak::taruhHewan(){

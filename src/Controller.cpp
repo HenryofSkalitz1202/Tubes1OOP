@@ -13,6 +13,9 @@ map<string, int> Toko::catalogBangunan;
 map<string, int> Toko::catalogProduk;
 vector<string> Toko::catalogHewan;
 vector<string> Toko::catalogTumbuhan;
+map<string, string> cekHewan;
+map<string, string> cekMaterialPlant;
+map<string, string> cekFruitPlant;
 
 Controller::Controller()
 {
@@ -23,7 +26,7 @@ Controller::Controller()
 
 Controller::~Controller()
 {
-    for (size_t i = 0; i < this->players.size(); i++)
+    for (int i = 0; i < this->players.size(); i++)
     {
         delete this->players[i];
     }
@@ -49,6 +52,41 @@ vector<string> Controller::stringToArraySpace(const string& input) {
     return result;
 }
 
+vector<string> Controller::stringToArrayDot(const string& input) {
+    vector<string> result;
+    stringstream ss(input);
+    string token;
+    while (getline(ss, token, '.')) {
+        result.push_back(token);
+    }
+    return result;
+}
+
+int Controller::custom_stoi(const std::string& str) {
+    int result = 0;
+    bool negative = false;
+    
+    int i = 0;
+    if (str[0] == '-') {
+        negative = true;
+        ++i;
+    }
+
+    for (; i < str.length(); ++i) {
+        if (str[i] >= '0' && str[i] <= '9') {
+            result = result * 10 + (str[i] - '0');
+        } else {
+            throw invalidStoiException();
+        }
+    }
+
+    if (negative) {
+        result = -1 * result;
+    }
+
+    return result;
+}
+
 void Controller::printMap(const std::map<std::string, int>& myMap) {
     for (const auto& pair : myMap) {
         std::cout << pair.first << ": " << pair.second << std::endl;
@@ -63,31 +101,44 @@ void Controller::populateConfigProduk(string filePathProduk){
     map<string, ProductMaterial*> mp_material;
     map<string, ProductFruit*> mp_fruit;
     map<string, ProductHewan*> mp_hewan;
-    map<string, int> mp_bahan;
 
     for (const auto& str : fileContentarr) {
         vector<string> str_arr = stringToArraySpace(str);
+
+        if(str_arr.size() < 7){
+            cout << "On " << filePathProduk << ": " << endl;
+            throw missingDataException();
+        }else if(str_arr.size() > 7){
+            cout << "On " << filePathProduk << ": " << endl;
+            throw UnexpectedDataException();
+        }
+
+
         ProductMaterial* produkMaterialPtr = nullptr;
         ProductFruit* produkFruitPtr = nullptr;
         ProductHewan* produkHewanPtr = nullptr;
-        if(str_arr[3] == "PRODUCT_MATERIAL_PLANT"){
-            produkMaterialPtr = new ProductMaterial(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], std::stoi(str_arr[5]), std::stoi(str_arr[6]));
-            mp_material.insert({str_arr[2], produkMaterialPtr});
-            Toko::catalogPrice.insert({str_arr[2], std::stoi(str_arr[6])});
-            Toko::catalogProduk.insert({str_arr[2], 0});
-        }else if(str_arr[3] == "PRODUCT_FRUIT_PLANT"){
-            produkFruitPtr = new ProductFruit(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], std::stoi(str_arr[5]), std::stoi(str_arr[6]));
-            mp_fruit.insert({str_arr[1], produkFruitPtr});
-            Toko::catalogPrice.insert({str_arr[1], std::stoi(str_arr[6])});
-            Toko::catalogProduk.insert({str_arr[1], 0});
-        }else if(str_arr[3] == "PRODUCT_ANIMAL"){
-            produkHewanPtr = new ProductHewan(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], std::stoi(str_arr[5]), std::stoi(str_arr[6]));
-            mp_hewan.insert({str_arr[1], produkHewanPtr});
-            Toko::catalogPrice.insert({str_arr[1], std::stoi(str_arr[6])});
-            Toko::catalogProduk.insert({str_arr[1], 0});
+        if((mp_material.find(str_arr[2]) == mp_material.end()) && (mp_fruit.find(str_arr[2]) == mp_fruit.end()) && (mp_hewan.find(str_arr[2]) == mp_hewan.end())){
+            if(str_arr[3] == "PRODUCT_MATERIAL_PLANT"){
+                produkMaterialPtr = new ProductMaterial(Controller::custom_stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], Controller::custom_stoi(str_arr[5]), Controller::custom_stoi(str_arr[6]));
+                mp_material.insert({str_arr[2], produkMaterialPtr});
+                Toko::catalogPrice.insert({str_arr[2], Controller::custom_stoi(str_arr[6])});
+                Toko::catalogProduk.insert({str_arr[2], 0});
+            }else if(str_arr[3] == "PRODUCT_FRUIT_PLANT"){
+                produkFruitPtr = new ProductFruit(Controller::custom_stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], Controller::custom_stoi(str_arr[5]), Controller::custom_stoi(str_arr[6]));
+                mp_fruit.insert({str_arr[1], produkFruitPtr});
+                Toko::catalogPrice.insert({str_arr[1], Controller::custom_stoi(str_arr[6])});
+                Toko::catalogProduk.insert({str_arr[1], 0});
+            }else if(str_arr[3] == "PRODUCT_ANIMAL"){
+                produkHewanPtr = new ProductHewan(Controller::custom_stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], Controller::custom_stoi(str_arr[5]), Controller::custom_stoi(str_arr[6]));
+                mp_hewan.insert({str_arr[1], produkHewanPtr});
+                Toko::catalogPrice.insert({str_arr[1], Controller::custom_stoi(str_arr[6])});
+                Toko::catalogProduk.insert({str_arr[1], 0});
+            }else{
+                cout << "Type " << str_arr[3];
+                throw UnknownProductTypeException();
+            }
         }else{
-            cout << "Type " << str_arr[3];
-            throw UnknownProductTypeException();
+            throw duplicateKeyException();
         }
     }
 
@@ -133,25 +184,39 @@ void Controller::populateConfigHewan(string filePathHewan){
 
     for (const auto& str : fileContentarr) {
         vector<string> str_arr = stringToArraySpace(str);
-        Hewan* hewanPtr = nullptr;
-        if(str_arr[3] == "HERBIVORE"){
-            hewanPtr = new Herbivore(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], std::stoi(str_arr[4]), std::stoi(str_arr[5]));
-        }else if(str_arr[3] == "CARNIVORE"){
-            hewanPtr = new Carnivore(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], std::stoi(str_arr[4]), std::stoi(str_arr[5]));
-        }else if(str_arr[3] == "OMNIVORE"){
-            hewanPtr = new Omnivore(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], std::stoi(str_arr[4]), std::stoi(str_arr[5]));
-        }else{
-            cout << "Type " << str_arr[3];
-            throw UnknownAnimalTypeException();
+
+        if(str_arr.size() < 6){
+            cout << "On " << filePathHewan << ": " << endl;
+            throw missingDataException();
+        }else if(str_arr.size() > 6){
+            cout << "On " << filePathHewan << ": " << endl;
+            throw UnexpectedDataException();
         }
-        mp.insert({str_arr[1], hewanPtr});
-        Toko::catalogHewan.push_back(str_arr[1]);
-        Toko::catalogPrice.insert({str_arr[1], std::stoi(str_arr[5])});
+
+        Hewan* hewanPtr = nullptr;
+        if(mp.find(str_arr[1]) == mp.end()){
+            if(str_arr[3] == "HERBIVORE"){
+                hewanPtr = new Herbivore(Controller::custom_stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], Controller::custom_stoi(str_arr[4]), Controller::custom_stoi(str_arr[5]));
+            }else if(str_arr[3] == "CARNIVORE"){
+                hewanPtr = new Carnivore(Controller::custom_stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], Controller::custom_stoi(str_arr[4]), Controller::custom_stoi(str_arr[5]));
+            }else if(str_arr[3] == "OMNIVORE"){
+                hewanPtr = new Omnivore(Controller::custom_stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], Controller::custom_stoi(str_arr[4]), Controller::custom_stoi(str_arr[5]));
+            }else{
+                cout << "Type " << str_arr[3];
+                throw UnknownAnimalTypeException();
+            }
+            mp.insert({str_arr[1], hewanPtr});
+            Toko::catalogHewan.push_back(str_arr[1]);
+            Toko::catalogPrice.insert({str_arr[1], Controller::custom_stoi(str_arr[5])});
+        }else{
+            throw duplicateKeyException();
+        }
     }
 
     Hewan::configHewan.clear();
     for (const auto& pair : mp) {
         Hewan::configHewan.insert({pair.first, pair.second});
+        Produk::cekHewan.insert({pair.second->getNamaAsset(), pair.first});
     }
 
     // std::cout << "Map content:" << std::endl;
@@ -169,18 +234,33 @@ void Controller::populateConfigTumbuhan(string filePathTumbuhan){
 
     for (const auto& str : fileContentarr) {
         vector<string> str_arr = stringToArraySpace(str);
-        Tumbuhan* tumbuhanPtr = nullptr;
-        if(str_arr[3] == "MATERIAL_PLANT"){
-            tumbuhanPtr = new MaterialPlant(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], std::stoi(str_arr[4]), std::stoi(str_arr[5]), Tumbuhan::current_turn);
-        }else if(str_arr[3] == "FRUIT_PLANT"){
-            tumbuhanPtr = new FruitPlant(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], std::stoi(str_arr[4]), std::stoi(str_arr[5]), Tumbuhan::current_turn);
-        }else{
-            cout << "Type " << str_arr[3];
-            throw UnknownPlantTypeException();
+
+        if(str_arr.size() < 6){
+            cout << "On " << filePathTumbuhan << ": " << endl;
+            throw missingDataException();
+        }else if(str_arr.size() > 6){
+            cout << "On " << filePathTumbuhan << ": " << endl;
+            throw UnexpectedDataException();
         }
-        mp.insert({str_arr[1], tumbuhanPtr});
-        Toko::catalogTumbuhan.push_back(str_arr[1]);
-        Toko::catalogPrice.insert({str_arr[1], std::stoi(str_arr[5])});
+
+        Tumbuhan* tumbuhanPtr = nullptr;
+        if(mp.find(str_arr[1]) == mp.end()){
+            if(str_arr[3] == "MATERIAL_PLANT"){
+                tumbuhanPtr = new MaterialPlant(Controller::custom_stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], Controller::custom_stoi(str_arr[4]), Controller::custom_stoi(str_arr[5]), Tumbuhan::current_turn);
+                Produk::cekMaterialPlant.insert({str_arr[2], str_arr[1]});
+            }else if(str_arr[3] == "FRUIT_PLANT"){
+                tumbuhanPtr = new FruitPlant(Controller::custom_stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], Controller::custom_stoi(str_arr[4]), Controller::custom_stoi(str_arr[5]), Tumbuhan::current_turn);
+                Produk::cekFruitPlant.insert({str_arr[2], str_arr[1]});
+            }else{
+                cout << "Type " << str_arr[3];
+                throw UnknownPlantTypeException();
+            }
+            mp.insert({str_arr[1], tumbuhanPtr});
+            Toko::catalogTumbuhan.push_back(str_arr[1]);
+            Toko::catalogPrice.insert({str_arr[1], Controller::custom_stoi(str_arr[5])});
+        }else{
+            throw duplicateKeyException();
+        }
     }
 
     Tumbuhan::configTumbuhan.clear(); // Clear the existing configProduk map if needed
@@ -206,32 +286,42 @@ void Controller::populateConfigBangunan(string filePathBangunan){
         Bangunan* bangunanPtr = nullptr;
         map<string, int> mp_bahan;
 
-        try{
-            for(size_t i = 4; i < str_arr.size(); i+=2){
-                auto it = ProductMaterial::configProdukMaterial.find(str_arr[i]);
-                if (it == ProductMaterial::configProdukMaterial.end()) {
-                    cout << "Material " << str_arr[i];
-                    throw MaterialBangunanNotProductMaterialException();
-                }
+        if(str_arr.size() < 6){
+            cout << "On " << filePathBangunan << ": " << endl;
+            throw missingDataException();
+        }else if(str_arr.size() % 2 == 1){
+            cout << "On " << filePathBangunan << ": " << endl;
+            throw UnexpectedDataException();
+        }
 
-                mp_bahan.insert({str_arr[i], std::stoi(str_arr[i+1])});
+        for(int i = 4; i < str_arr.size(); i+=2){
+            auto it = ProductMaterial::configProdukMaterial.find(str_arr[i]);
+            if (it == ProductMaterial::configProdukMaterial.end()) {
+                cout << "Material " << str_arr[i];
+                throw MaterialBangunanNotProductMaterialException();
             }
 
-            bangunanPtr = new Bangunan(std::stoi(str_arr[0]), str_arr[1], str_arr[2], std::stoi(str_arr[3]), mp_bahan);
+            if(mp_bahan.find(str_arr[i]) == mp_bahan.end()){
+                mp_bahan.insert({str_arr[i], Controller::custom_stoi(str_arr[i+1])});
+            }else{
+                throw duplicateKeyException();
+            }
+        }
+
+        if(mp.find(str_arr[2]) == mp.end()){
+            bangunanPtr = new Bangunan(Controller::custom_stoi(str_arr[0]), str_arr[1], str_arr[2], Controller::custom_stoi(str_arr[3]), mp_bahan);
             mp.insert({str_arr[2], bangunanPtr});
             Toko::catalogBangunan.insert({str_arr[2], 0});
-            Toko::catalogPrice.insert({str_arr[2], std::stoi(str_arr[3])});
-
-            // std::cout << "ListBahan:" << std::endl;
-            // for (const auto& pair : mp_bahan) {
-            //     std::cout << "Key: " << pair.first << ", Value: " << pair.second << std::endl;
-            // }
-            // std::cout << "=====================" << std::endl;
-        }catch(MaterialBangunanNotProductMaterialException& e){
-            cout << e.what() << endl;
-        }catch(exception& e){
-            cout << e.what() << endl;
+            Toko::catalogPrice.insert({str_arr[2], Controller::custom_stoi(str_arr[3])});
+        }else{
+            throw duplicateKeyException();
         }
+
+        // std::cout << "ListBahan:" << std::endl;
+        // for (const auto& pair : mp_bahan) {
+        //     std::cout << "Key: " << pair.first << ", Value: " << pair.second << std::endl;
+        // }
+        // std::cout << "=====================" << std::endl;
     }
 
     Bangunan::resepBangunan.clear();
@@ -251,21 +341,49 @@ void Controller::GameConfig(string filePathMisc){
     std::string fileContent = fileReader.readText();
 
     vector<string> fileContentarr = stringToArrayEnter(fileContent);
+    if(fileContentarr.size() < 5){
+        cout << "On " << filePathMisc << ": " << endl;
+        throw missingDataException();
+    }else if(fileContentarr.size() > 5){
+        cout << "On " << filePathMisc << ": " << endl;
+        throw UnexpectedDataException();
+    }
 
-    Pemain::uangWin = std::stoi(fileContentarr[0]);
-    Pemain::beratWin = std::stoi(fileContentarr[1]);
+    Pemain::uangWin = Controller::custom_stoi(fileContentarr[0]);
+    Pemain::beratWin = Controller::custom_stoi(fileContentarr[1]);
 
     vector<string> str_arr_inv = stringToArraySpace(fileContentarr[2]);
-    Inventory::inventoryRowSize = std::stoi(str_arr_inv[0]);
-    Inventory::inventoryColumnSize = std::stoi(str_arr_inv[1]);
+    if(str_arr_inv.size() < 2){
+        cout << "On " << filePathMisc << ": " << endl;
+        throw missingDataException();
+    }else if(str_arr_inv.size() > 2){
+        cout << "On " << filePathMisc << ": " << endl;
+        throw UnexpectedDataException();
+    }
+    Inventory::inventoryRowSize = Controller::custom_stoi(str_arr_inv[0]);
+    Inventory::inventoryColumnSize = Controller::custom_stoi(str_arr_inv[1]);
 
     vector<string> str_arr_lhn = stringToArraySpace(fileContentarr[3]);
-    Ladang::lahanRowSize = std::stoi(str_arr_lhn[0]);
-    Ladang::lahanColumnSize = std::stoi(str_arr_lhn[1]);
+    if(str_arr_lhn.size() < 2){
+        cout << "On " << filePathMisc << ": " << endl;
+        throw missingDataException();
+    }else if(str_arr_lhn.size() > 2){
+        cout << "On " << filePathMisc << ": " << endl;
+        throw UnexpectedDataException();
+    }
+    Ladang::lahanRowSize = Controller::custom_stoi(str_arr_lhn[0]);
+    Ladang::lahanColumnSize = Controller::custom_stoi(str_arr_lhn[1]);
 
     vector<string> str_arr_pet = stringToArraySpace(fileContentarr[4]);
-    Peternakan::peternakanRowSize = std::stoi(str_arr_pet[0]);
-    Peternakan::peternakanColumnSize = std::stoi(str_arr_pet[1]);
+    if(str_arr_pet.size() < 2){
+        cout << "On " << filePathMisc << ": " << endl;
+        throw missingDataException();
+    }else if(str_arr_pet.size() > 2){
+        cout << "On " << filePathMisc << ": " << endl;
+        throw UnexpectedDataException();
+    }
+    Peternakan::peternakanRowSize = Controller::custom_stoi(str_arr_pet[0]);
+    Peternakan::peternakanColumnSize = Controller::custom_stoi(str_arr_pet[1]);
 }
 
 void Controller::set_current_player(Pemain* player)
@@ -302,7 +420,7 @@ Pemain* Controller::get_first_player()
 
 void Controller::print_players()
 {
-    for (size_t i = 0; i < this->players.size(); i++)
+    for (int i = 0; i < this->players.size(); i++)
     {
         cout << this->players[i]->getUsername() << endl;
     }
@@ -315,7 +433,7 @@ bool Controller::is_game_over()
 
 void Controller::is_won()
 {
-    for (size_t i = 0; i < this->players.size(); i++)
+    for (int i = 0; i < this->players.size(); i++)
     {
         if (this->players[i]->getUang() >= Pemain::uangWin && this->players[i]->getBeratBadan() >= Pemain::beratWin)
         {

@@ -17,10 +17,10 @@ public:
   ~Tumbuhan();
 
   void setAssetType(string assetType);
-  void setType(string type);
+  void setTumbuhanType(string type);
   void setDurationToHarvest(size_t durationToHarvest);
   void setTurnInstantiated(size_t turn_instantiated);
-  string getType();
+  string getTumbuhanType();
   size_t getDurationToHarvest();
   size_t getTurnInstantiated();
 

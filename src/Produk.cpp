@@ -3,6 +3,10 @@
 #include <iostream>
 using namespace std;
 
+map<string, string> Produk::cekHewan;
+map<string, string> Produk::cekMaterialPlant;
+map<string, string> Produk::cekFruitPlant;
+
 //<---------------PRODUK----------------->
 void Produk::setAssetType(string assetType){
     try{
@@ -56,13 +60,26 @@ void ProductMaterial::setProdukType(string produkType){
 ProductMaterial::ProductMaterial(int produkID, string kodeHuruf, string namaProduk, string produkType, string origin, int addedWeight, int price){
     this->setAssetType("PRODUK");
     this->setAssetID(produkID);
-    this->setKodeHuruf(kodeHuruf);
-    this->setNamaAsset(namaProduk);
-    this->setProdukType(produkType);
+    this->setKodeHuruf(kodeHuruf); //dah di handle di asset
+    this->setNamaAsset(namaProduk); //bebas
+
+    this->setProdukType(produkType); //udah pasti bener karna dicek di Controller
+
+    if(Produk::cekMaterialPlant.find(origin) == Produk::cekMaterialPlant.end()){
+        cout << namaProduk << " originates from " << origin << " which is not recognized as MaterialPlant. ";
+        throw productMaterialNotFromMaterialPlantException();
+    }
     this->setOrigin(origin);
+
+    if(addedWeight != 0){
+        cout << namaProduk << " has an added weight of " << addedWeight << ". ";
+        throw productMaterialFalseAddedWeightException();
+    }
     this->setAddedWeight(addedWeight);
+
     this->setPrice(price);
 }
+
 ProductMaterial::~ProductMaterial(){}
 
 ProductMaterial::ProductMaterial(ProductMaterial& other){
@@ -121,8 +138,19 @@ ProductFruit::ProductFruit(int produkID, string kodeHuruf, string namaProduk, st
     this->setKodeHuruf(kodeHuruf);
     this->setNamaAsset(namaProduk);
     this->setProdukType(produkType);
+
+    if(Produk::cekFruitPlant.find(origin) == Produk::cekFruitPlant.end()){
+        cout << namaProduk << " originates from " << origin << " which is not recognized as FruitPlant. ";
+        throw productFruitNotFromFruitPlantException();
+    }
     this->setOrigin(origin);
+
+    if(addedWeight <= 0){
+        cout << namaProduk << " has an added weight of " << addedWeight << ". ";
+        throw productFruitFalseAddedWeightException();
+    }
     this->setAddedWeight(addedWeight);
+
     this->setPrice(price);
 }
 ProductFruit::~ProductFruit(){}
@@ -184,7 +212,17 @@ ProductHewan::ProductHewan(int produkID, string kodeHuruf, string namaProduk, st
     this->setKodeHuruf(kodeHuruf);
     this->setNamaAsset(namaProduk);
     this->setProdukType(produkType);
+
+    if(Produk::cekHewan.find(origin) == Produk::cekHewan.end()){
+        cout << namaProduk << " originates from " << origin << " which is not recognized as Hewan. ";
+        throw productHewanNotFromHewanException();
+    }
     this->setOrigin(origin);
+
+    if(addedWeight <= 0){
+        cout << namaProduk << " has an added weight of " << addedWeight << ". ";
+        throw productHewanFalseAddedWeightException();
+    }
     this->setAddedWeight(addedWeight);
     this->setPrice(price);
 }

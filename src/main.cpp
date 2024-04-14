@@ -35,29 +35,6 @@ int main(){
     std::cout << "\n" << endl;
 
     try {
-        string filePathProduk;
-        bool validPathProduk = false;
-        while(!validPathProduk){
-            filePathProduk = "";
-
-            cout << "Masukkan file path produk: " << endl;
-            cin >> filePathProduk;                                                
-
-            std::ifstream fileProduk(filePathProduk);
-            cout << "\nOpening " << filePathProduk << "....." << endl;
-
-            if (!fileProduk.is_open()) {
-                cout << ANSI_COLOR_RED << "File config produk '" << filePathProduk << "' is not found\n" << ANSI_COLOR_RESET << endl;
-            }else{
-                cout << ANSI_COLOR_GREEN << "Success! File '" << filePathProduk << "' is found" << ANSI_COLOR_RESET << endl;
-                std::cin.get();
-                std::cout << "Press any key to continue..." << endl;
-                std::cin.get();
-                validPathProduk = true;
-            }
-        }
-        Controller::populateConfigProduk(filePathProduk);
-
         std::string filePathHewan;
         bool validPathHewan = false;
         while(!validPathHewan){
@@ -69,8 +46,10 @@ int main(){
             std::ifstream fileHewan(filePathHewan);
             cout << "\nOpening " << filePathHewan << "....." << endl;
 
-            if (!fileHewan.is_open()) {
-                cout << ANSI_COLOR_RED << "File config hewan '" << filePathHewan << "' is not found\n" << ANSI_COLOR_RESET << endl;
+            if(Controller::stringToArrayDot(filePathHewan)[1] != "txt"){
+                cout << ANSI_COLOR_YELLOW << "File config must be a txt file!\n" << ANSI_COLOR_RESET << endl;
+            }else if (!fileHewan.is_open()) {
+                cout << ANSI_COLOR_YELLOW << "File config hewan '" << filePathHewan << "' is not found\n" << ANSI_COLOR_RESET << endl;
             }else{
                 cout << ANSI_COLOR_GREEN << "Success! File '" << filePathHewan << "' is found" << ANSI_COLOR_RESET << endl;
                 std::cin.get();
@@ -92,8 +71,10 @@ int main(){
             std::ifstream fileTumbuhan(filePathTumbuhan);
             cout << "\nOpening " << filePathTumbuhan << "....." << endl;
 
-            if (!fileTumbuhan.is_open()) {
-                cout << ANSI_COLOR_RED << "File config tumbuhan '" << filePathTumbuhan << "' is not found\n" << ANSI_COLOR_RESET << endl;
+            if(Controller::stringToArrayDot(filePathTumbuhan)[1] != "txt"){
+                cout << ANSI_COLOR_YELLOW << "File config must be a txt file!\n" << ANSI_COLOR_RESET << endl;
+            }else if (!fileTumbuhan.is_open()) {
+                cout << ANSI_COLOR_YELLOW << "File config tumbuhan '" << filePathTumbuhan << "' is not found\n" << ANSI_COLOR_RESET << endl;
             }else{
                 cout << ANSI_COLOR_GREEN << "Success! File '" << filePathTumbuhan << "' is found" << ANSI_COLOR_RESET << endl;
                 std::cin.get();
@@ -103,6 +84,31 @@ int main(){
             }
         }
         Controller::populateConfigTumbuhan(filePathTumbuhan);
+
+        string filePathProduk;
+        bool validPathProduk = false;
+        while(!validPathProduk){
+            filePathProduk = "";
+
+            cout << "Masukkan file path produk: " << endl;
+            cin >> filePathProduk;                                                
+
+            std::ifstream fileProduk(filePathProduk);
+            cout << "\nOpening " << filePathProduk << "....." << endl;
+
+            if(Controller::stringToArrayDot(filePathProduk)[1] != "txt"){
+                cout << ANSI_COLOR_YELLOW << "File config must be a txt file!\n" << ANSI_COLOR_RESET << endl;
+            }else if(!fileProduk.is_open()) {
+                cout << ANSI_COLOR_YELLOW << "File config produk '" << filePathProduk << "' is not found\n" << ANSI_COLOR_RESET << endl;
+            }else{
+                cout << ANSI_COLOR_GREEN << "Success! File '" << filePathProduk << "' is found" << ANSI_COLOR_RESET << endl;
+                std::cin.get();
+                std::cout << "Press any key to continue..." << endl;
+                std::cin.get();
+                validPathProduk = true;
+            }
+        }
+        Controller::populateConfigProduk(filePathProduk);
 
         std::string filePathBangunan;
         bool validPathBangunan = false;
@@ -116,8 +122,10 @@ int main(){
             std::ifstream fileBangunan(filePathBangunan);
             cout << "\nOpening " << filePathBangunan << "....." << endl;
 
-            if (!fileBangunan.is_open()) {
-                cout << ANSI_COLOR_RED << "File config bangunan '" << filePathBangunan << "' is not found\n" << ANSI_COLOR_RESET << endl;
+            if(Controller::stringToArrayDot(filePathBangunan)[1] != "txt"){
+                cout << ANSI_COLOR_YELLOW << "File config must be a txt file!\n" << ANSI_COLOR_RESET << endl;
+            }else if (!fileBangunan.is_open()) {
+                cout << ANSI_COLOR_YELLOW << "File config bangunan '" << filePathBangunan << "' is not found\n" << ANSI_COLOR_RESET << endl;
             }else{
                 cout << ANSI_COLOR_GREEN << "Success! File '" << filePathBangunan << "' is found" << ANSI_COLOR_RESET << endl;
                 std::cin.get();
@@ -139,8 +147,10 @@ int main(){
             std::ifstream fileMisc(filePathMisc);
             cout << "\nOpening " << filePathMisc << "....." << endl;
 
-            if (!fileMisc.is_open()) {
-                cout << ANSI_COLOR_RED << "File config misc '" << filePathMisc << "' is not found\n" << ANSI_COLOR_RESET << endl;
+            if(Controller::stringToArrayDot(filePathMisc)[1] != "txt"){
+                cout << ANSI_COLOR_YELLOW << "File config must be a txt file!\n" << ANSI_COLOR_RESET << endl;
+            }else if (!fileMisc.is_open()) {
+                cout << ANSI_COLOR_YELLOW << "File config misc '" << filePathMisc << "' is not found\n" << ANSI_COLOR_RESET << endl;
             }else{
                 cout << ANSI_COLOR_GREEN << "Success! File '" << filePathMisc << "' is found" << ANSI_COLOR_RESET << endl;
                 std::cin.get();
@@ -204,11 +214,29 @@ int main(){
         peternakan.print();
     } catch(UnknownProductTypeException& e){
         cout << e.what() << endl;
-    } catch(FilePathProdukNotFoundException& e){
+    } catch(invalidKodeHurufException& e){
         cout << e.what() << endl;
-    } catch(FilePathHewanNotFoundException& e){
+    } catch(invalidPriceException& e){
         cout << e.what() << endl;
-    } catch(FilePathBangunanNotFoundException& e){
+    } catch(invalidWeightToHarvestException& e){
+        cout << e.what() << endl;
+    } catch(productMaterialNotFromMaterialPlantException& e){
+        cout << e.what() << endl;
+    } catch(productMaterialFalseAddedWeightException& e){
+        cout << e.what() << endl;
+    } catch(productFruitNotFromFruitPlantException& e){
+        cout << e.what() << endl;
+    } catch(productFruitFalseAddedWeightException& e){
+        cout << e.what() << endl;
+    } catch(productHewanNotFromHewanException& e){
+        cout << e.what() << endl;
+    } catch(productHewanFalseAddedWeightException& e){
+        cout << e.what() << endl;
+    } catch(MaterialBangunanNotProductMaterialException& e){
+        cout << e.what() << endl;
+    } catch(invalidStoiException& e){
+        cout << e.what() << endl;
+    } catch(duplicateKeyException& e){
         cout << e.what() << endl;
     } catch(const std::exception& e) {
         cerr << e.what() << endl; // Print any error message

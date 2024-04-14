@@ -14,6 +14,8 @@ protected:
 public:
   ~Asset(){}
 
+  static bool isThreeLetterCapital(const std::string& str);
+
   virtual void setAssetType(string assetType) = 0;
   void setAssetID(int assetID);
   void setKodeHuruf(string kodeHuruf);

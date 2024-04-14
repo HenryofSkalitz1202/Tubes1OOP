@@ -24,8 +24,13 @@ void Hewan::setType(string type){
     this->type = type;
 }
 
-void Hewan::setWeightToHarvest(size_t weightToHarvest){
-    this->weightToHarvest = weightToHarvest;
+void Hewan::setWeightToHarvest(int weightToHarvest){
+    if(weightToHarvest <= 0){
+        cout << "Weight to harvest of " << this->getNamaAsset() << " is set to " << weightToHarvest << ". " << endl;
+        throw invalidWeightToHarvestException();
+    }else{
+        this->weightToHarvest = weightToHarvest;
+    }
 }
 
 void Hewan::setWeight(int weight){
@@ -64,7 +69,7 @@ vector<Produk*> Hewan::harvest(){
 }
 
 //<---------------HERBIVORE----------------->
-Herbivore::Herbivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price){
+Herbivore::Herbivore(int hewanID, string kodeHuruf, string namaHewan, string type, int weightToHarvest, int price){
     this->setAssetType("HEWAN");
     this->setAssetID(hewanID);
     this->setKodeHuruf(kodeHuruf);
@@ -111,7 +116,7 @@ void Herbivore::makan(Produk* pakan){
 }
 
 //<---------------CARNIVORE----------------->
-Carnivore::Carnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price){
+Carnivore::Carnivore(int hewanID, string kodeHuruf, string namaHewan, string type, int weightToHarvest, int price){
     this->setAssetType("HEWAN");
     this->setAssetID(hewanID);
     this->setKodeHuruf(kodeHuruf);
@@ -159,7 +164,7 @@ void Carnivore::makan(Produk* pakan){
 
 //<---------------OMNIVORE----------------->
 
-Omnivore::Omnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price){
+Omnivore::Omnivore(int hewanID, string kodeHuruf, string namaHewan, string type, int weightToHarvest, int price){
     this->setAssetType("HEWAN");
     this->setAssetID(hewanID);
     this->setKodeHuruf(kodeHuruf);

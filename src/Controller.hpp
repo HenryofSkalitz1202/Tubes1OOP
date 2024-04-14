@@ -5,7 +5,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-//#include <algorithm>
 #include "Pemain.cpp"
 using namespace std;
 
@@ -13,7 +12,7 @@ class Controller
 {
 private:
     //std::vector<Pemain*> players;
-    size_t current_player_index;
+    int current_player_index;
     Pemain* current_player;
     int turn_number;
     bool game_over;
@@ -25,6 +24,8 @@ public:
 
     static vector<string> stringToArrayEnter(const string& input);
     static vector<string> stringToArraySpace(const string& input);
+    static vector<string> stringToArrayDot(const string& input);
+    static int custom_stoi(const std::string& str);
     static void printMap(const std::map<std::string, int>& myMap);
     static void populateConfigProduk(string filePathProduk);
     static void populateConfigHewan(string filePathHewan);

@@ -70,14 +70,28 @@ public:
 class invalidPriceException : public exception{
 public:
     const char* what() const noexcept override{
-        return "\033[1;31mPrice of any asset must have a positive value.\n\033[0m";
+        return "\033[1;31mPrice of any Asset must have a positive value.\n\033[0m";
     }
 }; 
 
 class invalidWeightToHarvestException : public exception{
 public:
     const char* what() const noexcept override{
-        return "\033[1;31mPrice of any asset must have a positive value.\n\033[0m";
+        return "\033[1;31mWeight to harvest of any Hewan must have a positive value.\n\033[0m";
+    }
+};
+
+class invalidDurationToHarvestException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31mDuration to harvest of any Tumbuhan must have a positive value.\n\033[0m";
+    }
+}; 
+
+class invalidMaterialQuantityException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31mQuantity of any material Bangunan must have a positive value.\n\033[0m";
     }
 }; 
 

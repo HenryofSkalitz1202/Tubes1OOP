@@ -117,7 +117,7 @@ void Controller::populateConfigProduk(string filePathProduk){
         ProductMaterial* produkMaterialPtr = nullptr;
         ProductFruit* produkFruitPtr = nullptr;
         ProductHewan* produkHewanPtr = nullptr;
-        if((mp_material.find(str_arr[2]) == mp_material.end()) && (mp_fruit.find(str_arr[2]) == mp_fruit.end()) && (mp_hewan.find(str_arr[2]) == mp_hewan.end())){
+        if((mp_material.find(str_arr[2]) == mp_material.end()) && (mp_fruit.find(str_arr[1]) == mp_fruit.end()) && (mp_hewan.find(str_arr[1]) == mp_hewan.end())){
             if(str_arr[3] == "PRODUCT_MATERIAL_PLANT"){
                 produkMaterialPtr = new ProductMaterial(Controller::custom_stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], Controller::custom_stoi(str_arr[5]), Controller::custom_stoi(str_arr[6]));
                 mp_material.insert({str_arr[2], produkMaterialPtr});
@@ -302,7 +302,12 @@ void Controller::populateConfigBangunan(string filePathBangunan){
             }
 
             if(mp_bahan.find(str_arr[i]) == mp_bahan.end()){
-                mp_bahan.insert({str_arr[i], Controller::custom_stoi(str_arr[i+1])});
+                if(Controller::custom_stoi(str_arr[i+1]) > 0){
+                    mp_bahan.insert({str_arr[i], Controller::custom_stoi(str_arr[i+1])});
+                }else{
+                    cout << "Quantity of material " << str_arr[i] << " is set to " << str_arr[i+1] << "." << endl;
+                    throw invalidMaterialQuantityException();
+                }
             }else{
                 throw duplicateKeyException();
             }
@@ -468,6 +473,115 @@ bool Controller::is_peternak(Pemain* player)
 bool Controller::is_walikota(Pemain* player)
 {
     return dynamic_cast<Walikota*>(player) != nullptr;
+}
+
+bool Controller::isValidCommand(string command, Pemain* player){
+    if(command == "NEXT"){
+        return true;
+    }else if(command == "CETAK_PENYIMPANAN"){
+        return true;
+    }else if(command == "MAKAN"){
+        return true;
+    }else if(command == "BELI"){
+        return true;
+    }else if(command == "JUAL"){
+        return true;
+    }else if(command == "SIMPAN"){
+        return true;
+    }else{
+        if(dynamic_cast<Walikota*>(player)){
+            if(command == "PUNGUT_PAJAK"){
+                return true;
+            }else if(command == "BANGUN"){
+                return true;
+            }else if(command == "TAMBAH_PEMAIN"){
+                return true;
+            }else{
+                return false;
+            }
+        }else if(dynamic_cast<Petani*>(player)){
+            if(command == "CETAK_LADANG"){
+                return true;
+            }else if(command == "TANAM"){
+                return true;
+            }else if(command == "KASIH_MAKAN"){
+                return true;
+            }else if(command == "PANEN"){
+                return true;
+            }else{
+                return false;
+            }
+        }else if(dynamic_cast<Peternak*>(player)){
+            if(command == "CETAK_PETERNAKAN"){
+                return true;
+            }else if(command == "TERNAK"){
+                return true;
+            }else if(command == "KASIH_MAKAN"){
+                return true;
+            }else if(command == "PANEN"){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+}
+
+void Controller::readCommand(Pemain* player, Toko* store){
+    string command;
+    bool validCommand = false;
+    while(!validCommand){
+        command = "";
+        cout << "> ";
+        cin >> command;
+
+        if(isValidCommand(command, player)){
+            validCommand = true;
+        }else{
+            cout << "\033[1;33mCommand is not recognized! Please try again\n\033[0m" << endl;
+        }
+    }
+
+    if(command == "NEXT"){
+        this->next();
+    }else if(command == "CETAK_PENYIMPANAN"){
+        this->cetak_penyimpanan(player);
+    }else if(command == "PUNGUT_PAJAK"){
+        Walikota* walikota = dynamic_cast<Walikota*>(player);
+        walikota->pungutPajak(Controller::players);
+    }else if(command == "CETAK_LADANG"){
+        Petani* petani = dynamic_cast<Petani*>(player);
+        petani->getLadang().print();
+    }else if(command == "CETAK_PETERNAKAN"){
+        Peternak* peternak = dynamic_cast<Peternak*>(player);
+        peternak->getPeternakan().print();
+    }else if(command == "TANAM"){
+        Petani* petani = dynamic_cast<Petani*>(player);
+        petani->tanamTanaman();
+    }else if(command == "TERNAK"){
+        Peternak* peternak = dynamic_cast<Peternak*>(player);
+        peternak->taruhHewan();
+    }else if(command == "BANGUN"){
+        Walikota* walikota = dynamic_cast<Walikota*>(player);
+        walikota->bangunBangunan();
+    }else if(command == "MAKAN"){
+        this->makan(player);
+    }else if(command == "KASIH_MAKAN"){
+        Peternak* peternak = dynamic_cast<Peternak*>(player);
+        peternak->beriMakan();
+    }else if(command == "BELI"){
+        this->beli(player, store);
+    }else if(command == "JUAL"){
+        this->jual(player);
+    }else if(command == "PANEN"){
+        Petani* petani = dynamic_cast<Petani*>(player);
+        petani->panenTanaman();
+    }else if(command == "SIMPAN"){
+        //this->simpan();
+    }else if(command == "TAMBAH_PEMAIN"){
+        Walikota* walikota = dynamic_cast<Walikota*>(player);
+        walikota->tambahAkun(Controller::players);
+    }
 }
 
 void Controller::next()

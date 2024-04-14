@@ -38,7 +38,7 @@ void Asset::setNamaAsset(string namaAsset){
 
 void Asset::setPrice(int price){
     if(price <= 0){
-        cout << "Price of " << this->getNamaAsset() << " is set to " << price << ". " << endl;
+        cout << "Price of " << this->getNamaAsset() << " is set to " << price << "." << endl;
         throw invalidPriceException();
     }else{
         this->price = price;

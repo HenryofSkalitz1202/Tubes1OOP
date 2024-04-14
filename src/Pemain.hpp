@@ -52,6 +52,7 @@ public:
 
   void jualAsset();
   void makan();
+  //void simpan();
 
   virtual void beliAsset(Toko* store) = 0;
   virtual int getNetWorth() = 0;

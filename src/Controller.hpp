@@ -52,6 +52,8 @@ public:
     bool is_peternak(Pemain* player);
     bool is_walikota(Pemain* player);
 
+    bool isValidCommand(string command, Pemain* player);
+    void readCommand(Pemain* player, Toko* toko);
     void next();
     void cetak_penyimpanan(Pemain* player);
     void pungut_pajak(Walikota* walikota);

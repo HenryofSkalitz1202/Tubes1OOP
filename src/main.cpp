@@ -220,6 +220,10 @@ int main(){
         cout << e.what() << endl;
     } catch(invalidWeightToHarvestException& e){
         cout << e.what() << endl;
+    } catch(invalidDurationToHarvestException& e){
+        cout << e.what() << endl;
+    } catch(invalidMaterialQuantityException& e){
+        cout << e.what() << endl;
     } catch(productMaterialNotFromMaterialPlantException& e){
         cout << e.what() << endl;
     } catch(productMaterialFalseAddedWeightException& e){

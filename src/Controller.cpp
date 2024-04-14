@@ -374,6 +374,91 @@ void Controller::next()
     this->turn_number++;
 }
 
+void Controller::beli() {
+    try {
+        toko.displayToko();
+        int uang = current_player->getUang();
+        int available_slot = current_player->getInventory().countAvailableCapacity();
+        cout << "Uang Anda: " << uang << endl;
+        cout << "Slot penyimpanan tersedia: " << available_slot << endl;
+
+        int pilihan, jumlah;
+        cout << "\nNomor barang yang ingin dibeli: ";
+        cin >> pilihan;
+        cout << "Kuantitas: ";
+        cin >> jumlah;
+
+        if (is_walikota(current_player) && pilihan <= toko.getJumlahBangunan()) {
+            // throw walikota cant buy
+        }
+
+        if (jumlah > current_player->getInventory().countAvailableCapacity()) {
+            throw NotEnoughInventoryException();
+        }
+
+        Asset* item = toko.beli(pilihan, jumlah, uang);
+        current_player->setUang(uang);
+
+        cout << "Selamat Anda berhasil membeli " << jumlah << " " << item->getNamaAsset() << ". Uang Anda tersisa " << uang << " gulden." << endl;
+        cout << "Pilih slot untuk menyimpan barang yang Anda beli!" << endl;
+        cetak_penyimpanan();
+        string str_petak, petak;
+        vector<string> v_petak;
+        cin >> str_petak;
+        stringstream ss(str_petak);
+        while(!ss.eof()) {
+            getline(ss, petak, ',');
+            if (petak[0] == ' ') {
+                petak.erase(petak.begin());
+            }
+            v_petak.push_back(petak);
+        }
+        if (v_petak.size() != jumlah) {
+            // throw invalid input
+        }
+        for (auto const& p: v_petak) {
+            current_player->addToInventory(item, petak);
+        }
+        cout << item->getNamaAsset() << " berhasil disimpan dalam penyimpanan!" << endl;
+    } catch (NotEnoughInventoryException& e) {
+        cout << e.what() << endl;
+    }
+}
+
+void Controller::jual() {
+    try {
+        string str_petak, petak;
+        vector<Asset*> itemJual;
+        if (current_player->getInventory().isEmpty()) {
+            throw inventoryEmptyException();
+        }
+        cout << "Berikut merupakan penyimpanan Anda" << endl;
+        cetak_penyimpanan();
+        cout << "Silahkan pilih petak yang ingin Anda jual!" << endl;
+        cout << "Petak: ";
+        cin >> str_petak;
+        stringstream ss(str_petak);
+        while (!ss.eof()) {
+            getline(ss, petak, ',');
+            if (petak[0] == ' ') {
+                petak.erase(petak.begin());
+            }
+            if (current_player->getFromInventory(petak)->getAssetType() == "BANGUNAN") {
+                if (is_petani(current_player) || is_peternak(current_player)) {
+                    // throw wrong player
+                }
+            }
+            itemJual.push_back(current_player->getFromInventory(petak));
+            //belum remove item
+        }
+        int hasilJual = toko.jual(itemJual);
+        current_player->setUang(current_player->getUang() + hasilJual);
+        cout << "Barang Anda berhasil dijual! Uang Anda bertambah " << hasilJual << " gulden!" << endl;
+    } catch (inventoryEmptyException& e) {
+        cout << e.what() << endl;
+    }
+}
+
 void Controller::muat(string filePathState)
 {
     try {

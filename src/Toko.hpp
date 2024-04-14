@@ -21,8 +21,10 @@ class Toko {
         Toko();
         ~Toko();
 
-        Asset* beli(int, int);
-        int jual(Asset*, int);
+        Asset* beli(int pilihan, int jumlah, int& uang);
+        int jual(vector<Asset*> listItem);
+
+        Asset* getAsset(string name);
 
         void setJumlah(string, int);
 

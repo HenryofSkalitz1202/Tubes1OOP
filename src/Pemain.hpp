@@ -26,6 +26,7 @@ public:
   void setUang(int uang);
   void setberatBadan(int beratBadan);
   void addToInventory(Asset* item);
+  void addToInventory(Asset* item, string loc);
 
   string getStatus();
   string getUsername() const;

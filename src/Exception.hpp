@@ -283,4 +283,22 @@ class InvalidPilihanBeliException : public exception{
         }
 };
 
+class NotEnoughMoneyException : public exception{
+    public:
+        NotEnoughMoneyException(): exception() {}
+
+        const char* what() const throw(){
+            return "Uang tidak cukup.\n";
+        }
+};
+
+class NotEnoughInventoryException : public exception{
+    public:
+        NotEnoughInventoryException(): exception() {}
+
+        const char* what() const throw(){
+            return "Inventory tidak cukup.\n";
+        }
+};
+
 #endif

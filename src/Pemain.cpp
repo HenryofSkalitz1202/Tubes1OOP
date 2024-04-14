@@ -24,6 +24,10 @@ void Pemain::addToInventory(Asset* item){
     this->inventory.addItem(item);
 }
 
+void Pemain::addToInventory(Asset* item, string loc) {
+    this->inventory.addItemKey(item, loc);
+}
+
 string Pemain::getStatus(){
     return this->status;
 }

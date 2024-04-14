@@ -36,7 +36,6 @@ public:
     return result;
   }
 
-  Pemain();
   ~Pemain();
 
   void setUsername(string username);
@@ -50,6 +49,7 @@ public:
   Inventory getInventory();
   Asset* getFromInventory(string key);
 
+  void printInventory();
   void jualAsset();
   void makan();
   //void simpan();
@@ -65,8 +65,8 @@ private:
   Ladang ladang;
   const int ktkp = 13;
 public:
-  Petani();
-  Petani(string username, int uang, int beratBadan);
+  Petani(int petaniID, string username);
+  Petani(int petaniID, string username, int uang, int beratBadan, Inventory inventory, Ladang ladang);
   ~Petani();
   Petani(Petani& other);
   Petani& operator=(const Petani& other);
@@ -88,8 +88,8 @@ private:
   int walikotaID;
 
 public:
-  Walikota();
-  Walikota(string username, int uang, int beratBadan);
+  Walikota(int walikotaID, string username);
+  Walikota(int walikotaID, string username, int uang, int beratBadan, Inventory inventory);
   ~Walikota();
   Walikota(Walikota& other);
   Walikota& operator=(const Walikota& other);
@@ -112,8 +112,8 @@ private:
   Peternakan peternakan;
   const int ktkp = 11;
 public:
-  Peternak();
-  Peternak(string username, int uang, int beratBadan);
+  Peternak(int peternakID, string username);
+  Peternak(int peternakID, string username, int uang, int beratBadan, Inventory inventory, Peternakan peternakan);
   ~Peternak();
   Peternak(Peternak& other);
   Peternak& operator=(const Peternak& other);

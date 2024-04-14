@@ -9,10 +9,11 @@
 #define ANSI_COLOR_CYAN    "\x1b[36m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
-int Pemain::defaultBerat;
-int Pemain::defaultUang;
+int Pemain::defaultBerat = 40;
+int Pemain::defaultUang = 50;
 
 int main(){
+    //Start Menu
     std::cout << ".------..------..------..------..------..------." << endl;
     std::cout << "|W.--. ||H.--. ||O.--. ||O.--. ||P.--. ||S.--. |" << endl;
     std::cout << "| :" << ANSI_COLOR_RED << "/\\" << ANSI_COLOR_RESET <<  ": || :" << ANSI_COLOR_RED << "/\\" << ANSI_COLOR_RESET <<  ": || :" << ANSI_COLOR_RED << "/\\" << ANSI_COLOR_RESET <<  ": || :" << ANSI_COLOR_RED << "/\\" << ANSI_COLOR_RESET <<  ": || :" << ANSI_COLOR_RED << "/\\" << ANSI_COLOR_RESET <<  ": || :" << ANSI_COLOR_RED << "/\\" << ANSI_COLOR_RESET <<  ": |" << endl;
@@ -161,57 +162,48 @@ int main(){
         }
         Controller::GameConfig(filePathMisc);
 
-        // Create an Inventory object
-        Inventory inventory;
+        //Set Mode
+        cout << ANSI_COLOR_BLUE << "All config has been set successfully" << ANSI_COLOR_RESET << endl;
+        cout << "Press any key to continue..." << endl;
+        cin.get();
 
-        // Create some assets
-        // Define the materials list
-        Asset* asset1 = new Bangunan(1, "SMH", "SMALL_HOUSE", 1000, {{"Wood", 10}, {"Brick", 20}});
-        Asset* asset2 = new Bangunan(2, "MDH", "MEDIUM_HOUSE", 1000, {{"Wood", 10}, {"Brick", 20}});
-        Asset* asset3 = new Bangunan(4, "HTL", "HOTEL", 1000, {{"Wood", 10}, {"Brick", 20}});
+        cout << "==========================" << endl;
+        cout << "WELCOME TO KINGDOM MANAGER" << endl;
+        cout << "==========================" << endl;
+        cout << "1. New Game" << endl;
+        cout << "2. Load Game" << endl;
 
-        // Add assets to the inventory
-        inventory.addItemKey(asset1, "D04");
-        inventory.addItem(asset2);
-        inventory.addItemKey(asset3, "D04");
+        string gameMode;
+        bool validGameMode = false;
+        
+        while(!validGameMode){
+            gameMode = "";
+            cout << "Select game mode: ";
+            cin >> gameMode;
 
-        // Print the inventory
-        std::cout << "Inventory:" << std::endl;
-        inventory.print();
+            if(gameMode != "1" && gameMode != "2"){
+                cout << ANSI_COLOR_YELLOW << "Invalid game mode!\n" << ANSI_COLOR_RESET << endl;
+            }else{
+                validGameMode = true;
+            }
+        }
 
-        // Create a Ladang object
-        Ladang ladang;
+        //READ AND EXECUTE COMMAND
+        if(gameMode == "1"){
+            cout << ANSI_COLOR_BLUE << "\nStarting new game...." << ANSI_COLOR_RESET << endl;
+            Controller mainPage;
+            Toko* store = new Toko;
 
-        // Create some Tumbuhan objects
-        Tumbuhan* tumbuhan1 = new FruitPlant(1, "APL", "APPLE_TREE", "FRUIT_PLANT", 5, 5, 2);
-        Tumbuhan* tumbuhan2 = new MaterialPlant(1, "IRN", "IRONWOOD_TREE", "MATERIAL_PLANT", 8, 8, 2);
-        Tumbuhan* tumbuhan3 = new FruitPlant(1, "ORG", "ORANGE_TREE", "FRUIT_PLANT", 3, 7, 2);
+            cout << ANSI_COLOR_MAGENTA << "Cheapest: " << store->getCheapest() << ANSI_COLOR_RESET << endl;
 
-        // Add Tumbuhan to the ladang
-        ladang.addItem(tumbuhan1);
-        ladang.addItemKey(tumbuhan2, "B03");
-        ladang.addItemKey(tumbuhan3, "C02");
-
-        // Print the ladang
-        std::cout << "\nLadang:" << std::endl;
-        ladang.print();
-
-        // Create a Peternakan object
-        Peternakan peternakan;
-
-        // Create some Hewan objects
-        Hewan* hewan1 = new Herbivore(1, "COW", "COW", "HERBIVORE", 10, 500);
-        Hewan* hewan2 = new Omnivore(1, "CHK", "CHICKEN", "OMNIVORE", 10, 500);
-        Hewan* hewan3 = new Carnivore(3, "SNK", "SNAKE", "CARNIVORE", 10, 50);
-
-        // Add Hewan to the peternakan
-        peternakan.addItem(hewan1);
-        peternakan.addItemKey(hewan2, "B04");
-        peternakan.addItemKey(hewan3, "E07");
-
-        // Print the peternakan
-        std::cout << "\nPeternakan:" << std::endl;
-        peternakan.print();
+            while(!mainPage.is_game_over()){
+                cout << ANSI_COLOR_CYAN << "Turn: " << mainPage.getTurnNumber() << ANSI_COLOR_RESET << endl; 
+                cout << ANSI_COLOR_MAGENTA << "Current player: " << mainPage.get_current_player()->getUsername() << ANSI_COLOR_RESET << endl;
+                mainPage.readCommand(mainPage.get_current_player(), store);
+            }
+        }else if(gameMode == "2"){
+            //COMING SOON
+        }
     } catch(UnknownProductTypeException& e){
         cout << e.what() << endl;
     } catch(invalidKodeHurufException& e){

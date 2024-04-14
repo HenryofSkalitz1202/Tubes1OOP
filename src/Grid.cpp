@@ -9,9 +9,13 @@
 #define RED "\x1B[31m"
 #define GREEN "\x1B[32m"
 #define BLUE "\x1B[34m"
+#define YELLOW "\x1B[33m"
+#define MAGENTA "\x1B[35m"
+#define CYAN "\x1B[36m"
+#define WHITE "\x1B[37m"
 
 template <typename T>
-string Grid<T>::calculateKey(size_t row, size_t col){
+string Grid<T>::calculateKey(int row, int col){
     std::ostringstream oss;
     char key_alphabet = 'A' + col;
     oss << std::setw(2) << std::setfill('0') << row + 1;
@@ -24,7 +28,7 @@ string Grid<T>::calculateKey(size_t row, size_t col){
 }
 
 template <typename T>
-Grid<T>::Grid(size_t rows, size_t cols) : rows(rows), cols(cols) {
+Grid<T>::Grid(int rows, int cols) : rows(rows), cols(cols) {
     std::ostringstream oss;
     for(int i = 0; i <= this->rows; i++){
         for(int j = 0; j < this->cols; j++){
@@ -35,7 +39,7 @@ Grid<T>::Grid(size_t rows, size_t cols) : rows(rows), cols(cols) {
 }
 
 template <typename T>
-void Grid<T>::set(size_t row, size_t col, T value){
+void Grid<T>::set(int row, int col, T value){
     // if(row >= this->rows || col >= this->cols) {
     //     cout << "Attempted to set value at position (" << row << ", " << col << ").";
     //     throw outOfBoundsException();
@@ -51,15 +55,13 @@ void Grid<T>::set(size_t row, size_t col, T value){
 
 template <typename T>
 void Grid<T>::setWithKey(string key, T value){
-    // if(!this->isValidKey(key)) {
-    //     cout << "Attempted to set value with invalid key: " << key;
-    //     throw outOfBoundsException();
-    // }
+    if(!this->isValidKey(key)) {
+        cout << "Attempted to set value with invalid key: " << key;
+    }
 
-    // if(this->data[key] != nullptr){
-    //     cout << "Value of grid " << key << " is not null. ";
-    //     throw insertIntoUnemptyCellException();
-    // }
+    if(this->data[key] != nullptr){
+        cout << "Value of grid " << key << " is not null. ";
+    }
     
     this->data[key] = value;
 }
@@ -79,7 +81,7 @@ void Grid<T>::setNull(string key){
 }
 
 template <typename T>
-T Grid<T>::get(size_t row, size_t col){
+T Grid<T>::get(int row, int col){
     // if(row >= this->rows || col >= this->cols) {
     //     cout << "Attempted to set value at position (" << row << ", " << col << ").";
     //     throw outOfBoundsException();
@@ -101,12 +103,12 @@ T Grid<T>::get(string key){
 }
 
 template <typename T>
-size_t Grid<T>::numRows(){
+int Grid<T>::numRows(){
     return rows;
 }
 
 template <typename T>
-size_t Grid<T>::numCols(){
+int Grid<T>::numCols(){
     return cols;
 }
 
@@ -142,9 +144,9 @@ void Grid<T>::printBorder(int n) {
 
 template<typename T>
 int Grid<T>::countAvailableCapacity() {
-    size_t count = 0;
-    for (size_t i = 0; i < numRows(); ++i) {
-        for (size_t j = 0; j < numCols(); ++j) {
+    int count = 0;
+    for (int i = 0; i < numRows(); ++i) {
+        for (int j = 0; j < numCols(); ++j) {
             if (get(i, j) == nullptr) {
                 ++count;
             }
@@ -192,8 +194,8 @@ int Inventory::inventoryColumnSize;
 Inventory::Inventory() : Grid<Asset*>(inventoryRowSize, inventoryColumnSize) {}
 
 Inventory::~Inventory() {
-    for (size_t i = 0; i < this->rows; ++i) {
-        for (size_t j = 0; j < this->cols; ++j) {
+    for (int i = 0; i < this->rows; ++i) {
+        for (int j = 0; j < this->cols; ++j) {
             Asset* asset = get(i, j);
             if (asset != nullptr) {
                 delete asset;
@@ -203,8 +205,8 @@ Inventory::~Inventory() {
 }
 
 Inventory::Inventory(Inventory& other) : Grid<Asset*>(other.numRows(), other.numCols()) {
-    for (size_t i = 0; i < other.numRows(); ++i) {
-        for (size_t j = 0; j < other.numCols(); ++j) {
+    for (int i = 0; i < other.numRows(); ++i) {
+        for (int j = 0; j < other.numCols(); ++j) {
             Asset* asset = other.get(i, j);
             if (asset != nullptr) {
                 if (Produk* produk = dynamic_cast<Produk*>(asset)) {
@@ -230,8 +232,8 @@ Inventory& Inventory::operator=(const Inventory& other) {
     if (this == &other)
         return *this;
 
-    for (size_t i = 0; i < numRows(); ++i) {
-        for (size_t j = 0; j < numCols(); ++j) {
+    for (int i = 0; i < numRows(); ++i) {
+        for (int j = 0; j < numCols(); ++j) {
             Asset* asset = get(i, j);
             if (asset != nullptr) {
                 delete asset;
@@ -239,8 +241,8 @@ Inventory& Inventory::operator=(const Inventory& other) {
         }
     }
 
-    for (size_t i = 0; i < numRows(); ++i) {
-        for (size_t j = 0; j < numCols(); ++j) {
+    for (int i = 0; i < numRows(); ++i) {
+        for (int j = 0; j < numCols(); ++j) {
             auto it = other.data.find(calculateKey(i, j));
             Asset* asset = it->second;
             if (asset != nullptr) {
@@ -269,8 +271,8 @@ void Inventory::addItem(Asset* asset) {
     if(this->isFull()){
         throw inventoryFullException();
     }
-    for (size_t row = 0; row < this->numRows(); ++row) {
-        for (size_t col = 0; col < this->numCols(); ++col) {
+    for (int row = 0; row < this->numRows(); ++row) {
+        for (int col = 0; col < this->numCols(); ++col) {
             if (this->data[calculateKey(row, col)] == nullptr) {
                 set(row, col, asset);
                 return;
@@ -342,9 +344,11 @@ void Inventory::rekapInventory() {
     this->jumlahProductMaterial = 0;
     this->jumlahProductFruit = 0;
     this->jumlahProductHewan = 0;
+    this->jumlahTumbuhan = 0;
+    this->jumlahHewan = 0;
 
-    for (size_t i = 0; i < inventoryRowSize; ++i) {
-        for (size_t j = 0; j < inventoryColumnSize; ++j) {
+    for (int i = 0; i < inventoryRowSize; ++i) {
+        for (int j = 0; j < inventoryColumnSize; ++j) {
             Asset* asset = this->get(i, j);
             
             if (asset) {
@@ -404,8 +408,8 @@ int Ladang::lahanColumnSize;
 Ladang::Ladang() : Grid<Tumbuhan*>(lahanRowSize, lahanColumnSize) {}
 
 Ladang::Ladang(Ladang& other) : Grid<Tumbuhan*>(other.numRows(), other.numCols()) {
-    for (size_t i = 0; i < other.numRows(); ++i) {
-        for (size_t j = 0; j < other.numCols(); ++j) {
+    for (int i = 0; i < other.numRows(); ++i) {
+        for (int j = 0; j < other.numCols(); ++j) {
             set(i, j, other.get(i, j));
         }
     }
@@ -415,8 +419,8 @@ Ladang& Ladang::operator=(const Ladang& other) {
     if (this == &other)
         return *this;
 
-    for (size_t i = 0; i < numRows(); ++i) {
-        for (size_t j = 0; j < numCols(); ++j) {
+    for (int i = 0; i < numRows(); ++i) {
+        for (int j = 0; j < numCols(); ++j) {
             Tumbuhan* tumbuhan = get(i, j);
             if (tumbuhan != nullptr) {
                 delete tumbuhan;
@@ -424,8 +428,8 @@ Ladang& Ladang::operator=(const Ladang& other) {
         }
     }
 
-    for (size_t i = 0; i < numRows(); ++i) {
-        for (size_t j = 0; j < numCols(); ++j) {
+    for (int i = 0; i < numRows(); ++i) {
+        for (int j = 0; j < numCols(); ++j) {
             auto it = other.data.find(calculateKey(i, j));
             set(i, j, it->second);
         }
@@ -434,8 +438,8 @@ Ladang& Ladang::operator=(const Ladang& other) {
 }
 
 Ladang::~Ladang() {
-    for (size_t i = 0; i < numRows(); ++i) {
-        for (size_t j = 0; j < numCols(); ++j) {
+    for (int i = 0; i < numRows(); ++i) {
+        for (int j = 0; j < numCols(); ++j) {
             Tumbuhan* tumbuhan = get(i, j);
             if (tumbuhan != nullptr) {
                 delete tumbuhan;
@@ -449,8 +453,8 @@ void Ladang::addItem(Tumbuhan* tumbuhan) {
         throw ladangFullException();
     }
 
-    for (size_t row = 0; row < this->numRows(); ++row) {
-        for (size_t col = 0; col < this->numCols(); ++col) {
+    for (int row = 0; row < this->numRows(); ++row) {
+        for (int col = 0; col < this->numCols(); ++col) {
             if (this->data[calculateKey(row, col)] == nullptr) {
                 set(row, col, tumbuhan);
                 return;
@@ -524,8 +528,8 @@ int Peternakan::peternakanColumnSize;
 Peternakan::Peternakan() : Grid<Hewan*>(peternakanRowSize, peternakanColumnSize) {}
 
 Peternakan::Peternakan(Peternakan& other) : Grid<Hewan*>(other.numRows(), other.numCols()) {
-    for (size_t i = 0; i < other.numRows(); ++i) {
-        for (size_t j = 0; j < other.numCols(); ++j) {
+    for (int i = 0; i < other.numRows(); ++i) {
+        for (int j = 0; j < other.numCols(); ++j) {
             set(i, j, other.get(i, j));
         }
     }
@@ -535,8 +539,8 @@ Peternakan& Peternakan::operator=(const Peternakan& other) {
     if (this == &other)
         return *this;
 
-    for (size_t i = 0; i < numRows(); ++i) {
-        for (size_t j = 0; j < numCols(); ++j) {
+    for (int i = 0; i < numRows(); ++i) {
+        for (int j = 0; j < numCols(); ++j) {
             Hewan* hewan = get(i, j);
             if (hewan != nullptr) {
                 delete hewan;
@@ -544,8 +548,8 @@ Peternakan& Peternakan::operator=(const Peternakan& other) {
         }
     }
 
-    for (size_t i = 0; i < numRows(); ++i) {
-        for (size_t j = 0; j < numCols(); ++j) {
+    for (int i = 0; i < numRows(); ++i) {
+        for (int j = 0; j < numCols(); ++j) {
             auto it = other.data.find(calculateKey(i, j));
             set(i, j, it->second);
         }
@@ -554,8 +558,8 @@ Peternakan& Peternakan::operator=(const Peternakan& other) {
 }
 
 Peternakan::~Peternakan() {
-    for (size_t i = 0; i < numRows(); ++i) {
-        for (size_t j = 0; j < numCols(); ++j) {
+    for (int i = 0; i < numRows(); ++i) {
+        for (int j = 0; j < numCols(); ++j) {
             Hewan* hewan = get(i, j);
             if (hewan != nullptr) {
                 delete hewan;
@@ -569,8 +573,8 @@ void Peternakan::addItem(Hewan* hewan) {
         throw peternakanFullException();
     }
 
-    for (size_t row = 0; row < this->numRows(); ++row) {
-        for (size_t col = 0; col < this->numCols(); ++col) {
+    for (int row = 0; row < this->numRows(); ++row) {
+        for (int col = 0; col < this->numCols(); ++col) {
             if (this->data[calculateKey(row, col)] == nullptr) {
                 set(row, col, hewan);
                 return;

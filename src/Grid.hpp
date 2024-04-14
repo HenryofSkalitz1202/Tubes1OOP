@@ -14,21 +14,21 @@ template <typename T>
 class Grid{
 protected:
   map<string, T> data; 
-  size_t rows;
-  size_t cols;
+  int rows;
+  int cols;
 
 public:
-  Grid(size_t rows, size_t cols);
+  Grid(int rows, int cols);
 
-  string calculateKey(size_t row, size_t col);
-  void set(size_t row, size_t col, T value);
+  string calculateKey(int row, int col);
+  void set(int row, int col, T value);
   void setWithKey(string key, T value);
   void setNull(string key);
 
-  T get(size_t row, size_t col);
+  T get(int row, int col);
   T get(string key);
-  size_t numRows();
-  size_t numCols();
+  int numRows();
+  int numCols();
   int countAvailableCapacity();
   int getTotalWorth();
 

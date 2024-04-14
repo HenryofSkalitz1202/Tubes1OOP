@@ -4,6 +4,18 @@
 
 using namespace std;
 
+Toko::Toko(){
+    for(auto& pair : Toko::catalogBangunan){
+        pair.second += 5;
+    }
+
+    for(auto& pair : Toko::catalogProduk){
+        pair.second += 5;
+    }
+
+    this->cheapestPrice = this->findCheapest();
+}
+
 Toko::~Toko(){}
 
 int Toko::getCheapest(){

@@ -8,10 +8,12 @@ using namespace std;
 
 class Toko{
 private:
-  ~Toko();
   int cheapestPrice;
 
 public:
+  Toko();
+  ~Toko();
+  
   static map<string, int> catalogPrice;
   static map<string, int> catalogBangunan;
   static map<string, int> catalogProduk;

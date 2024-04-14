@@ -22,6 +22,15 @@ Controller::Controller()
     this->current_player_index = 0;
     this->turn_number = 0;
     this->game_over = false;
+    Tumbuhan::current_turn = this->turn_number;
+
+    Petani *p1 = new Petani(1, "Petani1");
+    Peternak *p2 = new Peternak(2, "Peternak1");
+    Walikota *p3 = new Walikota(3, "Walikota1");
+    this->add_player(p1);
+    this->add_player(p2);
+    this->add_player(p3);
+    this->set_current_player(this->get_first_player());
 }
 
 Controller::~Controller()
@@ -431,6 +440,10 @@ void Controller::print_players()
     }
 }
 
+int Controller::getTurnNumber(){
+    return this->turn_number;
+}
+
 bool Controller::is_game_over()
 {
     return this->game_over;
@@ -447,17 +460,6 @@ void Controller::is_won()
             break;
         }
     }
-}
-
-void Controller::start_default()
-{
-    Petani* p1 = new Petani("Petani1", 50, 40);
-    Peternak* p2 = new Peternak("Peternak1", 50, 40);
-    Walikota* w1 = new Walikota("Walikota", 50, 40);
-    this->add_player(w1);
-    this->add_player(p1);
-    this->add_player(p2);
-    this->set_current_player(this->get_first_player());
 }
 
 bool Controller::is_petani(Pemain* player)
@@ -591,6 +593,8 @@ void Controller::next()
     this->current_player = this->players[this->current_player_index];
     this->turn_number++;
     Tumbuhan::current_turn++;
+
+    cout << "Giliran dilanjut ke " << this->current_player->getUsername() << endl;
 }
 
 void Controller::cetak_penyimpanan(Pemain* player){

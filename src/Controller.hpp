@@ -42,11 +42,13 @@ public:
     Pemain* get_first_player();
     void print_players();
 
+    int getTurnNumber();
+
     bool is_game_over();
     void is_won();
 
-    void start_default();
-    void start_load();
+    //void start_default();
+    //void start_load();
 
     bool is_petani(Pemain* player);
     bool is_peternak(Pemain* player);

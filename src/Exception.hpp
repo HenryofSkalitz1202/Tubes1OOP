@@ -308,7 +308,7 @@ public:
 class noTumbuhanAvailableException : public exception{
 public:
     const char* what() const noexcept override{
-        return "\033[1;31mYou don't have any Hewan on your inventory!\n\033[0m";
+        return "\033[1;31mYou don't have any Tumbuhan on your inventory!\n\033[0m";
     }
 };
 

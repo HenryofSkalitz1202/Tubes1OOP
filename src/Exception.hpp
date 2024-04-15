@@ -337,4 +337,16 @@ struct commandNotFoundException : public exception{
     }
 };
 
+struct playerTypeNotExistException : public exception{
+    const char* what() const throw(){
+        return "Tidak terdapat tipe pemain ";
+    }
+};
+
+struct walikotaAlreadyExistException : public exception{
+    const char* what() const throw(){
+        return "Walikota sudah ada!\n";
+    }
+};
+
 #endif

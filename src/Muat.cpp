@@ -10,6 +10,7 @@ void Muat::read() {
     file.ignore();
 
     string line;
+    bool walikota_exist = false;
 
     for (int i = 0; i < num_players; i++) {
         getline(file, line);
@@ -20,13 +21,30 @@ void Muat::read() {
 
         iss >> username >> type >> berat_badan >> uang;
 
-        if (type == "Petani") {
-            player = new Petani(username, berat_badan, uang);
-        } else if (type == "Peternak") {
-            player = new Peternak(username, berat_badan, uang);
-        } else if (type == "Walikota") {
-            player = new Walikota(username, berat_badan, uang);
+        try {
+            if (type == "Petani") {
+                player = new Petani(username, berat_badan, uang);
+            } else if (type == "Peternak") {
+                player = new Peternak(username, berat_badan, uang);
+            } else if (type == "Walikota") {
+                if (walikota_exist) {
+                    throw walikotaAlreadyExistException();
+                } else {
+                    walikota_exist = true;
+                    player = new Walikota(username, berat_badan, uang);
+                }
+            } else {
+                throw playerTypeNotExistException();
+            }
+
+        } catch (playerTypeNotExistException& e) {
+            cout << e.what() << type << "!" << endl;
+            return;
+        } catch (walikotaAlreadyExistException& e) {
+            cout << e.what();
+            return;
         }
+
 
         getline(file, line);
         int nInventory = stoi(line);

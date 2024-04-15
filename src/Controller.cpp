@@ -530,6 +530,40 @@ bool Controller::isValidCommand(string command, Pemain* player){
 }
 
 void Controller::readCommand(Pemain* player, Toko* store){
+    cout << CYAN << "========Available Command========" << NORMAL << endl;
+    if(dynamic_cast<Petani*>(player)){
+        cout << BLUE << "1. NEXT" << endl;
+        cout << "2. CETAK_PENYIMPANAN" << endl;
+        cout << "3. MAKAN" << endl;
+        cout << "4. CETAK_LADANG" << endl;
+        cout << "5. TANAM" << endl;
+        cout << "6. PANEN" << endl;
+        cout << "7. BELI" << endl;
+        cout << "8. JUAL" << endl;
+        cout << "9. SIMPAN" << NORMAL << endl;
+    }else if(dynamic_cast<Peternak*>(player)){
+        cout << BLUE << "1. NEXT" << endl;
+        cout << "2. CETAK_PENYIMPANAN" << endl;
+        cout << "3. MAKAN" << endl;
+        cout << "4. CETAK_PETERNAKAN" << endl;
+        cout << "5. TERNAK" << endl;
+        cout << "6. PANEN" << endl;
+        cout << "7. KASIH_MAKAN" << endl;
+        cout << "8. BELI" << endl;
+        cout << "9. JUAL" << endl;
+        cout << "10. SIMPAN" << NORMAL << endl;
+    }else if(dynamic_cast<Walikota*>(player)){
+        cout << BLUE << "1. NEXT" << endl;
+        cout << "2. CETAK_PENYIMPANAN" << endl;
+        cout << "3. MAKAN" << endl;
+        cout << "4. PUNGUT_PAJAK" << endl;
+        cout << "5. BANGUN" << endl;
+        cout << "6. BELI" << endl;
+        cout << "7. JUAL" << endl;
+        cout << "8. SIMPAN" << endl;
+        cout << "9. TAMBAH_PEMAIN" << NORMAL << endl;
+    }
+
     string command;
     bool validCommand = false;
     while(!validCommand){

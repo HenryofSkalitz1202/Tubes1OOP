@@ -197,7 +197,7 @@ int main(){
             cout << ANSI_COLOR_MAGENTA << "Cheapest: " << store->getCheapest() << ANSI_COLOR_RESET << endl;
 
             while(!mainPage.is_game_over()){
-                cout << ANSI_COLOR_CYAN << "Turn: " << mainPage.getTurnNumber() << ANSI_COLOR_RESET << endl; 
+                cout << ANSI_COLOR_CYAN << "\nTurn: " << mainPage.getTurnNumber() << ANSI_COLOR_RESET << endl; 
                 cout << ANSI_COLOR_MAGENTA << "Current player: " << mainPage.get_current_player()->getUsername() << ANSI_COLOR_RESET << endl;
                 mainPage.readCommand(mainPage.get_current_player(), store);
             }

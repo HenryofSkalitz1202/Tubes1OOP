@@ -1,4 +1,6 @@
 #include "Controller.hpp"
+#include "Muat.hpp"
+#include "Simpan.hpp"
 
 Controller::Controller()
 {
@@ -36,14 +38,14 @@ vector<string> Controller::stringToArraySpace(const string& input) {
 }
 
 void Controller::printVector(const vector<string>& vec) {
-    cout << "<";
+    std::cout << "<";
     for (size_t i = 0; i < vec.size(); ++i) {
-        cout << vec[i];
+        std::cout << vec[i];
         if (i < vec.size() - 1) {
-            cout << ", ";
+            std::cout << ", ";
         }
     }
-    cout << ">" << endl;
+    std::cout << ">" << endl;
 }
 
 void Controller::populateConfigProduk(string filePathProduk){
@@ -298,10 +300,40 @@ void Controller::is_won()
     {
         if (this->players[i]->getUang() >= Pemain::uangWin && this->players[i]->getBeratBadan() >= Pemain::beratWin)
         {
-            cout << this->players[i]->getUsername() << " wins!" << endl;
+            cout << "_________                                     __        .__          __  .__"<< endl <<                      
+"\\_   ___ \\  ____   ____    ________________ _/  |_ __ __|  | _____ _/  |_|__| ____   ____   ______" << endl <<
+"/    \\  \\/ /  _ \\ /    \\  / ___\\_  __ \\__  \\\\   __\\  |  \\  | \\__  \\\\   __\\  |/  _ \\ /    \\ /  ___/" << endl <<
+"\\     \\___(  <_> )   |  \\/ /_/  >  | \\// __ \\|  | |  |  /  |__/ __ \\|  | |  (  <_> )   |  \\___ \\" << endl <<
+" \\______  /\\____/|___|  /\\___  /|__|  (____  /__| |____/|____(____  /__| |__|\\____/|___|  /____  >" << endl <<
+"        \\/            \\//_____/            \\/                     \\/                    \\/     \\/" << endl;
+            cout << this->players[i]->getUsername() << " wins!" << endl << endl << "Thank you for playing!";
             this->game_over = true;
             break;
         }
+    }
+}
+
+void Controller::start_option()
+{
+    int option;
+
+    cout << "Choose an option to start the game" << endl;
+    cout << "1. Default" << endl;
+    cout << "2. Load" << endl;
+    
+    do {
+        cout << "Choose option: ";
+        cin >> option;
+        cin.ignore();
+    } while (option != 1 && option != 2);
+
+    if (option == 1) {
+        this->start_default();
+    } else if (option == 2) {
+        string filePathState;
+        cout << "Masukkan path file penyimpanan!" << endl;
+        cin >> filePathState;
+        this->muat(filePathState);
     }
 }
 
@@ -332,12 +364,86 @@ bool Controller::is_walikota(Pemain* player)
     return dynamic_cast<Walikota*>(player) != nullptr;
 }
 
+vector<Pemain*> Controller::getPlayers() {
+    return this->players;
+}
+
+Toko Controller::getToko() {
+    return this->toko;
+}
+
+int Controller::getTurnNumber() {
+    return this->turn_number;
+}
+
+void Controller::readCommand() {
+    cout << "Apa yang ingin kamu lakukan?" << endl;
+    string choice;
+    cin >> choice;
+    for (auto& x : choice) x = tolower(x); // mengubah string input menjadi lowercase untuk pengecekan
+    try {
+    if (choice.compare("next") == 0) {
+        this->next();
+    }
+    else if (choice.compare("cetak_penyimpanan") == 0) {
+        this->cetak_penyimpanan();
+    } 
+    else if (choice.compare("pungut_pajak") == 0) {
+        this->pungut_pajak();;
+    } 
+    else if (choice.compare("cetak_ladang") == 0) {
+        this->cetak_ladang();
+    } 
+    else if (choice.compare("cetak_peternakan") == 0) {
+        this->cetak_peternakan();
+    } 
+    else if (choice.compare("tanam") == 0) {
+        this->tanam();
+    } 
+    else if (choice.compare("ternak") == 0) {
+        this->ternak();
+    } 
+    else if (choice.compare("bangun") == 0) {
+        this->bangun();
+    } 
+    else if (choice.compare("makan") == 0) {
+        this->makan();
+    } 
+    else if (choice.compare("kasih_makan") == 0) {
+        this->kasih_makan();
+    } 
+    else if (choice.compare("beli") == 0) {
+        this->beli();
+    } 
+    else if (choice.compare("jual") == 0) {
+        this->jual();
+    } 
+    else if (choice.compare("panen") == 0) {
+        this->panen();
+    } 
+    else if (choice.compare("simpan") == 0) {
+        this->simpan();
+    } 
+    else if (choice.compare("tambah_pemain") == 0) {
+        this->tambah_pemain();
+    }
+    else throw commandNotFoundException();
+    }
+    catch (exception& e) {
+        throw e;
+    }
+}
+
 void Controller::next()
 {
     this->is_won();
-    this->current_player_index = (this->current_player_index + 1) % this->players.size();
-    this->current_player = this->players[this->current_player_index];
-    this->turn_number++;
+    if (!this->is_game_over()) {
+        std::cout << current_player->getUsername() << " mengakhiri gilirannya" << endl;
+        this->current_player_index = (this->current_player_index + 1) % this->players.size();
+        this->current_player = this->players[this->current_player_index];
+        this->turn_number++;
+        std::cout << "Giliran " << current_player->getUsername() << " untuk bermain" << endl;
+    }
 }
 
 void Controller::cetak_penyimpanan() {
@@ -516,19 +622,8 @@ void Controller::kasih_makan() {
         std::cout << e.what();
     } 
 }
-void Controller::beli() {
-    //TODO
-}
-
-void Controller::jual() {
-    //TODO
-}
 
 void Controller::panen() {
-    // TODO
-}
-
-void Controller::simpan() {
     // TODO
 }
 
@@ -590,4 +685,124 @@ void Controller::tambah_pemain() {
     catch (usernameNotUniqueException& e) {
         std::cout << e.what();
     }   
+}
+
+
+void Controller::beli() {
+    try {
+        toko.displayToko();
+        int uang = current_player->getUang();
+        int available_slot = current_player->getInventory().countAvailableCapacity();
+        cout << "Uang Anda: " << uang << endl;
+        cout << "Slot penyimpanan tersedia: " << available_slot << endl;
+
+        int pilihan, jumlah;
+        cout << "\nNomor barang yang ingin dibeli: ";
+        cin >> pilihan;
+        cout << "Kuantitas: ";
+        cin >> jumlah;
+
+        if (is_walikota(current_player) && pilihan <= toko.getJumlahBangunan()) {
+            // throw walikota cant buy
+        }
+
+        if (jumlah > current_player->getInventory().countAvailableCapacity()) {
+            throw NotEnoughInventoryException();
+        }
+
+        Asset* item = toko.beli(pilihan, jumlah, uang);
+        current_player->setUang(uang);
+
+        cout << "Selamat Anda berhasil membeli " << jumlah << " " << item->getNamaAsset() << ". Uang Anda tersisa " << uang << " gulden." << endl;
+        cout << "Pilih slot untuk menyimpan barang yang Anda beli!" << endl;
+        cetak_penyimpanan();
+        string str_petak, petak;
+        vector<string> v_petak;
+        cin >> str_petak;
+        stringstream ss(str_petak);
+        while(!ss.eof()) {
+            getline(ss, petak, ',');
+            if (petak[0] == ' ') {
+                petak.erase(petak.begin());
+            }
+            v_petak.push_back(petak);
+        }
+        if (v_petak.size() != jumlah) {
+            // throw invalid input
+        }
+        for (auto const& p: v_petak) {
+            current_player->addToInventory(item, petak);
+        }
+        cout << item->getNamaAsset() << " berhasil disimpan dalam penyimpanan!" << endl;
+    } catch (NotEnoughInventoryException& e) {
+        cout << e.what() << endl;
+    }
+}
+
+void Controller::jual() {
+    try {
+        string str_petak, petak;
+        vector<Asset*> itemJual;
+        if (current_player->getInventory().isEmpty()) {
+            throw inventoryEmptyException();
+        }
+        cout << "Berikut merupakan penyimpanan Anda" << endl;
+        cetak_penyimpanan();
+        cout << "Silahkan pilih petak yang ingin Anda jual!" << endl;
+        cout << "Petak: ";
+        cin >> str_petak;
+        stringstream ss(str_petak);
+        while (!ss.eof()) {
+            getline(ss, petak, ',');
+            if (petak[0] == ' ') {
+                petak.erase(petak.begin());
+            }
+            if (current_player->getFromInventory(petak)->getAssetType() == "BANGUNAN") {
+                if (is_petani(current_player) || is_peternak(current_player)) {
+                    // throw wrong player
+                }
+            }
+            itemJual.push_back(current_player->getFromInventory(petak));
+            //belum remove item
+        }
+        int hasilJual = toko.jual(itemJual);
+        current_player->setUang(current_player->getUang() + hasilJual);
+        cout << "Barang Anda berhasil dijual! Uang Anda bertambah " << hasilJual << " gulden!" << endl;
+    } catch (inventoryEmptyException& e) {
+        cout << e.what() << endl;
+    }
+}
+
+void Controller::muat(string filePathState)
+{
+    try {
+        ifstream fileState(filePathState);
+        if (!fileState) {
+            throw FilePathStateNotFoundException();
+        }
+
+        Muat Muat(filePathState, *this);
+        Muat.read();
+
+    } catch (FilePathStateNotFoundException& e) {
+        cout << e.what() << endl;
+    }
+}
+
+void Controller::simpan() {
+    string filepath;
+    cout << "Masukkan lokasi berkas state:";
+    cin >> filepath;
+    try {
+        ofstream SaveFile(filepath);
+        if (!SaveFile) {
+            throw SavePathNotFoundException();
+        }
+        SaveFile.close();
+        Simpan simpan(filepath, *this);
+        simpan.write();
+        cout << "State berhasil disimpan" << endl;
+    } catch (SavePathNotFoundException& e) {
+        cout << e.what() << endl;
+    }
 }

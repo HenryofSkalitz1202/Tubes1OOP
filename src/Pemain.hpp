@@ -26,11 +26,13 @@ public:
   void setUang(int uang);
   void setberatBadan(int beratBadan);
   void addToInventory(Asset* item);
+  void addToInventory(Asset* item, string loc);
 
   string getStatus() const;
   string getUsername() const;
-  int getUang() const;
+  int getUang() const ;
   int getBeratBadan() const;
+  Inventory getInventory();
   Asset* getFromInventory(string key);
 
   void printInventory();
@@ -55,6 +57,7 @@ public:
   void setStatus();
   void setPetaniID(int petaniID);
   int getPetaniID();
+  Ladang getLadang();
 
   void tanamTanaman();
   void panenTanaman();
@@ -106,6 +109,7 @@ public:
   void setStatus();
   void setPeternakID(int peternakID);
   int getPeternakID();
+  Peternakan getPeternakan();
 
   void taruhHewan();
   void beriMakan();

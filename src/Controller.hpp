@@ -9,24 +9,29 @@
 #include <sstream>
 #include <fstream>
 #include <stdexcept>
+#include "Exception.hpp"
+#include "input.cpp"
 #include "Pemain.hpp"
 #include "Hewan/Hewan.hpp"
 #include "Hewan/Carnivore.hpp"
 #include "Hewan/Herbivore.hpp"
 #include "Hewan/Omnivore.hpp"
 #include "Tumbuhan.hpp"
-#include "Exception.hpp"
-#include "input.cpp"
+#include "Toko.hpp"
+
 using namespace std;
+
+class Import;
 
 class Controller
 {
 private:
-    std::vector<Pemain*> players;
+    vector<Pemain*> players;
     size_t current_player_index;
     Pemain* current_player;
     int turn_number;
     bool game_over;
+    Toko toko;
 
 public:
     Controller();
@@ -53,13 +58,18 @@ public:
     bool is_game_over();
     void is_won();
 
+    void start_option();
     void start_default();
-    void start_load();
 
     bool is_petani(Pemain* player);
     bool is_peternak(Pemain* player);
     bool is_walikota(Pemain* player);
 
+    vector<Pemain*> getPlayers();
+    Toko getToko();
+    int getTurnNumber();
+
+    void readCommand();
     void next();
     void cetak_penyimpanan();
     void pungut_pajak();
@@ -73,9 +83,9 @@ public:
     void beli();
     void jual();
     void panen();
+    void muat(string filePathState);
     void simpan();
     void tambah_pemain();
-
 };
 
 #endif

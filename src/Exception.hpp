@@ -4,6 +4,12 @@
 #include <exception>
 using namespace std;
 
+struct FilePathStateNotFoundException : public exception{
+    const char* what() const throw(){
+        return "' is not found.";
+    }
+};
+
 struct FilePathProdukNotFoundException : public exception{
     const char* what() const throw(){
         return "' is not found.";
@@ -25,6 +31,12 @@ struct FilePathTumbuhanNotFoundException : public exception{
 struct FilePathBangunanNotFoundException : public exception{
     const char* what() const throw(){
         return "' is not found.";
+    }
+};
+
+struct SavePathNotFoundException : public exception{
+    const char* what() const throw(){
+        return "File path invalid.";
     }
 };
 
@@ -298,6 +310,30 @@ struct pemainFalseTypeException : public exception{
 struct usernameNotUniqueException : public exception{
     const char* what() const throw(){
         return "Username tersebut sudah digunakan pemain lain!\n";
+    }
+};
+
+class NotEnoughMoneyException : public exception{
+    public:
+        NotEnoughMoneyException(): exception() {}
+
+        const char* what() const throw(){
+            return "Uang tidak cukup.\n";
+        }
+};
+
+class NotEnoughInventoryException : public exception{
+    public:
+        NotEnoughInventoryException(): exception() {}
+
+        const char* what() const throw(){
+            return "Inventory tidak cukup.\n";
+        }
+};
+
+struct commandNotFoundException : public exception{
+    const char* what() const throw(){
+        return "Pilihan tidak ditemukan, coba periksa kembali!\n";
     }
 };
 

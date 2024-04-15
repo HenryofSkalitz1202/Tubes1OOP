@@ -390,13 +390,13 @@ void Inventory::rekapInventory() {
         }
     }
 
-    std::cout << "Inventory Summary:" << endl;
-    std::cout << "Bangunan: " << jumlahBangunan << endl;
-    std::cout << "ProductMaterial: " << jumlahProductMaterial << endl;
-    std::cout << "ProductFruit: " << jumlahProductFruit << endl;
-    std::cout << "ProductHewan: " << jumlahProductHewan << endl;
-    std::cout << "Hewan: " << jumlahHewan << endl;
-    std::cout << "Tumbuhan: " << jumlahTumbuhan << endl;
+    // std::cout << "Inventory Summary:" << endl;
+    // std::cout << "Bangunan: " << jumlahBangunan << endl;
+    // std::cout << "ProductMaterial: " << jumlahProductMaterial << endl;
+    // std::cout << "ProductFruit: " << jumlahProductFruit << endl;
+    // std::cout << "ProductHewan: " << jumlahProductHewan << endl;
+    // std::cout << "Hewan: " << jumlahHewan << endl;
+    // std::cout << "Tumbuhan: " << jumlahTumbuhan << endl;
 }
 
 void Inventory::print() {
@@ -493,24 +493,31 @@ void Ladang::addItemKey(Tumbuhan* tumbuhan, string loc) {
 }
 
 bool Ladang::isAvailablePanen(){
-    for(const auto& pair : this->data){
-        if(pair.second->isReadyToHarvest()){
-            return true;
+    for(int row = 0; row < this->numRows(); row++){
+        for(int col = 0; col < this->numCols(); col++){
+            if(this->get(row, col) != nullptr){
+                if(this->get(row, col)->isReadyToHarvest()){
+                    return true;
+                }
+            }
         }
     }
+
     return false;
 }
 
 map<string, int> Ladang::rekapLadang(){
     map<string, int> siapPanen;
     
-    for (const auto& pair : this->data) {
-        siapPanen[pair.second->getKodeHuruf()] = 0;
-    }
-
-    for (const auto& pair : this->data) {
-        if (pair.second->isReadyToHarvest()) {
-            siapPanen[pair.second->getKodeHuruf()]++;
+    for(int row = 0; row < this->numRows(); row++){
+        for(int col = 0; col < this->numCols(); col++){
+            if(this->get(row, col) != nullptr && this->get(row, col)->isReadyToHarvest()){
+                if(siapPanen.find(this->get(row, col)->getKodeHuruf()) != siapPanen.end()){
+                    siapPanen[this->get(row, col)->getKodeHuruf()]++;
+                }else{
+                    siapPanen.insert({this->get(row, col)->getKodeHuruf(), 1});
+                }
+            }
         }
     }
 

@@ -30,7 +30,7 @@ public:
 
 class FruitPlant :  public Tumbuhan{
 public:
-  FruitPlant(int TumbuhanID, string kodeHuruf, string namaTumbuhan, string type, int durationToHarvest, int price, int turn_instantiated);
+  FruitPlant(int TumbuhanID, string kodeHuruf, string namaTumbuhan, string type, int durationToHarvest, int price);
   ~FruitPlant();
   FruitPlant(FruitPlant& other);
   FruitPlant& operator=(const FruitPlant& other);
@@ -40,7 +40,7 @@ public:
 
 class MaterialPlant : public Tumbuhan{
 public:
-  MaterialPlant(int TumbuhanID, string kodeHuruf, string namaTumbuhan, string type, int durationToHarvest, int price, int turn_instantiated);
+  MaterialPlant(int TumbuhanID, string kodeHuruf, string namaTumbuhan, string type, int durationToHarvest, int price);
   ~MaterialPlant();
   MaterialPlant(MaterialPlant& other);
   MaterialPlant& operator=(const MaterialPlant& other);

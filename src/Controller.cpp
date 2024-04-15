@@ -255,10 +255,10 @@ void Controller::populateConfigTumbuhan(string filePathTumbuhan){
         Tumbuhan* tumbuhanPtr = nullptr;
         if(mp.find(str_arr[1]) == mp.end()){
             if(str_arr[3] == "MATERIAL_PLANT"){
-                tumbuhanPtr = new MaterialPlant(Controller::custom_stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], Controller::custom_stoi(str_arr[4]), Controller::custom_stoi(str_arr[5]), Tumbuhan::current_turn);
+                tumbuhanPtr = new MaterialPlant(Controller::custom_stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], Controller::custom_stoi(str_arr[4]), Controller::custom_stoi(str_arr[5]));
                 Produk::cekMaterialPlant.insert({str_arr[2], str_arr[1]});
             }else if(str_arr[3] == "FRUIT_PLANT"){
-                tumbuhanPtr = new FruitPlant(Controller::custom_stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], Controller::custom_stoi(str_arr[4]), Controller::custom_stoi(str_arr[5]), Tumbuhan::current_turn);
+                tumbuhanPtr = new FruitPlant(Controller::custom_stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], Controller::custom_stoi(str_arr[4]), Controller::custom_stoi(str_arr[5]));
                 Produk::cekFruitPlant.insert({str_arr[2], str_arr[1]});
             }else{
                 cout << "Type " << str_arr[3];

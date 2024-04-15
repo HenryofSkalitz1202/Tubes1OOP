@@ -8,7 +8,7 @@ class Omnivore : public Hewan{
     Omnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price);
     ~Omnivore();
     Omnivore& operator=(Omnivore& other);
-    void makan(Produk&);
+    void makan(Produk*&);
 };
 
 #endif

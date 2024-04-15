@@ -8,7 +8,7 @@ class Herbivore : public Hewan{
         Herbivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price);
         ~Herbivore();
         Herbivore& operator=(Herbivore& other);
-        void makan(Produk&);
+        void makan(Produk*&);
     };
 
 #endif

@@ -33,6 +33,7 @@ Bangunan& Bangunan::operator=(const Bangunan& other){
     this->setNamaAsset(other.namaAsset);
     this->setPrice(other.price);
     this->setListBahan(other.listBahan);
+    return *this;
 }
 
 void Bangunan::setAssetType(string assetType){

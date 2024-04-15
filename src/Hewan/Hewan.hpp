@@ -49,7 +49,7 @@ class Hewan: public Asset {
     int getPrice() const;
 
     bool isReadyToHarvest();
-    virtual void makan(Produk&) = 0; 
+    virtual void makan(Produk*&) = 0; 
     vector<Produk*> harvest();
 };
 

@@ -1,9 +1,12 @@
 #ifndef GRID_HPP
 #define GRID_HPP
 #include "Exception.hpp"
-#include "Tumbuhan.cpp"
-#include "Hewan/Hewan.cpp"
-#include "Bangunan.cpp"
+#include "Tumbuhan.hpp"
+#include "Hewan/Hewan.hpp"
+#include "Hewan/Carnivore.hpp"
+#include "Hewan/Herbivore.hpp"
+#include "Hewan/Omnivore.hpp"
+#include "Bangunan.hpp"
 #include <string>
 #include <vector>
 #include <map>

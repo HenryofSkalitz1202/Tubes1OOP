@@ -58,7 +58,7 @@ public:
     bool is_game_over();
     void is_won();
 
-    void start_option(string filePathState);
+    void start_option();
     void start_default();
 
     bool is_petani(Pemain* player);
@@ -69,6 +69,7 @@ public:
     Toko getToko();
     int getTurnNumber();
 
+    void readCommand();
     void next();
     void cetak_penyimpanan();
     void pungut_pajak();
@@ -85,7 +86,6 @@ public:
     void muat(string filePathState);
     void simpan();
     void tambah_pemain();
-
 };
 
 #endif

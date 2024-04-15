@@ -4,6 +4,8 @@
 using namespace std;
 
 //<---------------PRODUK----------------->
+map<string, Produk*> Produk::configProduk;
+Produk::Produk() {}
 void Produk::setAssetType(string assetType){
     try{
         if(assetType != "PRODUK"){
@@ -37,6 +39,26 @@ string Produk::getOrigin(){
 
 int Produk::getAddedWeight(){
     return this->addedWeight;
+}
+
+int Produk::getPrice()
+{
+    return 0;
+}
+
+bool Produk::isEdibleHerbivore()
+{
+    return false;
+}
+
+bool Produk::isEdibleCarnivore()
+{
+    return false;
+}
+
+bool Produk::isBuildable()
+{
+    return false;
 }
 
 //<---------------PRODUCT MATERIAL----------------->
@@ -85,6 +107,7 @@ ProductMaterial& ProductMaterial::operator=(const ProductMaterial& other){
     this->setOrigin(other.origin);
     this->setAddedWeight(other.addedWeight);
     this->setPrice(other.price);
+    return *this;
 }
 
 void ProductMaterial::printProduct(ProductMaterial p){
@@ -147,6 +170,7 @@ ProductFruit& ProductFruit::operator=(const ProductFruit& other){
     this->setOrigin(other.origin);
     this->setAddedWeight(other.addedWeight);
     this->setPrice(other.price);
+    return *this;
 }
 
 void ProductFruit::printProduct(ProductFruit p){
@@ -211,6 +235,7 @@ ProductHewan& ProductHewan::operator=(const ProductHewan& other){
     this->setOrigin(other.origin);
     this->setAddedWeight(other.addedWeight);
     this->setPrice(other.price);
+    return *this;
 }
 
 void ProductHewan::printProduct(ProductHewan p){

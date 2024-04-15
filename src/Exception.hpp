@@ -283,6 +283,36 @@ class InvalidPilihanBeliException : public exception{
         }
 };
 
+struct gameNotStartedException : public exception{
+    const char* what() const throw(){
+        return "Game sedang tidak berjalan!\n";
+    }
+};
+
+struct wrongPlayerTypeException : public exception{
+    const char* what() const throw(){
+        return "Kamu tidak bisa melakukan itu!\n";
+    }
+};
+
+struct notEnoughMoneyException : public exception{
+    const char* what() const throw(){
+        return "Uang tidak cukup!\n";
+    }
+};
+
+struct pemainFalseTypeException : public exception{
+    const char* what() const throw(){
+        return "Kamu hanya bisa menambahkan pemain dengan tipe \"peternak\" atau \"petani\"!\n";
+    }
+};
+
+struct usernameNotUniqueException : public exception{
+    const char* what() const throw(){
+        return "Username tersebut sudah digunakan pemain lain!\n";
+    }
+};
+
 class NotEnoughMoneyException : public exception{
     public:
         NotEnoughMoneyException(): exception() {}
@@ -299,6 +329,12 @@ class NotEnoughInventoryException : public exception{
         const char* what() const throw(){
             return "Inventory tidak cukup.\n";
         }
+};
+
+struct commandNotFoundException : public exception{
+    const char* what() const throw(){
+        return "Pilihan tidak ditemukan, coba periksa kembali!\n";
+    }
 };
 
 #endif

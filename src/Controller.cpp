@@ -6,7 +6,7 @@ Controller::Controller()
 {
     this->current_player_index = 0;
     this->turn_number = 0;
-    this->game_over = false;
+    this->game_over = true;
 }
 
 Controller::~Controller()
@@ -38,14 +38,14 @@ vector<string> Controller::stringToArraySpace(const string& input) {
 }
 
 void Controller::printVector(const vector<string>& vec) {
-    cout << "<";
+    std::cout << "<";
     for (size_t i = 0; i < vec.size(); ++i) {
-        cout << vec[i];
+        std::cout << vec[i];
         if (i < vec.size() - 1) {
-            cout << ", ";
+            std::cout << ", ";
         }
     }
-    cout << ">" << endl;
+    std::cout << ">" << endl;
 }
 
 void Controller::populateConfigProduk(string filePathProduk){
@@ -300,14 +300,20 @@ void Controller::is_won()
     {
         if (this->players[i]->getUang() >= Pemain::uangWin && this->players[i]->getBeratBadan() >= Pemain::beratWin)
         {
-            cout << this->players[i]->getUsername() << " wins!" << endl;
+            cout << "_________                                     __        .__          __  .__"<< endl <<                      
+"\\_   ___ \\  ____   ____    ________________ _/  |_ __ __|  | _____ _/  |_|__| ____   ____   ______" << endl <<
+"/    \\  \\/ /  _ \\ /    \\  / ___\\_  __ \\__  \\\\   __\\  |  \\  | \\__  \\\\   __\\  |/  _ \\ /    \\ /  ___/" << endl <<
+"\\     \\___(  <_> )   |  \\/ /_/  >  | \\// __ \\|  | |  |  /  |__/ __ \\|  | |  (  <_> )   |  \\___ \\" << endl <<
+" \\______  /\\____/|___|  /\\___  /|__|  (____  /__| |____/|____(____  /__| |__|\\____/|___|  /____  >" << endl <<
+"        \\/            \\//_____/            \\/                     \\/                    \\/     \\/" << endl;
+            cout << this->players[i]->getUsername() << " wins!" << endl << endl << "Thank you for playing!";
             this->game_over = true;
             break;
         }
     }
 }
 
-void Controller::start_option(string filePathState)
+void Controller::start_option()
 {
     int option;
 
@@ -324,6 +330,9 @@ void Controller::start_option(string filePathState)
     if (option == 1) {
         this->start_default();
     } else if (option == 2) {
+        string filePathState;
+        cout << "Masukkan path file penyimpanan!" << endl;
+        cin >> filePathState;
         this->muat(filePathState);
     }
 }
@@ -337,6 +346,7 @@ void Controller::start_default()
     this->add_player(p1);
     this->add_player(p2);
     this->set_current_player(this->get_first_player());
+    this->game_over = false;
 }
 
 bool Controller::is_petani(Pemain* player)
@@ -366,13 +376,317 @@ int Controller::getTurnNumber() {
     return this->turn_number;
 }
 
+void Controller::readCommand() {
+    cout << "Apa yang ingin kamu lakukan?" << endl;
+    string choice;
+    cin >> choice;
+    for (auto& x : choice) x = tolower(x); // mengubah string input menjadi lowercase untuk pengecekan
+    try {
+    if (choice.compare("next") == 0) {
+        this->next();
+    }
+    else if (choice.compare("cetak_penyimpanan") == 0) {
+        this->cetak_penyimpanan();
+    } 
+    else if (choice.compare("pungut_pajak") == 0) {
+        this->pungut_pajak();;
+    } 
+    else if (choice.compare("cetak_ladang") == 0) {
+        this->cetak_ladang();
+    } 
+    else if (choice.compare("cetak_peternakan") == 0) {
+        this->cetak_peternakan();
+    } 
+    else if (choice.compare("tanam") == 0) {
+        this->tanam();
+    } 
+    else if (choice.compare("ternak") == 0) {
+        this->ternak();
+    } 
+    else if (choice.compare("bangun") == 0) {
+        this->bangun();
+    } 
+    else if (choice.compare("makan") == 0) {
+        this->makan();
+    } 
+    else if (choice.compare("kasih_makan") == 0) {
+        this->kasih_makan();
+    } 
+    else if (choice.compare("beli") == 0) {
+        this->beli();
+    } 
+    else if (choice.compare("jual") == 0) {
+        this->jual();
+    } 
+    else if (choice.compare("panen") == 0) {
+        this->panen();
+    } 
+    else if (choice.compare("simpan") == 0) {
+        this->simpan();
+    } 
+    else if (choice.compare("tambah_pemain") == 0) {
+        this->tambah_pemain();
+    }
+    else throw commandNotFoundException();
+    }
+    catch (exception& e) {
+        throw e;
+    }
+}
+
 void Controller::next()
 {
     this->is_won();
-    this->current_player_index = (this->current_player_index + 1) % this->players.size();
-    this->current_player = this->players[this->current_player_index];
-    this->turn_number++;
+    if (!this->is_game_over()) {
+        std::cout << current_player->getUsername() << " mengakhiri gilirannya" << endl;
+        this->current_player_index = (this->current_player_index + 1) % this->players.size();
+        this->current_player = this->players[this->current_player_index];
+        this->turn_number++;
+        std::cout << "Giliran " << current_player->getUsername() << " untuk bermain" << endl;
+    }
 }
+
+void Controller::cetak_penyimpanan() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        current_player->printInventory();
+    }
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }
+}
+void Controller::pungut_pajak() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        if (!this->is_walikota(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        else {
+            Walikota temp;
+            temp = current_player;
+            temp.tagihPajak();
+        }
+    }
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }
+    catch (wrongPlayerTypeException& e) {
+        std::cout << e.what();
+    }
+}
+
+void Controller::cetak_ladang() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        if (!this->is_petani(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        else {
+            Petani temp;
+            temp = current_player;
+            temp.printLadang();
+        }
+    }
+    catch (wrongPlayerTypeException& e) {
+        std::cout << e.what();
+    }
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }
+}
+
+void Controller::cetak_peternakan() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        if (!this->is_peternak(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        else {
+            Peternak temp;
+            temp = current_player;
+            temp.printPeternakan();
+        }
+    }
+    catch (wrongPlayerTypeException& e) {
+        std::cout << e.what();
+    }
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }
+}
+
+void Controller::tanam() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        if (!this->is_petani(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        else {
+            Petani temp;
+            temp = current_player;
+            temp.tanamTanaman();
+        }
+    }
+    catch (wrongPlayerTypeException& e) {
+        std::cout << e.what();
+    }    
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }
+}
+
+void Controller::ternak() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }    
+        if (!this->is_petani(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        else {
+            Peternak temp;
+            temp = current_player;
+            temp.taruhHewan();
+        }
+    }
+    catch (wrongPlayerTypeException& e) {
+        std::cout << e.what();
+    }    
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }
+}
+
+void Controller::bangun() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        if (!this->is_walikota(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        else {
+            Walikota temp;
+            temp = current_player;
+            temp.bangunBangunan();
+        }
+    }
+    catch (wrongPlayerTypeException& e) {
+        std::cout << e.what();
+    }  
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }  
+}
+
+void Controller::makan() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        current_player->makan();
+    }
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }
+}
+
+void Controller::kasih_makan() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        if (!this->is_peternak(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        else {
+            Peternak temp;
+            temp = current_player;
+            temp.beriMakan();
+        }
+    }
+    catch (wrongPlayerTypeException& e) {
+        std::cout << e.what();
+    }   
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    } 
+}
+
+void Controller::panen() {
+    // TODO
+}
+
+void Controller::tambah_pemain() {
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        if (!this->is_walikota(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        if (current_player->getUang() < 50) {
+            throw notEnoughMoneyException();
+        }
+        string type;
+        string usn;
+        std::cout << "Masukkan jenis pemain: ";
+        std::cin >> type;
+        for (auto& x : type) x = tolower(x); // mengubah string input menjadi lowercase untuk pengecekan
+        if (type.compare("peternak") && type.compare("petani")) {
+            throw pemainFalseTypeException();
+        }
+        std::cout << "Masukkan nama pemain: ";
+        std::cin >> usn;
+        for (auto x : players) {
+            if (!usn.compare(x->getUsername())) {
+                throw usernameNotUniqueException();
+            }
+        }
+
+        Pemain* newPlayerPoint;
+        if (type.compare("peternak")==0) {
+            Peternak newPlayer(usn, 50, 0);
+            Pemain* newPlayerPoint = &newPlayer;
+        }
+        else {
+            Petani newPlayer(usn, 50, 0);
+            Pemain* newPlayerPoint = &newPlayer;
+        }
+        players.push_back(newPlayerPoint);
+        this->sort_players();
+        // update current index
+        if (current_player->getUsername().compare(usn) > 0) this->current_player_index  = (this->current_player_index + 1) % this->players.size();
+        std::cout << "Pemain ditambahkan!" << endl;
+        std::cout << "Selamat datang \"" << usn << "\" di kota ini!" << endl;
+    }
+    catch (wrongPlayerTypeException& e) {
+        std::cout << e.what();
+    }   
+    catch (gameNotStartedException& e) {
+        std::cout << e.what();
+    }   
+    catch (notEnoughMoneyException& e) {
+        std::cout << e.what();
+    }   
+    catch (pemainFalseTypeException& e) {
+        std::cout << e.what();
+    }   
+    catch (usernameNotUniqueException& e) {
+        std::cout << e.what();
+    }   
+}
+
 
 void Controller::beli() {
     try {

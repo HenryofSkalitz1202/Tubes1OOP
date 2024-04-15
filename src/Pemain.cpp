@@ -2,6 +2,8 @@
 
 int Pemain::uangWin;
 int Pemain::beratWin;
+int Pemain::defaultBerat;
+int Pemain::defaultUang;
 //<---------------PEMAIN----------------->
 Pemain::Pemain(){}
 
@@ -28,7 +30,8 @@ void Pemain::addToInventory(Asset* item, string loc) {
     this->inventory.addItemKey(item, loc);
 }
 
-string Pemain::getStatus(){
+
+string Pemain::getStatus() const {
     return this->status;
 }
 
@@ -36,11 +39,11 @@ string Pemain::getUsername() const{
     return this->username;
 }
 
-int Pemain::getUang(){
+int Pemain::getUang() const {
     return this->uang;
 }
 
-int Pemain::getBeratBadan(){
+int Pemain::getBeratBadan() const {
     return this->beratBadan;
 }
 
@@ -50,6 +53,13 @@ Inventory Pemain::getInventory() {
 
 Asset* Pemain::getFromInventory(string key){
     return this->inventory.get(key);
+}
+
+void Pemain::printInventory() {
+    this->inventory.print();
+}
+void Pemain::makan() {
+    //TODO
 }
 
 //<---------------PETANI----------------->
@@ -84,6 +94,15 @@ Petani& Petani::operator=(const Petani& other){
     this->uang = other.uang;
     this->beratBadan = other.beratBadan;
     this->status = other.status;
+    return *this;
+}
+
+Petani& Petani::operator=(const Pemain* other){
+    this->username = other->getUsername();
+    this->uang = other->getUang();
+    this->beratBadan = other->getBeratBadan();
+    this->status = other->getStatus();
+    return *this;
 }
 
 void Petani::setStatus(){
@@ -244,6 +263,10 @@ void Petani::beliBangunan(){
     //TO DO
 }
 
+void Petani::printLadang() {
+    this->inventory.print();
+}
+
 int Petani::getNetWorth(){
     return this->inventory.getTotalWorth() + this->ladang.getTotalWorth() + this->uang;
 }
@@ -296,6 +319,15 @@ Walikota& Walikota::operator=(const Walikota& other){
     this->uang = other.uang;
     this->beratBadan = other.beratBadan;
     this->status = other.status;
+    return *this;
+}
+
+Walikota& Walikota::operator=(const Pemain* other){
+    this->username = other->getUsername();
+    this->uang = other->getUang();
+    this->beratBadan = other->getBeratBadan();
+    this->status = other->getStatus();
+    return *this;
 }
 
 void Walikota::setStatus(){
@@ -332,6 +364,7 @@ int Walikota::getNetWorth(){
 
 int Walikota::countPajak(){
     //TO DO
+    return 0;
 }
 
 //<---------------PETERNAK----------------->
@@ -366,7 +399,17 @@ Peternak& Peternak::operator=(const Peternak& other){
     this->uang = other.uang;
     this->beratBadan = other.beratBadan;
     this->status = other.status;
+    return *this;
 }
+
+Peternak& Peternak::operator=(const Pemain* other){
+    this->username = other->getUsername();
+    this->uang = other->getUang();
+    this->beratBadan = other->getBeratBadan();
+    this->status = other->getStatus();
+    return *this;
+}
+
 
 void Peternak::setStatus(){
     this->status = "Peternak";
@@ -569,6 +612,10 @@ void Peternak::panenHewan(){
 
 void Peternak::beliBangunan(){
     //TO DO
+}
+
+void Peternak::printPeternakan() {
+    this->inventory.print();
 }
 
 int Peternak::getNetWorth(){

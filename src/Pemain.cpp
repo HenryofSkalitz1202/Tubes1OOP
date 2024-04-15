@@ -459,13 +459,13 @@ void Petani::panenTanaman(){
                 std::cin >> temp_key;
 
                 if(!this->ladang.isValidKey(temp_key)){
-                    std::cout << YELLOW << temp_key << " is invalid" << NORMAL << std::endl;
+                    std::cout << YELLOW << temp_key << " is invalid\n" << NORMAL << std::endl;
                 }else if(this->ladang.get(temp_key) == nullptr){
-                    std::cout << YELLOW << temp_key << " is empty" << NORMAL << std::endl;
+                    std::cout << YELLOW << temp_key << " is empty\n" << NORMAL << std::endl;
                 }else if(this->ladang.get(temp_key)->getKodeHuruf() != mapIdxKode[nomor_tanaman]){
-                    std::cout << YELLOW << temp_key << " doesn't contain " << mapIdxKode[nomor_tanaman] << "." << NORMAL << std::endl;
+                    std::cout << YELLOW << temp_key << " doesn't contain " << mapIdxKode[nomor_tanaman] << ".\n" << NORMAL << std::endl;
                 }else if(!this->ladang.get(temp_key)->isReadyToHarvest()){
-                    std::cout << YELLOW << mapIdxKode[nomor_tanaman] << " in " << temp_key << " is not ripe yet." << NORMAL << std::endl;
+                    std::cout << YELLOW << mapIdxKode[nomor_tanaman] << " in " << temp_key << " is not ripe yet.\n" << NORMAL << std::endl;
                 }else{
                     key_vec.push_back(temp_key);
                     validTempKey = true;
@@ -1188,49 +1188,80 @@ void Peternak::taruhHewan(){
         std::cout << "Pilih hewan dari penyimpanan" << std::endl;
         this->inventory.print();
 
-        string key_inv;
-        bool validInv = false;
-        while(!validInv){
-            std::cout << "Slot : ";
-            std::cin >> key_inv;
+        bool invalidSlotFound = true;
+        vector<string> slotTernak;
+        string slotTernakInput;
+        while(invalidSlotFound){
+            invalidSlotFound = false;
+            slotTernak.clear();
 
-            if(!this->inventory.isValidKey(key_inv)){
-                std::cout << key_inv << " is invalid" << std::endl;
-            }else if(this->getFromInventory(key_inv) == nullptr){
-                std::cout << key_inv << " is empty" << std::endl;
-            }else if(!dynamic_cast<Hewan*>(this->getFromInventory(key_inv))){
-                std::cout << "Object in " << key_inv << "is not of Hewan type" << std::endl;
-            }else{
-                validInv = true;
+            slotTernakInput = "";
+            cin.get();
+            std::cout << "Slot : ";
+            getline(cin, slotTernakInput);
+            slotTernak = Pemain::stringToArrayComma(slotTernakInput);
+
+            for(string kandang : slotTernak){
+                if(!this->inventory.isValidKey(kandang)){
+                    invalidSlotFound = true;
+                    std::cout << YELLOW << kandang << " is invalid" << std::endl;
+                    std::cout << "Press any key to continue..." << NORMAL << endl;
+                }else if(this->getFromInventory(kandang) == nullptr){
+                    invalidSlotFound = true;
+                    std::cout << YELLOW << kandang << " is empty" << std::endl;
+                    std::cout << "Press any key to continue..." << NORMAL << endl;
+                }else if(!dynamic_cast<Hewan*>(this->getFromInventory(kandang))){
+                    invalidSlotFound = true;
+                    std::cout << YELLOW << kandang << " doesn't contain Hewan" << std::endl;
+                    std::cout << "Press any key to continue..." << NORMAL << endl;
+                }
             }
         }
 
-        Hewan* hewan = dynamic_cast<Hewan*>(this->getFromInventory(key_inv));
+        vector<Hewan*> hewanTernak;
+        for(const string& key_inv : slotTernak){
+            if(dynamic_cast<Carnivore*>(this->getFromInventory(key_inv))){
+                Carnivore* hewan = new Carnivore(*dynamic_cast<Carnivore*>(this->getFromInventory(key_inv)));
+                hewanTernak.push_back(hewan);
+                std::cout << "Kamu memilih " << hewan->getNamaAsset() << " pada " << key_inv << std::endl;
+            }else if(dynamic_cast<Herbivore*>(this->getFromInventory(key_inv))){
+                Herbivore* hewan = new Herbivore(*dynamic_cast<Herbivore*>(this->getFromInventory(key_inv)));
+                hewanTernak.push_back(hewan);
+                std::cout << "Kamu memilih " << hewan->getNamaAsset() << " pada " << key_inv << std::endl;
+            }else if(dynamic_cast<Omnivore*>(this->getFromInventory(key_inv))){
+                Omnivore* hewan = new Omnivore(*dynamic_cast<Omnivore*>(this->getFromInventory(key_inv)));
+                hewanTernak.push_back(hewan);
+                std::cout << "Kamu memilih " << hewan->getNamaAsset() << " pada " << key_inv << std::endl;
+            }
 
-        std::cout << "Kamu memilih " << hewan->getNamaAsset() << std::endl;
+            this->inventory.setNull(key_inv);
+        }
+
         std::cout << "\nPilih petak peternakan yang akan ditinggali" << std::endl;
         this->peternakan.print();
 
-        string key_peternakan;
-        bool validPet = false;
-        while(!validPet){
-            std::cout << "Petak peternakan: ";
-            std::cin >> key_peternakan;
+        for(Hewan* hewan : hewanTernak){
+            string key_peternakan;
+            bool validPet = false;
+            while(!validPet){
+                std::cout << "Hewan: " << hewan->getNamaAsset() << endl;
+                std::cout << "Petak peternakan: ";
+                std::cin >> key_peternakan;
 
-            if(!this->inventory.isValidKey(key_peternakan)){
-                std::cout << key_peternakan << " is invalid" << std::endl;
-            }else if(this->peternakan.get(key_peternakan) != nullptr){
-                std::cout << key_peternakan << " is not vacant" << std::endl;
-            }else{
-                validPet = true;
+                if(!this->inventory.isValidKey(key_peternakan)){
+                    std::cout << YELLOW << key_peternakan << " is invalid\n" << NORMAL << std::endl;
+                }else if(this->peternakan.get(key_peternakan) != nullptr){
+                    std::cout << YELLOW << key_peternakan << " is not vacant\n" << NORMAL << std::endl;
+                }else{
+                    validPet = true;
+                }
             }
+
+            this->peternakan.setWithKey(key_peternakan, hewan);
+
+            std::cout << "\nDengan hati-hati, kamu meletakkan seekor " << hewan->getNamaAsset() << " di kandang." << std::endl;
+            std::cout << GREEN << hewan->getNamaAsset() << " telah menjadi peliharaanmu sekarang!\n" << NORMAL << endl;
         }
-
-        this->peternakan.setWithKey(key_peternakan, hewan);
-        this->inventory.setNull(key_inv);
-
-        std::cout << "\nDengan hati-hati, kamu meletakkan seekor " << hewan->getNamaAsset() << " di kandang." << std::endl;
-        std::cout << hewan->getNamaAsset() << " telah menjadi peliharaanmu sekarang!";
     }catch(inventoryEmptyException& e){
         std::cout << e.what();
     }catch(noHewanAvailableException& e){
@@ -1252,6 +1283,10 @@ void Peternak::beriMakan(){
             throw noFoodException();
         }
 
+        if(this->peternakan.isEmpty()){
+            throw peternakanEmptyException();
+        }
+
         this->peternakan.cekPeternakan();
 
         if(this->peternakan.hasCarnivore()){
@@ -1267,59 +1302,84 @@ void Peternak::beriMakan(){
                 }
             }
         }
-
-        if(this->peternakan.isEmpty()){
-            throw peternakanEmptyException();
-        }
-
+        
         std::cout << "Pilih petak kandang yang akan diberi makan" << std::endl;
         this->peternakan.print();
 
-        string key_peternakan;
-        bool validPet = false;
-        while(!validPet){
-            std::cout << "Petak peternakan: ";
-            std::cin >> key_peternakan;
+        bool invalidSlotFound = true;
+        vector<string> slotTernak;
+        string slotTernakInput;
+        while(invalidSlotFound){
+            invalidSlotFound = false;
+            slotTernak.clear();
 
-            if(!this->peternakan.isValidKey(key_peternakan)){
-                std::cout << key_peternakan << " is invalid" << std::endl;
-            }else if(this->peternakan.get(key_peternakan) == nullptr){
-                std::cout << key_peternakan << " is empty";
-            }else{
-                validPet = true;
+            slotTernakInput = "";
+            cin.get();
+            std::cout << "Petak peternakan: ";
+            getline(cin, slotTernakInput);
+            slotTernak = Pemain::stringToArrayComma(slotTernakInput);
+
+            for(string key_peternakan : slotTernak){
+                if(!this->peternakan.isValidKey(key_peternakan)){
+                    invalidSlotFound = true;
+                    std::cout << YELLOW << key_peternakan << " is invalid" << std::endl;
+                    std::cout << "Press any key to continue..." << NORMAL << endl;
+                }else if(this->peternakan.get(key_peternakan) == nullptr){
+                    invalidSlotFound = true;
+                    std::cout << YELLOW << key_peternakan << " is empty" << std::endl;
+                    std::cout << "Press any key to continue..." << NORMAL << endl;
+                }else if(!dynamic_cast<Hewan*>(this->peternakan.get(key_peternakan))){
+                    invalidSlotFound = true;
+                    std::cout << YELLOW << key_peternakan << " doesn't contain Hewan" << std::endl;
+                    std::cout << "Press any key to continue..." << NORMAL << endl;
+                }
             }
         }
 
-        std::cout << "Kamu memilih " << this->peternakan.get(key_peternakan)->getNamaAsset() << " untuk diberi makan." << std::endl;
+        std::cout << std::endl;
+        for(const string& slotHewan : slotTernak){
+            std::cout << "Kamu memilih " << this->peternakan.get(slotHewan)->getNamaAsset() << " pada " << slotHewan << " untuk diberi makan." << std::endl;
+        }
+
         std::cout << "Pilih pangan yang akan diberikan" << std::endl;
         this->inventory.print();
+        
+        for(const string& slotHewan : slotTernak){
+            string slotInv;
+            bool validInv = false;
+            while(!validInv){
+                std::cout << "Hewan: " << this->peternakan.get(slotHewan)->getNamaAsset() << endl;
+                std::cout << "Slot: ";
+                std::cin >> slotInv;
 
-        string slot;
-        bool validInv = false;
-        while(!validInv){
-            std::cout << "Slot: ";
-            std::cin >> slot;
+                if(!this->inventory.isValidKey(slotInv)){
+                    std::cout << YELLOW << slotInv << " is invalid" << NORMAL << std::endl;
+                }else if(this->getFromInventory(slotInv) == nullptr){
+                    std::cout << YELLOW << slotInv << " is empty" << NORMAL << std::endl;
+                }else if(!dynamic_cast<ProductFruit*>(this->getFromInventory(slotInv)) && !dynamic_cast<ProductHewan*>(this->getFromInventory(slotInv))){
+                    std::cout << YELLOW << this->getFromInventory(slotInv)->getNamaAsset() << " is inedible\n" << NORMAL << std::endl;
+                }else if(dynamic_cast<ProductFruit*>(this->getFromInventory(slotInv)) && dynamic_cast<Carnivore*>(this->peternakan.get(slotHewan))){
+                    std::cout << YELLOW << "You are feeding " << this->getFromInventory(slotInv)->getNamaAsset() << " to "<< this->peternakan.get(slotHewan)->getNamaAsset() << ". Carnivore can't eat ProductFruit.\n" << NORMAL << std::endl;
+                }else if(dynamic_cast<ProductHewan*>(this->getFromInventory(slotInv)) && dynamic_cast<Herbivore*>(this->peternakan.get(slotHewan))){
+                    std::cout << YELLOW << "You are feeding " << this->getFromInventory(slotInv)->getNamaAsset() << " to "<< this->peternakan.get(slotHewan)->getNamaAsset() << ". Herbivore can't eat ProductHewan.\n" << NORMAL << std::endl;
+                }else{
+                    validInv = true;
+                }
+            }
 
-            if(!this->inventory.isValidKey(slot)){
-                std::cout << slot << " is invalid" << std::endl;
-            }else if(this->getFromInventory(slot) == nullptr){
-                std::cout << slot << " is empty" << std::endl;
-            }else if(!dynamic_cast<ProductFruit*>(this->getFromInventory(slot)) && !dynamic_cast<ProductHewan*>(this->getFromInventory(slot))){
-                std::cout << this->getFromInventory(slot)->getNamaAsset() << " is inedible" << std::endl;
-            }else if(dynamic_cast<ProductFruit*>(this->getFromInventory(slot)) && dynamic_cast<Carnivore*>(this->peternakan.get(key_peternakan))){
-                std::cout << "You are feeding " << this->getFromInventory(slot)->getNamaAsset() << " to "<< this->peternakan.get(key_peternakan) << ". Carnivore can't eat ProductFruit." << std::endl;
-            }else if(dynamic_cast<ProductHewan*>(this->getFromInventory(slot)) && dynamic_cast<Herbivore*>(this->peternakan.get(key_peternakan))){
-                std::cout << "You are feeding " << this->getFromInventory(slot)->getNamaAsset() << " to "<< this->peternakan.get(key_peternakan) << ". Herbivore can't eat ProductHewan." << std::endl;
-            }else{
-                validInv = true;
+            //aterialPlant* tumbuhan = new MaterialPlant(*dynamic_cast<MaterialPlant*>(this->getFromInventory(key_inv)));
+            if(dynamic_cast<ProductFruit*>(this->getFromInventory(slotInv))){
+                ProductFruit* pakan = new ProductFruit(*dynamic_cast<ProductFruit*>(this->getFromInventory(slotInv)));
+                this->peternakan.get(slotHewan)->makan(pakan);
+                this->inventory.setNull(slotInv);
+                std::cout << this->peternakan.get(slotHewan)->getNamaAsset() << " sudah diberi makan dan " << GREEN << "beratnya menjadi " << this->peternakan.get(slotHewan)->getWeight() << "." << NORMAL << std::endl;
+            }else if(dynamic_cast<ProductHewan*>(this->getFromInventory(slotInv))){
+                ProductHewan* pakan = new ProductHewan(*dynamic_cast<ProductHewan*>(this->getFromInventory(slotInv)));
+                this->peternakan.get(slotHewan)->makan(pakan);
+                this->inventory.setNull(slotInv);
+                std::cout << this->peternakan.get(slotHewan)->getNamaAsset() << " sudah diberi makan dan " << GREEN << "beratnya menjadi " << this->peternakan.get(slotHewan)->getWeight() << "." << NORMAL << std::endl;
             }
         }
-
-        Produk* pakan = dynamic_cast<Produk*>(this->getFromInventory(slot));
-        this->peternakan.get(key_peternakan)->makan(pakan);
-        this->inventory.setNull(slot);
-
-        std::cout << this->peternakan.get(key_peternakan)->getNamaAsset() << " sudah diberi makan dan beratnya menjadi " << this->peternakan.get(key_peternakan)->getWeight() << "." << std::endl;
     }catch(inventoryEmptyException& e){
         std::cout << e.what();
     }catch(peternakanEmptyException& e){
@@ -1341,7 +1401,7 @@ void Peternak::panenHewan(){
             throw noneSiapPanenPeternakanException();
         }
 
-        if(!this->inventory.isFull()){
+        if(this->inventory.isFull()){
             throw inventoryFullException();
         }
 
@@ -1366,11 +1426,26 @@ void Peternak::panenHewan(){
         bool validNomorHewan = false;
         while(!validNomorHewan){
             nomor_hewan = 0;
+            std::string input;
             std::cout << "Nomor hewan yang ingin dipanen: ";
-            std::cin >> nomor_hewan;
+            std::cin >> input;
 
+            bool isNumeric = true;
+            for (char c : input) {
+                if (!std::isdigit(c)) {
+                    isNumeric = false;
+                    break;
+                }
+            }
+            if (!isNumeric) {
+                std::cout << YELLOW << "Input is not a valid number!\n" << NORMAL << std::endl;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                continue;
+            }
+
+            nomor_hewan = std::stoi(input);
             if(mapIdxKode.find(nomor_hewan) == mapIdxKode.end()){
-                std::cout << "Nomor hewan is invalid!\n" << std::endl;
+                std::cout << YELLOW << "Nomor hewan is invalid!\n" << NORMAL << std::endl;
             }else{
                 validNomorHewan = true;
             }
@@ -1388,15 +1463,30 @@ void Peternak::panenHewan(){
         bool validJumlahPetak = false;
         while(!validJumlahPetak){
             jumlah_petak = 0;
+            std::string input;
             std::cout << "\nJumlah petak yang ingin dipanen: ";
-            std::cin >> jumlah_petak;
+            std::cin >> input;
 
+            bool isNumeric = true;
+            for (char c : input) {
+                if (!std::isdigit(c)) {
+                    isNumeric = false;
+                    break;
+                }
+            }
+            if (!isNumeric) {
+                std::cout << YELLOW << "Input is not a valid number!\n" << NORMAL << std::endl;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                continue;
+            }
+
+            jumlah_petak = std::stoi(input);
             if(jumlah_petak <= 0){
-                std::cout << "Jumlah petak is invalid!\n";
+                std::cout << YELLOW << "Jumlah petak is invalid!\n" << NORMAL << endl;
             }else if(jumlah_petak > rekapPeternakan[mapIdxKode[nomor_hewan]]){
-                std::cout << "You are trying to harvest more than the amount of petak that is currently available to harvest!\n";
+                std::cout << YELLOW << "You are trying to harvest more than the amount of petak that is currently available to harvest!\n" << NORMAL << endl;
             }else if(this->inventory.countAvailableCapacity() < (jumlah_petak * produkHasil.size())){
-                std::cout << "Available inventory capacity is not enough!\n";
+                std::cout << YELLOW << "Available inventory capacity is not enough!\n" << NORMAL << endl;
             }else{
                 validJumlahPetak = true;
             }
@@ -1416,11 +1506,13 @@ void Peternak::panenHewan(){
                 std::cin >> temp_key;
 
                 if(!this->peternakan.isValidKey(temp_key)){
-                    std::cout << temp_key << " is invalid" << std::endl;
+                    std::cout << YELLOW << temp_key << " is invalid" << NORMAL << std::endl;
                 }else if(this->peternakan.get(temp_key) == nullptr){
-                    std::cout << temp_key << " is empty" << std::endl;
+                    std::cout << YELLOW << temp_key << " is empty" << NORMAL << std::endl;
                 }else if(this->peternakan.get(temp_key)->getKodeHuruf() != mapIdxKode[nomor_hewan]){
-                    std::cout << temp_key << " doesn't contain " << mapIdxKode[nomor_hewan] << "." << std::endl;
+                    std::cout << YELLOW << temp_key << " doesn't contain " << mapIdxKode[nomor_hewan] << "." << NORMAL << std::endl;
+                }else if(!this->peternakan.get(temp_key)->isReadyToHarvest()){
+                    std::cout << YELLOW << mapIdxKode[nomor_hewan] << " in " << temp_key << " is not ready yet.\n" << NORMAL << std::endl;
                 }else{
                     key_vec.push_back(temp_key);
                     validTempKey = true;
@@ -1443,7 +1535,7 @@ void Peternak::panenHewan(){
             this->peternakan.setNull(key);
         }
 
-        std::cout << jumlah_petak << " petak hewan " << mapIdxKode[nomor_hewan] << " pada petak " << str_key << " telah dipanen." << std::endl;
+        std::cout << GREEN << jumlah_petak << " petak hewan " << mapIdxKode[nomor_hewan] << " pada petak " << str_key << " telah dipanen." << NORMAL << std::endl;
     }catch(peternakanEmptyException& e){
         std::cout << e.what();
     }catch(noneSiapPanenPeternakanException& e){
@@ -1535,9 +1627,9 @@ void Peternak::beliAsset(Toko* store){
 
             nomorBarang = std::stoi(input);
             if(mapIdxKode.find(nomorBarang) == mapIdxKode.end() || nomorBarang <= 0){
-                std::cout << "Nomor barang is invalid!" << std::endl;
+                std::cout << "Nomor barang is invalid!\n" << std::endl;
             }else if(Toko::catalogPrice[mapIdxKode[nomorBarang]] > this->uang){
-                std::cout << YELLOW << "Barang is too expensive!" << NORMAL << std::endl;
+                std::cout << YELLOW << "Barang is too expensive!\n" << NORMAL << std::endl;
             }else{
                 validNomorBarang = true;
             }
@@ -1570,34 +1662,34 @@ void Peternak::beliAsset(Toko* store){
 
             kuantitas = std::stoi(input);
             if(kuantitas <= 0){
-                std::cout << "Kuantitas is invalid!" << std::endl;
+                std::cout << "Kuantitas is invalid!\n" << std::endl;
             }else if(kuantitas > this->inventory.countAvailableCapacity()){
-                cout << YELLOW << "Inventory capacity is not enough" << NORMAL << endl;
+                cout << YELLOW << "Inventory capacity is not enough\n" << NORMAL << endl;
             }else{
                 if(mapType[mapIdxKode[nomorBarang]] == "BANGUNAN"){
                     if(kuantitas > Toko::catalogBangunan[mapIdxKode[nomorBarang]]){
-                        std::cout << YELLOW << "There isn't enough stock of " << mapIdxKode[nomorBarang] << "!" << NORMAL << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << mapIdxKode[nomorBarang] << "!\n" << NORMAL << std::endl;
                     }else{
                         barang = Bangunan::resepBangunan[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
                     }
                 }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_MATERIAL_PLANT"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
-                        std::cout << YELLOW << "There isn't enough stock of " << mapIdxKode[nomorBarang] << "!" << NORMAL << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << mapIdxKode[nomorBarang] << "!\n" << NORMAL << std::endl;
                     }else{
                         barang = ProductMaterial::configProdukMaterial[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
                     }
                 }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_FRUIT_PLANT"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
-                        std::cout << YELLOW << "There isn't enough stock of " << ProductFruit::configProdukFruit[mapIdxKode[nomorBarang]]->getNamaAsset() << "!" << NORMAL << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << ProductFruit::configProdukFruit[mapIdxKode[nomorBarang]]->getNamaAsset() << "!\n" << NORMAL << std::endl;
                     }else{
                         barang = ProductFruit::configProdukFruit[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
                     }
                 }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_ANIMAL"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
-                        std::cout << YELLOW << "There isn't enough stock of " << ProductHewan::configProdukHewan[mapIdxKode[nomorBarang]]->getNamaAsset() << "!" << NORMAL << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << ProductHewan::configProdukHewan[mapIdxKode[nomorBarang]]->getNamaAsset() << "!\n" << NORMAL << std::endl;
                     }else{
                         barang = ProductHewan::configProdukHewan[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
@@ -1613,10 +1705,10 @@ void Peternak::beliAsset(Toko* store){
 
             if(kuantitasCukup){
                 if(this->uang >= kuantitas * Toko::catalogPrice[mapIdxKode[nomorBarang]]){
-                    std::cout << GREEN << "Selamat! Anda berhasil membeli " << kuantitas << barang->getNamaAsset() << NORMAL << std::endl;
+                    std::cout << GREEN << "Selamat! Anda berhasil membeli " << kuantitas << " " << barang->getNamaAsset() << NORMAL << std::endl;
                     validKuantitas = true;
                 }else{
-                    std::cout << YELLOW << "You don't have enough money to buy that much!" << NORMAL << std::endl;
+                    std::cout << YELLOW << "You don't have enough money to buy that much!\n" << NORMAL << std::endl;
                 }
             }
         }

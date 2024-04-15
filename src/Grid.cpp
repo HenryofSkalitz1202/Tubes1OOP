@@ -620,12 +620,15 @@ void Peternakan::addItemKey(Hewan* hewan, string loc) {
 }
 
 bool Peternakan::isAvailablePanen(){
-    for(const auto& pair : this->data){
-        if(pair.second->isReadyToHarvest()){
-            return true;
+    for(int row = 0; row < this->numRows(); row++){
+        for(int col = 0; col < this->numCols(); col++){
+            if(this->get(row, col) != nullptr){
+                if(this->get(row, col)->isReadyToHarvest()){
+                    return true;
+                }
+            }
         }
     }
-    return false;
 }
 
 bool Peternakan::hasCarnivore(){
@@ -663,16 +666,16 @@ void Peternakan::cekPeternakan(){
 
 std::map<std::string, int> Peternakan::rekapPeternakan() {
     std::map<std::string, int> siapPanen;
-
-    // Initialize count for all kodeHuruf
-    for (const auto& pair : this->data) {
-        siapPanen[pair.second->getKodeHuruf()] = 0;
-    }
-
-    // Update count for ready-to-harvest animals
-    for (const auto& pair : this->data) {
-        if (pair.second->isReadyToHarvest()) {
-            siapPanen[pair.second->getKodeHuruf()]++;
+    
+    for(int row = 0; row < this->numRows(); row++){
+        for(int col = 0; col < this->numCols(); col++){
+            if(this->get(row, col) != nullptr && this->get(row, col)->isReadyToHarvest()){
+                if(siapPanen.find(this->get(row, col)->getKodeHuruf()) != siapPanen.end()){
+                    siapPanen[this->get(row, col)->getKodeHuruf()]++;
+                }else{
+                    siapPanen.insert({this->get(row, col)->getKodeHuruf(), 1});
+                }
+            }
         }
     }
 

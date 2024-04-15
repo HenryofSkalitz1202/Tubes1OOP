@@ -50,10 +50,11 @@ int Hewan::getWeight(){
 }
 
 bool Hewan::isReadyToHarvest(){
-    if (this->weight == this->weightToHarvest){
+    if(this->weight >= this->weightToHarvest){
         return true;
+    }else{
+        return false;
     }
-    return false;
 }
 
 vector<Produk*> Hewan::harvest(){

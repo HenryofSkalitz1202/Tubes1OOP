@@ -569,7 +569,11 @@ void Controller::readCommand(Pemain* player, Toko* store){
     }else if(command == "JUAL"){
         this->jual(player);
     }else if(command == "PANEN"){
-        this->panen(dynamic_cast<Petani*>(player));
+        if(dynamic_cast<Petani*>(player)){
+            this->panen(dynamic_cast<Petani*>(player));
+        }else if(dynamic_cast<Peternak*>(player)){
+            this->panen(dynamic_cast<Peternak*>(player));
+        }
     }else if(command == "SIMPAN"){
         //this->simpan();
     }else if(command == "TAMBAH_PEMAIN"){
@@ -634,6 +638,10 @@ void Controller::jual(Pemain* player){
 
 void Controller::panen(Petani* petani){
     petani->panenTanaman();
+}
+
+void Controller::panen(Peternak* peternak){
+    peternak->panenHewan();
 }
 
 void Controller::tambah_pemain(Walikota* walikota){

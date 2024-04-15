@@ -4,10 +4,9 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include "Controller.hpp"
 
 using namespace std;
-
-class Controller;
 
 class Muat {
     private:
@@ -18,6 +17,7 @@ class Muat {
     Muat(string filepath, Controller& controller);
 
     void read();
+    Asset* getAsset(string name);
 };
 
 #endif

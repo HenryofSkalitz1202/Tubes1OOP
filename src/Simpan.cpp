@@ -31,17 +31,10 @@ void Simpan::write() {
             }
         }
     }
-    Toko toko = this->controller.getToko();
-    SaveFile << toko.getJumlahBangunan() + toko.getJumlahProduk() << endl;
-    for (auto const& x: Bangunan::resepBangunan) {
-        if (toko.getJumlah(x.first) > 0) {
-            SaveFile << x.first << " " << toko.getJumlah(x.first) << endl;
-        }
-    }
-    for (auto const& x: Produk::configProduk) {
-        if (toko.getJumlah(x.first) > 0) {
-            SaveFile << x.first << " " << toko.getJumlah(x.first) << endl;
-        }
+    map<string, int> tokoItems = controller.getListJumlahItemToko();
+    SaveFile << tokoItems.size() << endl;
+    for (auto const& x: tokoItems) {
+        SaveFile << x.first << " " << x.second << endl;
     }
     SaveFile.close();
 }
@@ -50,8 +43,8 @@ vector<string> Simpan::inventoryItems(Pemain* player) {
     vector<string> itemNames;
     for (size_t i=0; i<Inventory::inventoryRowSize; ++i) {
         for (size_t j=0; j<Inventory::inventoryColumnSize; ++j) {
-            if (player->getInventory().get(i, j) != nullptr) {
-                itemNames.push_back(player->getInventory().get(i, j)->getNamaAsset());
+            if (player->getFromInventory(i, j) != nullptr) {
+                itemNames.push_back(player->getFromInventory(i, j)->getNamaAsset());
             }
         }
     }
@@ -63,11 +56,12 @@ vector<string> Simpan::ladangItems(Petani* player) {
     string details;
     for (size_t i=0; i<Ladang::lahanRowSize; ++i) {
         for (size_t j=0; j<Ladang::lahanColumnSize; ++j) {
-            if (player->getLadang().get(i, j) != nullptr) {
+            string key = player->getLadang().calculateKey(i, j);
+            if (player->getFromLadang(key) != nullptr) {
                 details = "";
-                details += player->getLadang().calculateKey(i, j);
-                details += " " + player->getLadang().get(i, j)->getNamaAsset();
-                int umur = this->controller.getTurnNumber() - player->getLadang().get(i,j)->getTurnInstantiated();
+                details += key;
+                details += " " + player->getFromLadang(key)->getNamaAsset();
+                int umur = this->controller.getTurnNumber() - player->getFromLadang(key)->getTurnInstantiated();
                 details += " " + to_string(umur);
                 items.push_back(details);
             }
@@ -81,11 +75,12 @@ vector<string> Simpan::peternakanItems (Peternak* player) {
     string details;
     for (size_t i=0; i<Peternakan::peternakanRowSize; ++i) {
         for (size_t j=0; j<Peternakan::peternakanColumnSize; ++j) {
-            if (player->getPeternakan().get(i, j) != nullptr) {
+            string key = player->getPeternakan().calculateKey(i, j);
+            if (player->getFromPeternakan(key) != nullptr) {
                 details = "";
-                details += player->getPeternakan().calculateKey(i, j);
-                details += " " + player->getPeternakan().get(i, j)->getNamaAsset();
-                details += " " + to_string(player->getPeternakan().get(i, j)->getWeight());
+                details += key;
+                details += " " + player->getFromPeternakan(key)->getNamaAsset();
+                details += " " + to_string(player->getFromPeternakan(key)->getWeight());
                 items.push_back(details);
             }
         }

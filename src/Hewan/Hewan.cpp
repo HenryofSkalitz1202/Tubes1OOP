@@ -53,9 +53,7 @@ size_t Hewan::getWeightToHarvest() const{
 int Hewan::getWeight() const{
     return this->weight;
 }
-int Hewan::getPrice() const{
-    return this->price;
-}
+
 bool Hewan::isReadyToHarvest(){
     return (this->weightToHarvest == this->weight);
 }

@@ -68,10 +68,10 @@ void Controller::populateConfigProduk(string filePathProduk){
             mp_material.insert({str_arr[2], produkMaterialPtr});
         }else if(str_arr[3] == "PRODUCT_FRUIT_PLANT"){
             produkFruitPtr = new ProductFruit(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], std::stoi(str_arr[5]), std::stoi(str_arr[6]));
-            mp_fruit.insert({str_arr[1], produkFruitPtr});
+            mp_fruit.insert({str_arr[2], produkFruitPtr});
         }else if(str_arr[3] == "PRODUCT_ANIMAL"){
             produkHewanPtr = new ProductHewan(std::stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], std::stoi(str_arr[5]), std::stoi(str_arr[6]));
-            mp_hewan.insert({str_arr[1], produkHewanPtr});
+            mp_hewan.insert({str_arr[2], produkHewanPtr});
         }else{
             cout << "Type " << str_arr[3];
             throw UnknownProductTypeException();
@@ -131,7 +131,7 @@ void Controller::populateConfigHewan(string filePathHewan){
             cout << "Type " << str_arr[3];
             throw UnknownAnimalTypeException();
         }
-        mp.insert({str_arr[1], hewanPtr});
+        mp.insert({str_arr[2], hewanPtr});
     }
 
     Hewan::configHewan.clear(); // Clear the existing configProduk map if needed
@@ -163,7 +163,7 @@ void Controller::populateConfigTumbuhan(string filePathTumbuhan){
             cout << "Type " << str_arr[3];
             throw UnknownPlantTypeException();
         }
-        mp.insert({str_arr[1], tumbuhanPtr});
+        mp.insert({str_arr[2], tumbuhanPtr});
     }
 
     Tumbuhan::configTumbuhan.clear(); // Clear the existing configProduk map if needed
@@ -201,7 +201,7 @@ void Controller::populateConfigBangunan(string filePathBangunan){
             }
 
             bangunanPtr = new Bangunan(std::stoi(str_arr[0]), str_arr[1], str_arr[2], std::stoi(str_arr[3]), mp_bahan);
-            mp.insert({str_arr[1], bangunanPtr});
+            mp.insert({str_arr[2], bangunanPtr});
 
             std::cout << "ListBahan:" << std::endl;
             for (const auto& pair : mp_bahan) {
@@ -334,6 +334,8 @@ void Controller::start_option()
         cout << "Masukkan path file penyimpanan!" << endl;
         cin >> filePathState;
         this->muat(filePathState);
+        this->set_current_player(this->get_first_player());
+        this->game_over = false;
     }
 }
 
@@ -368,8 +370,12 @@ vector<Pemain*> Controller::getPlayers() {
     return this->players;
 }
 
-Toko Controller::getToko() {
-    return this->toko;
+map<string, int> Controller::getListJumlahItemToko() {
+    return this->toko.getListJumlahAsset();
+}
+
+void Controller::setJumlahItemToko(string itemName, int jumlah) {
+    this->toko.setJumlah(itemName, jumlah);
 }
 
 int Controller::getTurnNumber() {
@@ -550,7 +556,7 @@ void Controller::ternak() {
         if (this->is_game_over()) {
             throw gameNotStartedException();
         }    
-        if (!this->is_petani(current_player)) {
+        if (!this->is_peternak(current_player)) {
             throw wrongPlayerTypeException();
         }
         else {
@@ -690,86 +696,102 @@ void Controller::tambah_pemain() {
 
 void Controller::beli() {
     try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
         toko.displayToko();
         int uang = current_player->getUang();
-        int available_slot = current_player->getInventory().countAvailableCapacity();
-        cout << "Uang Anda: " << uang << endl;
-        cout << "Slot penyimpanan tersedia: " << available_slot << endl;
+        int available_slot = current_player->availableInventory();
+        std::cout << "Uang Anda: " << uang << endl;
+        std::cout << "Slot penyimpanan tersedia: " << available_slot << endl;
 
         int pilihan, jumlah;
-        cout << "\nNomor barang yang ingin dibeli: ";
+        std::cout << "\nNomor barang yang ingin dibeli: ";
         cin >> pilihan;
-        cout << "Kuantitas: ";
+        std::cout << "Kuantitas: ";
         cin >> jumlah;
 
         if (is_walikota(current_player) && pilihan <= toko.getJumlahBangunan()) {
-            // throw walikota cant buy
+            throw wrongPlayerTypeException();
         }
 
-        if (jumlah > current_player->getInventory().countAvailableCapacity()) {
+        if (jumlah > available_slot) {
             throw NotEnoughInventoryException();
         }
 
         Asset* item = toko.beli(pilihan, jumlah, uang);
         current_player->setUang(uang);
 
-        cout << "Selamat Anda berhasil membeli " << jumlah << " " << item->getNamaAsset() << ". Uang Anda tersisa " << uang << " gulden." << endl;
-        cout << "Pilih slot untuk menyimpan barang yang Anda beli!" << endl;
+        std::cout << "Selamat Anda berhasil membeli " << jumlah << " " << item->getNamaAsset() << ". Uang Anda tersisa " << current_player->getUang() << " gulden." << endl;
+        std::cout << "Pilih slot untuk menyimpan barang yang Anda beli!" << endl;
         cetak_penyimpanan();
-        string str_petak, petak;
-        vector<string> v_petak;
-        cin >> str_petak;
-        stringstream ss(str_petak);
-        while(!ss.eof()) {
-            getline(ss, petak, ',');
-            if (petak[0] == ' ') {
-                petak.erase(petak.begin());
+        string petak;
+        size_t pos = -1;
+        cout << "Petak: ";
+        for (int i=0; i<jumlah; i++) {
+            cin >> petak;
+            while ((pos = petak.rfind(','))!= std::string::npos) {
+                petak.erase(pos, 1);
             }
-            v_petak.push_back(petak);
-        }
-        if (v_petak.size() != jumlah) {
-            // throw invalid input
-        }
-        for (auto const& p: v_petak) {
             current_player->addToInventory(item, petak);
         }
-        cout << item->getNamaAsset() << " berhasil disimpan dalam penyimpanan!" << endl;
+
+        std::cout << item->getNamaAsset() << " berhasil disimpan dalam penyimpanan!" << endl;
     } catch (NotEnoughInventoryException& e) {
-        cout << e.what() << endl;
+        std::cout << e.what() << endl;
+    } catch (wrongPlayerTypeException& e) {
+        std::cout << e.what() << endl;
+    } catch (gameNotStartedException& e) {
+        std::cout << e.what() << endl;
     }
 }
 
 void Controller::jual() {
     try {
-        string str_petak, petak;
-        vector<Asset*> itemJual;
-        if (current_player->getInventory().isEmpty()) {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        int cap = Inventory::inventoryColumnSize*Inventory::inventoryRowSize;
+        if (current_player->availableInventory() == cap) {
             throw inventoryEmptyException();
         }
-        cout << "Berikut merupakan penyimpanan Anda" << endl;
+
+        std::cout << "Berikut merupakan penyimpanan Anda" << endl;
         cetak_penyimpanan();
-        cout << "Silahkan pilih petak yang ingin Anda jual!" << endl;
+
+        std::cout << "Berapa petak yang ingin Anda jual?" << endl;
+        std::cout << "Jumlah: ";
+        int jumlah;
+        cin >> jumlah;
+
+        std::cout << "Silahkan pilih petak yang ingin Anda jual!" << endl;
+        size_t pos = -1;
+        string petak;
+        vector<Asset*> itemJual;
         cout << "Petak: ";
-        cin >> str_petak;
-        stringstream ss(str_petak);
-        while (!ss.eof()) {
-            getline(ss, petak, ',');
-            if (petak[0] == ' ') {
-                petak.erase(petak.begin());
+        for (int i=0; i<jumlah; i++) {
+            cin >> petak;
+            while ((pos = petak.rfind(','))!= std::string::npos) {
+                petak.erase(pos, 1);
             }
             if (current_player->getFromInventory(petak)->getAssetType() == "BANGUNAN") {
                 if (is_petani(current_player) || is_peternak(current_player)) {
-                    // throw wrong player
+                    throw wrongPlayerTypeException();
                 }
             }
             itemJual.push_back(current_player->getFromInventory(petak));
-            //belum remove item
+            current_player->removeFromInventory(petak);
         }
+
         int hasilJual = toko.jual(itemJual);
         current_player->setUang(current_player->getUang() + hasilJual);
-        cout << "Barang Anda berhasil dijual! Uang Anda bertambah " << hasilJual << " gulden!" << endl;
+        std::cout << "Barang Anda berhasil dijual! Uang Anda bertambah " << hasilJual << " gulden!" << endl;
     } catch (inventoryEmptyException& e) {
-        cout << e.what() << endl;
+        std::cout << e.what() << endl;
+    } catch (wrongPlayerTypeException& e) {
+        std::cout << e.what() << endl;
+    } catch (gameNotStartedException& e) {
+        std::cout << e.what() << endl;
     }
 }
 

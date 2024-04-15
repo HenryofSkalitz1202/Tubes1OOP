@@ -24,8 +24,6 @@ class Toko {
         Asset* beli(int pilihan, int jumlah, int& uang);
         int jual(vector<Asset*> listItem);
 
-        Asset* getAsset(string name);
-
         void setJumlah(string, int);
 
         void addTersedia(Asset*);
@@ -33,6 +31,7 @@ class Toko {
 
         int getJumlahBangunan() const;
         int getJumlahProduk() const;
+        map<string, int> getListJumlahAsset();
         int getJumlah(string);
 
         void displayToko();

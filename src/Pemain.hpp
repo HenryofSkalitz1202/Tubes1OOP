@@ -34,6 +34,9 @@ public:
   int getBeratBadan() const;
   Inventory getInventory();
   Asset* getFromInventory(string key);
+  Asset* getFromInventory(size_t i, size_t j);
+  void removeFromInventory(string key);
+  int availableInventory();
 
   void printInventory();
   void makan();
@@ -58,6 +61,8 @@ public:
   void setPetaniID(int petaniID);
   int getPetaniID();
   Ladang getLadang();
+  Tumbuhan* getFromLadang(string key);
+  void addToLadang(Tumbuhan* tumbuhan, string loc);
 
   void tanamTanaman();
   void panenTanaman();
@@ -110,6 +115,8 @@ public:
   void setPeternakID(int peternakID);
   int getPeternakID();
   Peternakan getPeternakan();
+  Hewan* getFromPeternakan(string key);
+  void addToPeternakan(Hewan* hewan, string loc);
 
   void taruhHewan();
   void beriMakan();

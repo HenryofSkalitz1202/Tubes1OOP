@@ -1,7 +1,7 @@
 #include "Controller.hpp"
 
 int main() {
-    Controller test;
+    //Controller test;
     std::string filePathProduk = "produk.txt";
     std::string filePathHewan = "animal.txt";
     std::string filePathTumbuhan = "plant.txt";
@@ -15,7 +15,7 @@ int main() {
             throw FilePathProdukNotFoundException();
         }
 
-        test.populateConfigProduk(filePathProduk);
+        Controller::populateConfigProduk(filePathProduk);
         fileProduk.close();
 
         std::ifstream fileHewan(filePathHewan);
@@ -25,7 +25,7 @@ int main() {
         }
 
         cout << endl;
-        test.populateConfigHewan(filePathHewan);
+        Controller::populateConfigHewan(filePathHewan);
         fileHewan.close();
 
         std::ifstream fileTumbuhan(filePathTumbuhan);
@@ -35,19 +35,30 @@ int main() {
         }
 
         cout << endl;
-        test.populateConfigTumbuhan(filePathTumbuhan);
+        Controller::populateConfigTumbuhan(filePathTumbuhan);
         fileTumbuhan.close();
 
-        std::ifstream fileMisc(filePathMisc);
-        if (!fileMisc.is_open()) {
+        std::ifstream fileBangunan(filePathBangunan);
+        if (!fileBangunan.is_open()) {
             cout << "File config bangunan '" << filePathBangunan;
             throw FilePathBangunanNotFoundException();
         }
 
         cout << endl;
-        test.GameConfig(filePathMisc);
+        Controller::populateConfigBangunan(filePathBangunan);
+        fileBangunan.close();
+
+        std::ifstream fileMisc(filePathMisc);
+        if (!fileMisc.is_open()) {
+            cout << "File config misc '" << filePathMisc;
+            throw FilePathBangunanNotFoundException();
+        }
+
+        cout << endl;
+        Controller::GameConfig(filePathMisc);
         fileMisc.close();
 
+        Controller test;
         test.start_option();
         cout << "Giliran " << test.get_current_player()->getUsername() << " untuk bermain!" << endl;
         while (!test.is_game_over()) {

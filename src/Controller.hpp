@@ -66,7 +66,8 @@ public:
     bool is_walikota(Pemain* player);
 
     vector<Pemain*> getPlayers();
-    Toko getToko();
+    map<string, int> getListJumlahItemToko();
+    void setJumlahItemToko(string itemName, int jumlah);
     int getTurnNumber();
 
     void readCommand();

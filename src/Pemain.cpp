@@ -55,6 +55,18 @@ Asset* Pemain::getFromInventory(string key){
     return this->inventory.get(key);
 }
 
+Asset* Pemain::getFromInventory(size_t i, size_t j) {
+    return this->inventory.get(i, j);
+}
+
+void Pemain::removeFromInventory(string key) {
+    this->inventory.setNull(key);
+}
+
+int Pemain::availableInventory() {
+    return this->inventory.countAvailableCapacity();
+}
+
 void Pemain::printInventory() {
     this->inventory.print();
 }
@@ -121,6 +133,14 @@ int Petani::getPetaniID(){
 
 Ladang Petani::getLadang() {
     return this->ladang;
+}
+
+Tumbuhan* Petani::getFromLadang(string key) {
+    return this->ladang.get(key);
+}
+
+void Petani::addToLadang(Tumbuhan* tumbuhan, string loc) {
+    this->ladang.addItemKey(tumbuhan, loc);
 }
 
 void Petani::tanamTanaman(){
@@ -425,6 +445,14 @@ int Peternak::getPeternakID(){
 
 Peternakan Peternak::getPeternakan() {
     return this->peternakan;
+}
+
+Hewan* Peternak::getFromPeternakan(string key) {
+    return this->peternakan.get(key);
+}
+
+void Peternak::addToPeternakan(Hewan* hewan, string loc) {
+    this->peternakan.addItemKey(hewan, loc);
 }
 
 void Peternak::taruhHewan(){

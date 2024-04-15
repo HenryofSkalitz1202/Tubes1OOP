@@ -27,7 +27,6 @@ class Hewan: public Asset {
     string type;
     size_t weightToHarvest;
     int weight;
-    int price;
   public:
     static map<string, Hewan*> configHewan;
 
@@ -46,7 +45,6 @@ class Hewan: public Asset {
     string getType() const;
     size_t getWeightToHarvest() const;
     int getWeight() const;
-    int getPrice() const;
 
     bool isReadyToHarvest();
     virtual void makan(Produk*&) = 0; 

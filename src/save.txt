@@ -1,0 +1,13 @@
+4
+Bondowoso Walikota 0 0
+3
+SANDALWOOD_WOOD
+BANANA
+HOTEL
+Budi Peternak 0 0
+5
+COW
+COW_MEAT
+COW
+ALOE_TREE
+SMALL_HOUSE

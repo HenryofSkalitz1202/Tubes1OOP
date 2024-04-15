@@ -284,7 +284,7 @@ void Petani::beliBangunan(){
 }
 
 void Petani::printLadang() {
-    this->inventory.print();
+    this->ladang.print();
 }
 
 int Petani::getNetWorth(){
@@ -643,7 +643,7 @@ void Peternak::beliBangunan(){
 }
 
 void Peternak::printPeternakan() {
-    this->inventory.print();
+    this->peternakan.print();
 }
 
 int Peternak::getNetWorth(){

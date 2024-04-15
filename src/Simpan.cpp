@@ -1,5 +1,6 @@
 #include "Simpan.hpp"
 #include <sstream>
+#include <iomanip>
 
 Simpan::Simpan(string filepath, Controller& controller) : filepath(filepath), controller(controller) {}
 
@@ -56,7 +57,7 @@ vector<string> Simpan::ladangItems(Petani* player) {
     string details;
     for (size_t i=0; i<Ladang::lahanRowSize; ++i) {
         for (size_t j=0; j<Ladang::lahanColumnSize; ++j) {
-            string key = player->getLadang().calculateKey(i, j);
+            string key = calculateKey(i, j);
             if (player->getFromLadang(key) != nullptr) {
                 details = "";
                 details += key;
@@ -72,12 +73,11 @@ vector<string> Simpan::ladangItems(Petani* player) {
 
 vector<string> Simpan::peternakanItems (Peternak* player) {
     vector<string> items;
-    string details;
-    for (size_t i=0; i<Peternakan::peternakanRowSize; ++i) {
-        for (size_t j=0; j<Peternakan::peternakanColumnSize; ++j) {
-            string key = player->getPeternakan().calculateKey(i, j);
+    for (size_t i=0; i<Peternakan::peternakanRowSize; i++) {
+        for (size_t j=0; j<Peternakan::peternakanColumnSize; j++) {
+            string key = calculateKey(i, j);
             if (player->getFromPeternakan(key) != nullptr) {
-                details = "";
+                string details = "";
                 details += key;
                 details += " " + player->getFromPeternakan(key)->getNamaAsset();
                 details += " " + to_string(player->getFromPeternakan(key)->getWeight());
@@ -86,4 +86,16 @@ vector<string> Simpan::peternakanItems (Peternak* player) {
         }
     }
     return items;
+}
+
+string Simpan::calculateKey(size_t row, size_t col) {
+    std::ostringstream oss;
+    char key_alphabet = 'A' + col;
+    oss << std::setw(2) << std::setfill('0') << row + 1;
+    std::string final_key = key_alphabet + oss.str();
+
+    oss.str("");
+    oss.clear();
+
+    return final_key;
 }

@@ -15,6 +15,7 @@ class Simpan {
         vector<string> inventoryItems(Pemain* player);
         vector<string> ladangItems(Petani* player);
         vector<string> peternakanItems (Peternak* player);
+        string calculateKey(size_t row, size_t col);
 };
 
 #endif

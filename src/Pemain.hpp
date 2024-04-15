@@ -20,21 +20,7 @@ public:
   static int defaultBerat;
   static int defaultUang;
 
-  static vector<string> stringToArrayComma(const string& input){
-    auto isspace = [](int ch) {
-        return !std::isspace(ch);
-    };
-
-    std::vector<std::string> result;
-    std::istringstream iss(input);
-    std::string token;
-    while (std::getline(iss, token, ',')) {
-        token.erase(token.begin(), std::find_if(token.begin(), token.end(), isspace));
-        token.erase(std::find_if(token.rbegin(), token.rend(), isspace).base(), token.end());
-        result.push_back(token);
-    }
-    return result;
-  }
+  static vector<string> stringToArrayComma(const string& input);
 
   ~Pemain();
 

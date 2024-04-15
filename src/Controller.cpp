@@ -598,7 +598,7 @@ void Controller::next()
 }
 
 void Controller::cetak_penyimpanan(Pemain* player){
-    player->getInventory().print();
+    player->printInventory();
 }
 
 void Controller::pungut_pajak(Walikota* walikota){

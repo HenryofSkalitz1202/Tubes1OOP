@@ -1,11 +1,27 @@
 #include "Pemain.hpp"
 #include <iostream>
-
 using namespace std;
 
 int Pemain::uangWin;
 int Pemain::beratWin;
 //<---------------PEMAIN----------------->
+std::vector<std::string> Pemain::stringToArrayComma(const std::string& input) {
+    // Remove white spaces from the input string
+    std::string inputWithoutSpaces = input;
+    inputWithoutSpaces.erase(std::remove_if(inputWithoutSpaces.begin(), inputWithoutSpaces.end(), ::isspace), inputWithoutSpaces.end());
+
+    // Tokenize the modified string using commas as delimiters
+    std::vector<std::string> result;
+    std::stringstream ss(inputWithoutSpaces);
+    std::string token;
+    while (std::getline(ss, token, ',')) {
+        if (!token.empty()) {  // Check if token is not empty
+            result.push_back(token);
+        }
+    }
+    return result;
+}
+
 Pemain::~Pemain(){
 }
 
@@ -67,8 +83,9 @@ void Pemain::jualAsset(){
             invalidPetakFound = false;
 
             petakJualInput = "";
-            std::cout << "\nSilahkan pilih petak yang ingin Anda jual!\nPetak : " << std::endl;
-            cin >> petakJualInput;
+            std::cout << "\nSilahkan pilih petak yang ingin Anda jual!\nPetak : ";
+            cin.get();
+            getline(cin, petakJualInput);
             petakJual = Pemain::stringToArrayComma(petakJualInput);
 
             for (const std::string& petak : petakJual) {
@@ -82,25 +99,32 @@ void Pemain::jualAsset(){
             }
         }
 
+        int uangTambah = 0;
         for(const string& petak : petakJual){
             Asset* assetptr = this->inventory.get(petak);
             if(dynamic_cast<Hewan*>(assetptr) || dynamic_cast<Tumbuhan*>(assetptr)){
                 this->uang += assetptr->getPrice();
+                uangTambah += assetptr->getPrice();
                 this->inventory.setNull(petak);
             }else if(dynamic_cast<Bangunan*>(assetptr)){
                 Toko::catalogBangunan[assetptr->getNamaAsset()]++;
                 this->uang += assetptr->getPrice();
+                uangTambah += assetptr->getPrice();
                 this->inventory.setNull(petak);
             }else if(dynamic_cast<ProductMaterial*>(assetptr)){
                 Toko::catalogProduk[assetptr->getNamaAsset()]++;
                 this->uang += assetptr->getPrice();
+                uangTambah += assetptr->getPrice();
                 this->inventory.setNull(petak);
             }else if(dynamic_cast<ProductFruit*>(assetptr) || dynamic_cast<ProductHewan*>(assetptr)){
                 Toko::catalogProduk[assetptr->getKodeHuruf()]++;
                 this->uang += assetptr->getPrice();
+                uangTambah += assetptr->getPrice();
                 this->inventory.setNull(petak);
             }
         }
+
+        cout << "Barang Anda berhasil dijual! Uang Anda bertambah " << uangTambah << " gulden!" << endl;  
     }catch(inventoryEmptyException& e){
         std::cout << e.what();
     }
@@ -264,7 +288,7 @@ void Petani::tanamTanaman(){
         this->inventory.setNull(key_inv);
 
         std::cout << "\nCangkul, cangkul, cangkul yang dalam~!" << std::endl;
-        std::cout << tumbuhan->getNamaAsset() << " berhasil ditanam!";
+        std::cout << tumbuhan->getNamaAsset() << " berhasil ditanam!" << endl;
     }catch(inventoryEmptyException& e){
         std::cout << e.what();
     }catch(noTumbuhanAvailableException& e){
@@ -454,7 +478,7 @@ void Petani::beliAsset(Toko* store){
             if(mapIdxKode.find(nomorBarang) == mapIdxKode.end()){
                 std::cout << YELLOW << "Nomor barang is invalid!" << NORMAL << std::endl;
             }else if(Toko::catalogPrice[mapIdxKode[nomorBarang]] > this->uang){
-                std::cout << YELLOW << "Barang is too expensive!" << std::endl;
+                std::cout << YELLOW << "Barang is too expensive!" << NORMAL << std::endl;
             }else{
                 validNomorBarang = true;
             }
@@ -494,7 +518,7 @@ void Petani::beliAsset(Toko* store){
                         barang = ProductFruit::configProdukFruit[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
                     }
-                }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_HEWAN"){
+                }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_ANIMAL"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
                         std::cout << YELLOW << "There isn't enough stock of " << ProductHewan::configProdukHewan[mapIdxKode[nomorBarang]]->getNamaAsset() << "!" << NORMAL << std::endl;
                     }else{
@@ -507,21 +531,16 @@ void Petani::beliAsset(Toko* store){
                 }else if(mapType[mapIdxKode[nomorBarang]] == "TUMBUHAN"){
                     barang = Tumbuhan::configTumbuhan[mapIdxKode[nomorBarang]];
                     kuantitasCukup = true;
-                }else{
-                    cout << "bocor sini" << endl;
                 }
             }
 
-            cout << "Kuantitas cukup " << kuantitasCukup << endl; 
             if(kuantitasCukup){
                 if(this->uang >= kuantitas * Toko::catalogPrice[mapIdxKode[nomorBarang]]){
-                    std::cout << GREEN << "Selamat! Anda berhasil membeli " << kuantitas << barang->getNamaAsset() << NORMAL << std::endl;
+                    std::cout << GREEN << "Selamat! Anda berhasil membeli " << kuantitas << " " << barang->getNamaAsset() << NORMAL << std::endl;
                     validKuantitas = true;
                 }else{
                     std::cout << YELLOW << "You don't have enough money to buy that much!" << NORMAL << std::endl;
                 }
-            }else{
-                cout << "bocor di dieu" << endl;
             }
         }
 
@@ -533,27 +552,35 @@ void Petani::beliAsset(Toko* store){
         string petakBeliInput;
         while (invalidPetakFound){
             invalidPetakFound = false;
+            petakBeli.clear();
 
             petakBeliInput = "";
+            cin.get();
             std::cout << "Petak slot : ";
-            cin >> petakBeliInput;
+            getline(cin, petakBeliInput);
             petakBeli = Pemain::stringToArrayComma(petakBeliInput);
 
-            for (const std::string& petak : petakBeli) {
-                if (!this->inventory.isValidKey(petak)) {
-                    invalidPetakFound = true;
-                    std::cout << YELLOW << petak << " is invalid" << NORMAL << std::endl;
-                }else if(this->inventory.get(petak) != nullptr){
-                    invalidPetakFound = true;
-                    std::cout << YELLOW << petak << " is not available" << NORMAL << std::endl;
+            if (petakBeli.size() == kuantitas){
+                for (string petak : petakBeli){
+                    if (!this->inventory.isValidKey(petak)) {
+                        invalidPetakFound = true;
+                        std::cout << YELLOW << petak << " is invalid" << std::endl;
+                        std::cout << "Press any key to continue..." << NORMAL << endl;
+                    }else if(this->inventory.get(petak) != nullptr){
+                        invalidPetakFound = true;
+                        std::cout << YELLOW << petak << " is not available" << std::endl;
+                        std::cout << "Press any key to continue..." << NORMAL << endl;
+                    }
                 }
+            }else{
+                invalidPetakFound = true;
+                std::cout << YELLOW << "You are trying to buy " << kuantitas << " assets, but input " << petakBeli.size() << " slots" << endl;
+                std::cout << "Please input " << kuantitas << " slots" << endl;
+                std::cout << "Press any key to continue..." << NORMAL << endl;
             }
         }
 
         for(const string& petak : petakBeli){
-            cout << "petak: " << petak << endl;
-            cout << "length: " << petakBeli.size() << endl;
-            cout << "barang: " << barang->getKodeHuruf() << " " << barang->getNamaAsset() << endl;
             this->inventory.setWithKey(petak, barang);
             this->uang -= barang->getPrice();
             if(dynamic_cast<Bangunan*>(barang)){
@@ -847,7 +874,7 @@ void Walikota::beliAsset(Toko* store){
 
             petakBeliInput = "";
             std::cout << "Petak slot : ";
-            cin >> petakBeliInput;
+            getline(cin, petakBeliInput);
             petakBeli = Pemain::stringToArrayComma(petakBeliInput);
 
             for (const std::string& petak : petakBeli) {
@@ -1393,7 +1420,7 @@ void Peternak::beliAsset(Toko* store){
 
             petakBeliInput = "";
             std::cout << "Petak slot : ";
-            cin >> petakBeliInput;
+            getline(cin, petakBeliInput);
             petakBeli = Pemain::stringToArrayComma(petakBeliInput);
 
             for (const std::string& petak : petakBeli) {

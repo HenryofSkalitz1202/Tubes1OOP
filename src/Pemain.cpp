@@ -1,5 +1,6 @@
 #include "Pemain.hpp"
 #include <iostream>
+#include <cctype>
 using namespace std;
 
 int Pemain::uangWin;
@@ -83,18 +84,20 @@ void Pemain::jualAsset(){
             invalidPetakFound = false;
 
             petakJualInput = "";
-            std::cout << "\nSilahkan pilih petak yang ingin Anda jual!\nPetak : ";
             cin.get();
+            std::cout << "\nSilahkan pilih petak yang ingin Anda jual!\nPetak : ";
             getline(cin, petakJualInput);
             petakJual = Pemain::stringToArrayComma(petakJualInput);
 
             for (const std::string& petak : petakJual) {
                 if (!this->inventory.isValidKey(petak)) {
                     invalidPetakFound = true;
-                    std::cout << petak << " is invalid" << std::endl;
+                    std::cout << YELLOW << petak << " is invalid" << std::endl;
+                    std::cout << "Press any key to continue..." << NORMAL << endl;
                 }else if(this->inventory.get(petak) == nullptr){
                     invalidPetakFound = true;
-                    std::cout << petak << " is empty" << std::endl;
+                    std::cout << YELLOW << petak << " is empty" << std::endl;
+                    std::cout << "Press any key to continue..." << NORMAL << endl;
                 }
             }
         }
@@ -470,16 +473,31 @@ void Petani::beliAsset(Toko* store){
 
         int nomorBarang;
         bool validNomorBarang = false;
-        while(!validNomorBarang){
+        while (!validNomorBarang) {
             nomorBarang = 0;
+            std::string input;
             std::cout << "Barang ingin dibeli: ";
-            cin >> nomorBarang;
+            std::cin >> input;
 
-            if(mapIdxKode.find(nomorBarang) == mapIdxKode.end()){
-                std::cout << YELLOW << "Nomor barang is invalid!" << NORMAL << std::endl;
-            }else if(Toko::catalogPrice[mapIdxKode[nomorBarang]] > this->uang){
-                std::cout << YELLOW << "Barang is too expensive!" << NORMAL << std::endl;
-            }else{
+            bool isNumeric = true;
+            for (char c : input) {
+                if (!std::isdigit(c)) {
+                    isNumeric = false;
+                    break;
+                }
+            }
+            if (!isNumeric) {
+                std::cout << YELLOW << "Input is not a valid number!\n" << NORMAL << std::endl;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                continue;
+            }
+
+            nomorBarang = std::stoi(input);
+            if (mapIdxKode.find(nomorBarang) == mapIdxKode.end() || nomorBarang <= 0) {
+                std::cout << YELLOW << "Nomor barang is invalid!\n" << NORMAL << std::endl;
+            } else if (Toko::catalogPrice[mapIdxKode[nomorBarang]] > this->uang) {
+                std::cout << YELLOW << "Barang is too expensive!\n" << NORMAL << std::endl;
+            } else {
                 validNomorBarang = true;
             }
         }
@@ -487,40 +505,58 @@ void Petani::beliAsset(Toko* store){
         int kuantitas;
         Asset* barang;
         bool validKuantitas = false;
-        bool kuantitasCukup = false;
+        bool kuantitasCukup;
         while(!validKuantitas){
             kuantitas = 0;
+            kuantitasCukup = false;
             barang = nullptr;
+            std::string input;
             std::cout << "Kuantitas: ";
-            cin >> kuantitas;
+            std::cin >> input;
 
+            bool isNumeric = true;
+            for (char c : input) {
+                if (!std::isdigit(c)) {
+                    isNumeric = false;
+                    break;
+                }
+            }
+            if (!isNumeric) {
+                std::cout << YELLOW << "Input is not a valid number!\n" << NORMAL << std::endl;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                continue;
+            }
+
+            kuantitas = std::stoi(input);
             if(kuantitas <= 0){
-                std::cout << YELLOW << "Kuantitas is invalid!" << NORMAL << std::endl;
+                std::cout << YELLOW << "Kuantitas is invalid!\n" << NORMAL << std::endl;
+            }else if(kuantitas > this->inventory.countAvailableCapacity()){
+                cout << YELLOW << "Inventory capacity is not enough" << NORMAL << endl;
             }else{
                 if(mapType[mapIdxKode[nomorBarang]] == "BANGUNAN"){
                     if(kuantitas > Toko::catalogBangunan[mapIdxKode[nomorBarang]]){
-                        std::cout << YELLOW << "There isn't enough stock of " << mapIdxKode[nomorBarang] << "!" << NORMAL << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << mapIdxKode[nomorBarang] << "!\n" << NORMAL << std::endl;
                     }else{
                         barang = Bangunan::resepBangunan[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
                     }
                 }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_MATERIAL_PLANT"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
-                        std::cout << YELLOW << "There isn't enough stock of " << mapIdxKode[nomorBarang] << "!" << NORMAL << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << mapIdxKode[nomorBarang] << "!\n" << NORMAL << std::endl;
                     }else{
                         barang = ProductMaterial::configProdukMaterial[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
                     }
                 }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_FRUIT_PLANT"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
-                        std::cout << YELLOW << "There isn't enough stock of " << ProductFruit::configProdukFruit[mapIdxKode[nomorBarang]]->getNamaAsset() << "!" << NORMAL << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << ProductFruit::configProdukFruit[mapIdxKode[nomorBarang]]->getNamaAsset() << "!\n" << NORMAL << std::endl;
                     }else{
                         barang = ProductFruit::configProdukFruit[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
                     }
                 }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_ANIMAL"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
-                        std::cout << YELLOW << "There isn't enough stock of " << ProductHewan::configProdukHewan[mapIdxKode[nomorBarang]]->getNamaAsset() << "!" << NORMAL << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << ProductHewan::configProdukHewan[mapIdxKode[nomorBarang]]->getNamaAsset() << "!\n" << NORMAL << std::endl;
                     }else{
                         barang = ProductHewan::configProdukHewan[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
@@ -539,7 +575,7 @@ void Petani::beliAsset(Toko* store){
                     std::cout << GREEN << "Selamat! Anda berhasil membeli " << kuantitas << " " << barang->getNamaAsset() << NORMAL << std::endl;
                     validKuantitas = true;
                 }else{
-                    std::cout << YELLOW << "You don't have enough money to buy that much!" << NORMAL << std::endl;
+                    std::cout << YELLOW << "You don't have enough money to buy that much!\n" << NORMAL << std::endl;
                 }
             }
         }
@@ -800,10 +836,25 @@ void Walikota::beliAsset(Toko* store){
         bool validNomorBarang = false;
         while(!validNomorBarang){
             nomorBarang = 0;
+            string input;
             std::cout << "Barang ingin dibeli: ";
-            cin >> nomorBarang;
+            cin >> input;
 
-            if(mapIdxKode.find(nomorBarang) == mapIdxKode.end()){
+            bool isNumeric = true;
+            for (char c : input) {
+                if (!std::isdigit(c)) {
+                    isNumeric = false;
+                    break;
+                }
+            }
+            if (!isNumeric) {
+                std::cout << YELLOW << "Input is not a valid number!\n" << NORMAL << std::endl;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                continue;
+            }
+
+            nomorBarang = std::stoi(input);
+            if(mapIdxKode.find(nomorBarang) == mapIdxKode.end() || nomorBarang <= 0){
                 std::cout << YELLOW << "Nomor barang is invalid!" << NORMAL << std::endl;
             }else if(Toko::catalogPrice[mapIdxKode[nomorBarang]] > this->uang){
                 std::cout << YELLOW << "Barang is too expensive!" << NORMAL << std::endl;
@@ -815,15 +866,33 @@ void Walikota::beliAsset(Toko* store){
         int kuantitas;
         Asset* barang;
         bool validKuantitas = false;
-        bool kuantitasCukup = false;
+        bool kuantitasCukup;
         while(!validKuantitas){
             kuantitas = 0;
+            kuantitasCukup = false;
             barang = nullptr;
+            std::string input;
             std::cout << "Kuantitas: ";
-            cin >> kuantitas;
+            std::cin >> input;
 
-            if(kuantitas <= 0 || kuantitas > this->inventory.countAvailableCapacity()){
+            bool isNumeric = true;
+            for (char c : input) {
+                if (!std::isdigit(c)) {
+                    isNumeric = false;
+                    break;
+                }
+            }
+            if (!isNumeric) {
+                std::cout << YELLOW << "Input is not a valid number!\n" << NORMAL << std::endl;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                continue;
+            }
+
+            kuantitas = std::stoi(input);
+            if(kuantitas <= 0){
                 std::cout << YELLOW <<  "Kuantitas is invalid!" << NORMAL << std::endl;
+            }else if(kuantitas > this->inventory.countAvailableCapacity()){
+                cout << YELLOW << "Inventory capacity is not enough" << NORMAL << endl;
             }else{
                 if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_MATERIAL_PLANT"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
@@ -1347,10 +1416,25 @@ void Peternak::beliAsset(Toko* store){
         bool validNomorBarang = false;
         while(!validNomorBarang){
             nomorBarang = 0;
+            string input;
             std::cout << "Barang ingin dibeli: ";
-            cin >> nomorBarang;
+            cin >> input;
 
-            if(mapIdxKode.find(nomorBarang) == mapIdxKode.end()){
+            bool isNumeric = true;
+            for (char c : input) {
+                if (!std::isdigit(c)) {
+                    isNumeric = false;
+                    break;
+                }
+            }
+            if (!isNumeric) {
+                std::cout << YELLOW << "Input is not a valid number!\n" << NORMAL << std::endl;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                continue;
+            }
+
+            nomorBarang = std::stoi(input);
+            if(mapIdxKode.find(nomorBarang) == mapIdxKode.end() || nomorBarang <= 0){
                 std::cout << "Nomor barang is invalid!" << std::endl;
             }else if(Toko::catalogPrice[mapIdxKode[nomorBarang]] > this->uang){
                 std::cout << YELLOW << "Barang is too expensive!" << NORMAL << std::endl;
@@ -1362,15 +1446,33 @@ void Peternak::beliAsset(Toko* store){
         int kuantitas;
         Asset* barang;
         bool validKuantitas = false;
-        bool kuantitasCukup = false;
+        bool kuantitasCukup;
         while(!validKuantitas){
             kuantitas = 0;
+            kuantitasCukup = false;
             barang = nullptr;
+            string input;
             std::cout << "Kuantitas: ";
-            cin >> kuantitas;
+            cin >> input;
 
+            bool isNumeric = true;
+            for (char c : input) {
+                if (!std::isdigit(c)) {
+                    isNumeric = false;
+                    break;
+                }
+            }
+            if (!isNumeric) {
+                std::cout << YELLOW << "Input is not a valid number!\n" << NORMAL << std::endl;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                continue;
+            }
+
+            kuantitas = std::stoi(input);
             if(kuantitas <= 0){
                 std::cout << "Kuantitas is invalid!" << std::endl;
+            }else if(kuantitas > this->inventory.countAvailableCapacity()){
+                cout << YELLOW << "Inventory capacity is not enough" << NORMAL << endl;
             }else{
                 if(mapType[mapIdxKode[nomorBarang]] == "BANGUNAN"){
                     if(kuantitas > Toko::catalogBangunan[mapIdxKode[nomorBarang]]){

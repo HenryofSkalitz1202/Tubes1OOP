@@ -185,6 +185,27 @@ bool Grid<T>::isFull(){
 
 template<typename T>
 bool Grid<T>::isValidKey(string key){
+    if(key.size() != 3){
+        return false;
+    }
+
+    char colIdentifier = key[0];
+    char alphabetUpperBound = 'A' + (this->numCols() - 1);
+    if(!std::isupper(colIdentifier)) {
+        return false;
+    }else if(colIdentifier > alphabetUpperBound || colIdentifier < 'A'){
+        return false;
+    }
+
+    if(!isdigit(key[1]) || !isdigit(key[2])){
+        return false;
+    }
+
+    string rowIdentifier = key.substr(1, 2);
+    if(std::stoi(rowIdentifier) > this->numRows() || std::stoi(rowIdentifier) <= 0){
+        return false;
+    }
+
     return this->data.find(key) != this->data.end();
 }
 //<---------------INVENTORY----------------->

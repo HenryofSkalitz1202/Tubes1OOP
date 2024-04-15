@@ -201,6 +201,8 @@ int main(){
                 cout << ANSI_COLOR_MAGENTA << "Current player: " << mainPage.get_current_player()->getUsername() << ANSI_COLOR_RESET << endl;
                 mainPage.readCommand(mainPage.get_current_player(), store);
             }
+
+            cout << "Selamat kamu menang!" << endl;
         }else if(gameMode == "2"){
             //COMING SOON
         }

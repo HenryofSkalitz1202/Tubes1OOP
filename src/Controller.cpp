@@ -549,40 +549,31 @@ void Controller::readCommand(Pemain* player, Toko* store){
     }else if(command == "CETAK_PENYIMPANAN"){
         this->cetak_penyimpanan(player);
     }else if(command == "PUNGUT_PAJAK"){
-        Walikota* walikota = dynamic_cast<Walikota*>(player);
-        walikota->pungutPajak(Controller::players);
+        this->pungut_pajak(dynamic_cast<Walikota*>(player));
     }else if(command == "CETAK_LADANG"){
-        Petani* petani = dynamic_cast<Petani*>(player);
-        petani->getLadang().print();
+        this->cetak_ladang(dynamic_cast<Petani*>(player));
     }else if(command == "CETAK_PETERNAKAN"){
-        Peternak* peternak = dynamic_cast<Peternak*>(player);
-        peternak->getPeternakan().print();
+        this->cetak_peternakan(dynamic_cast<Peternak*>(player));
     }else if(command == "TANAM"){
-        Petani* petani = dynamic_cast<Petani*>(player);
-        petani->tanamTanaman();
+        this->tanam(dynamic_cast<Petani*>(player));
     }else if(command == "TERNAK"){
-        Peternak* peternak = dynamic_cast<Peternak*>(player);
-        peternak->taruhHewan();
+        this->ternak(dynamic_cast<Peternak*>(player));
     }else if(command == "BANGUN"){
-        Walikota* walikota = dynamic_cast<Walikota*>(player);
-        walikota->bangunBangunan();
+        this->bangun(dynamic_cast<Walikota*>(player));
     }else if(command == "MAKAN"){
         this->makan(player);
     }else if(command == "KASIH_MAKAN"){
-        Peternak* peternak = dynamic_cast<Peternak*>(player);
-        peternak->beriMakan();
+        this->kasih_makan(dynamic_cast<Peternak*>(player));
     }else if(command == "BELI"){
         this->beli(player, store);
     }else if(command == "JUAL"){
         this->jual(player);
     }else if(command == "PANEN"){
-        Petani* petani = dynamic_cast<Petani*>(player);
-        petani->panenTanaman();
+        this->panen(dynamic_cast<Petani*>(player));
     }else if(command == "SIMPAN"){
         //this->simpan();
     }else if(command == "TAMBAH_PEMAIN"){
-        Walikota* walikota = dynamic_cast<Walikota*>(player);
-        walikota->tambahAkun(Controller::players);
+        this->tambah_pemain(dynamic_cast<Walikota*>(player));
     }
 }
 

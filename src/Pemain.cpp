@@ -804,7 +804,9 @@ void Walikota::beliAsset(Toko* store){
             cin >> nomorBarang;
 
             if(mapIdxKode.find(nomorBarang) == mapIdxKode.end()){
-                std::cout << "Nomor barang is invalid!" << std::endl;
+                std::cout << YELLOW << "Nomor barang is invalid!" << NORMAL << std::endl;
+            }else if(Toko::catalogPrice[mapIdxKode[nomorBarang]] > this->uang){
+                std::cout << YELLOW << "Barang is too expensive!" << NORMAL << std::endl;
             }else{
                 validNomorBarang = true;
             }
@@ -821,25 +823,25 @@ void Walikota::beliAsset(Toko* store){
             cin >> kuantitas;
 
             if(kuantitas <= 0 || kuantitas > this->inventory.countAvailableCapacity()){
-                std::cout << "Kuantitas is invalid!" << std::endl;
+                std::cout << YELLOW <<  "Kuantitas is invalid!" << NORMAL << std::endl;
             }else{
                 if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_MATERIAL_PLANT"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
-                        std::cout << "There isn't enough stock of " << mapIdxKode[nomorBarang] << "!" << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << mapIdxKode[nomorBarang] << "!" << NORMAL << std::endl;
                     }else{
                         barang = ProductMaterial::configProdukMaterial[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
                     }
                 }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_FRUIT_PLANT"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
-                        std::cout << "There isn't enough stock of " << ProductFruit::configProdukFruit[mapIdxKode[nomorBarang]]->getNamaAsset() << "!" << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << ProductFruit::configProdukFruit[mapIdxKode[nomorBarang]]->getNamaAsset() << "!" << NORMAL << std::endl;
                     }else{
                         barang = ProductFruit::configProdukFruit[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
                     }
-                }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_HEWAN"){
+                }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_ANIMAL"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
-                        std::cout << "There isn't enough stock of " << ProductHewan::configProdukHewan[mapIdxKode[nomorBarang]]->getNamaAsset() << "!" << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << ProductHewan::configProdukHewan[mapIdxKode[nomorBarang]]->getNamaAsset() << "!" << NORMAL << std::endl;
                     }else{
                         barang = ProductHewan::configProdukHewan[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
@@ -855,10 +857,10 @@ void Walikota::beliAsset(Toko* store){
 
             if(kuantitasCukup){
                 if(this->uang >= kuantitas * Toko::catalogPrice[mapIdxKode[nomorBarang]]){
-                    std::cout << "Selamat! Anda berhasil membeli " << kuantitas << barang->getNamaAsset() << std::endl;
+                    std::cout << GREEN << "Selamat! Anda berhasil membeli " << kuantitas << barang->getNamaAsset() << NORMAL << std::endl;
                     validKuantitas = true;
                 }else{
-                    std::cout << "You don't have enough money to buy that much!" << std::endl;
+                    std::cout << YELLOW << "You don't have enough money to buy that much!" << NORMAL << std::endl;
                 }
             }
         }
@@ -871,25 +873,37 @@ void Walikota::beliAsset(Toko* store){
         string petakBeliInput;
         while (invalidPetakFound){
             invalidPetakFound = false;
+            petakBeli.clear();
 
             petakBeliInput = "";
+            cin.get();
             std::cout << "Petak slot : ";
             getline(cin, petakBeliInput);
             petakBeli = Pemain::stringToArrayComma(petakBeliInput);
 
-            for (const std::string& petak : petakBeli) {
-                if (!this->inventory.isValidKey(petak)) {
-                    invalidPetakFound = true;
-                    std::cout << petak << " is invalid" << std::endl;
-                }else if(this->inventory.get(petak) != nullptr){
-                    invalidPetakFound = true;
-                    std::cout << petak << " is not available" << std::endl;
+            if(petakBeli.size() == kuantitas){
+                for (const std::string& petak : petakBeli) {
+                    if (!this->inventory.isValidKey(petak)) {
+                        invalidPetakFound = true;
+                        std::cout << YELLOW <<  petak << " is invalid" << std::endl;
+                        std::cout << "Press any key to continue..." << NORMAL << endl;
+                    }else if(this->inventory.get(petak) != nullptr){
+                        invalidPetakFound = true;
+                        std::cout << YELLOW << petak << " is not available" << std::endl;
+                        std::cout << "Press any key to continue..." << NORMAL << endl;
+                    }
                 }
+            }else{
+                invalidPetakFound = true;
+                std::cout << YELLOW << "You are trying to buy " << kuantitas << " assets, but input " << petakBeli.size() << " slots" << endl;
+                std::cout << "Please input " << kuantitas << " slots" << endl;
+                std::cout << "Press any key to continue..." << NORMAL << endl;
             }
         }
 
         for(const string& petak : petakBeli){
             this->inventory.setWithKey(petak, barang);
+            this->uang -= barang->getPrice();
 
             if(dynamic_cast<ProductMaterial*>(barang)){
                 Toko::catalogProduk[barang->getNamaAsset()]--;
@@ -898,7 +912,7 @@ void Walikota::beliAsset(Toko* store){
             }
         }
 
-        std::cout << barang->getNamaAsset() << " berhasil disimpan dalam penyimpanan!" << std::endl;
+        std::cout << GREEN << barang->getNamaAsset() << " berhasil disimpan dalam penyimpanan!" << std::endl;
     }catch(uangInsufficientException& e){
         std::cout << e.what();
     }catch(inventoryFullException& e){
@@ -1338,6 +1352,8 @@ void Peternak::beliAsset(Toko* store){
 
             if(mapIdxKode.find(nomorBarang) == mapIdxKode.end()){
                 std::cout << "Nomor barang is invalid!" << std::endl;
+            }else if(Toko::catalogPrice[mapIdxKode[nomorBarang]] > this->uang){
+                std::cout << YELLOW << "Barang is too expensive!" << NORMAL << std::endl;
             }else{
                 validNomorBarang = true;
             }
@@ -1358,28 +1374,28 @@ void Peternak::beliAsset(Toko* store){
             }else{
                 if(mapType[mapIdxKode[nomorBarang]] == "BANGUNAN"){
                     if(kuantitas > Toko::catalogBangunan[mapIdxKode[nomorBarang]]){
-                        std::cout << "There isn't enough stock of " << mapIdxKode[nomorBarang] << "!" << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << mapIdxKode[nomorBarang] << "!" << NORMAL << std::endl;
                     }else{
                         barang = Bangunan::resepBangunan[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
                     }
                 }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_MATERIAL_PLANT"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
-                        std::cout << "There isn't enough stock of " << mapIdxKode[nomorBarang] << "!" << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << mapIdxKode[nomorBarang] << "!" << NORMAL << std::endl;
                     }else{
                         barang = ProductMaterial::configProdukMaterial[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
                     }
                 }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_FRUIT_PLANT"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
-                        std::cout << "There isn't enough stock of " << ProductFruit::configProdukFruit[mapIdxKode[nomorBarang]]->getNamaAsset() << "!" << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << ProductFruit::configProdukFruit[mapIdxKode[nomorBarang]]->getNamaAsset() << "!" << NORMAL << std::endl;
                     }else{
                         barang = ProductFruit::configProdukFruit[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
                     }
-                }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_HEWAN"){
+                }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_ANIMAL"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
-                        std::cout << "There isn't enough stock of " << ProductHewan::configProdukHewan[mapIdxKode[nomorBarang]]->getNamaAsset() << "!" << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << ProductHewan::configProdukHewan[mapIdxKode[nomorBarang]]->getNamaAsset() << "!" << NORMAL << std::endl;
                     }else{
                         barang = ProductHewan::configProdukHewan[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
@@ -1390,22 +1406,16 @@ void Peternak::beliAsset(Toko* store){
                 }else if(mapType[mapIdxKode[nomorBarang]] == "TUMBUHAN"){
                     barang = Tumbuhan::configTumbuhan[mapIdxKode[nomorBarang]];
                     kuantitasCukup = true;
-                }else{
-                    cout << "bocor sini" << endl;
                 }
             }
 
-            cout << "Kuantitas cukup " << kuantitasCukup << endl;
-
             if(kuantitasCukup){
                 if(this->uang >= kuantitas * Toko::catalogPrice[mapIdxKode[nomorBarang]]){
-                    std::cout << "Selamat! Anda berhasil membeli " << kuantitas << barang->getNamaAsset() << std::endl;
+                    std::cout << GREEN << "Selamat! Anda berhasil membeli " << kuantitas << barang->getNamaAsset() << NORMAL << std::endl;
                     validKuantitas = true;
                 }else{
-                    std::cout << "You don't have enough money to buy that much!" << std::endl;
+                    std::cout << YELLOW << "You don't have enough money to buy that much!" << NORMAL << std::endl;
                 }
-            }else{
-                cout << "Malah ke sini wkwkwk!" << endl;
             }
         }
 
@@ -1417,25 +1427,37 @@ void Peternak::beliAsset(Toko* store){
         string petakBeliInput;
         while (invalidPetakFound){
             invalidPetakFound = false;
+            petakBeli.clear();
 
             petakBeliInput = "";
+            cin.get();
             std::cout << "Petak slot : ";
             getline(cin, petakBeliInput);
             petakBeli = Pemain::stringToArrayComma(petakBeliInput);
 
-            for (const std::string& petak : petakBeli) {
-                if (!this->inventory.isValidKey(petak)) {
-                    invalidPetakFound = true;
-                    std::cout << petak << " is invalid" << std::endl;
-                }else if(this->inventory.get(petak) != nullptr){
-                    invalidPetakFound = true;
-                    std::cout << petak << " is not available" << std::endl;
+            if (petakBeli.size() == kuantitas){
+                for (string petak : petakBeli){
+                    if (!this->inventory.isValidKey(petak)) {
+                        invalidPetakFound = true;
+                        std::cout << YELLOW << petak << " is invalid" << std::endl;
+                        std::cout << "Press any key to continue..." << NORMAL << endl;
+                    }else if(this->inventory.get(petak) != nullptr){
+                        invalidPetakFound = true;
+                        std::cout << YELLOW << petak << " is not available" << std::endl;
+                        std::cout << "Press any key to continue..." << NORMAL << endl;
+                    }
                 }
+            }else{
+                invalidPetakFound = true;
+                std::cout << YELLOW << "You are trying to buy " << kuantitas << " assets, but input " << petakBeli.size() << " slots" << endl;
+                std::cout << "Please input " << kuantitas << " slots" << endl;
+                std::cout << "Press any key to continue..." << NORMAL << endl;
             }
         }
 
         for(const string& petak : petakBeli){
             this->inventory.setWithKey(petak, barang);
+            this->uang -= barang->getPrice();
             if(dynamic_cast<Bangunan*>(barang)){
                 Toko::catalogBangunan[barang->getNamaAsset()]--;
             }else if(dynamic_cast<ProductMaterial*>(barang)){
@@ -1445,7 +1467,7 @@ void Peternak::beliAsset(Toko* store){
             }
         }
 
-        std::cout << barang->getNamaAsset() << " berhasil disimpan dalam penyimpanan!" << std::endl;
+        std::cout << GREEN << barang->getNamaAsset() << " berhasil disimpan dalam penyimpanan!" << NORMAL << std::endl;
     }catch(uangInsufficientException& e){
         std::cout << e.what();
     }catch(inventoryFullException& e){

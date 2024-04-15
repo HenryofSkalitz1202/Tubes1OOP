@@ -61,6 +61,7 @@ public:
   int getPetaniID();
   Ladang getLadang();
 
+  void printLadang();
   void tanamTanaman();
   void panenTanaman();
   void beliAsset(Toko* store);
@@ -108,6 +109,7 @@ public:
   int getPeternakID();
   Peternakan getPeternakan();
 
+  void printPeternakan();
   void taruhHewan();
   void beriMakan();
   void panenHewan();

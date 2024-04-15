@@ -606,11 +606,11 @@ void Controller::pungut_pajak(Walikota* walikota){
 }
 
 void Controller::cetak_ladang(Petani* petani){
-    petani->getLadang().print();
+    petani->printLadang();
 }
 
 void Controller::cetak_peternakan(Peternak* peternak){
-    peternak->getPeternakan().print();
+    peternak->printPeternakan();
 }
 
 void Controller::tanam(Petani* petani){

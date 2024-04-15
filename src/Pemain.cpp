@@ -229,6 +229,10 @@ Ladang Petani::getLadang(){
     return this->ladang;
 }
 
+void Petani::printLadang(){
+    this->ladang.print();
+}
+
 void Petani::tanamTanaman(){
     try{
         if(this->inventory.isEmpty()){
@@ -249,49 +253,66 @@ void Petani::tanamTanaman(){
         std::cout << "Pilih tanaman dari penyimpanan" << std::endl;
         this->inventory.print();
         
-        string key_inv;
-        bool validInv = false;
-        while(!validInv){
-            std::cout << "Slot : ";
-            std::cin >> key_inv;
+        bool invalidSlotFound = true;
+        vector<string> slotTanam;
+        string slotTanamInput;
+        while (invalidSlotFound){
+            invalidSlotFound = false;
+            slotTanam.clear();
 
-            if(!this->inventory.isValidKey(key_inv)){
-                std::cout << key_inv << " is invalid" << std::endl;
-            }else if(this->getFromInventory(key_inv) == nullptr){
-                std::cout << key_inv << " is empty" << std::endl;
-            }else if(!dynamic_cast<Tumbuhan*>(this->getFromInventory(key_inv))){
-                std::cout << "Object in " << key_inv << " is not of Tumbuhan type" << std::endl;
-            }else{
-                validInv = true;
+            slotTanamInput = "";
+            cin.get();
+            std::cout << "Slot : ";
+            getline(cin, slotTanamInput);
+            slotTanam = Pemain::stringToArrayComma(slotTanamInput);
+
+            for (string petak : slotTanam){
+                if (!this->inventory.isValidKey(petak)) {
+                    invalidSlotFound = true;
+                    std::cout << YELLOW << petak << " is invalid" << std::endl;
+                    std::cout << "Press any key to continue..." << NORMAL << endl;
+                }else if(this->inventory.get(petak) == nullptr){
+                    invalidSlotFound = true;
+                    std::cout << YELLOW << petak << " is empty" << std::endl;
+                    std::cout << "Press any key to continue..." << NORMAL << endl;
+                }
             }
         }
 
-        Tumbuhan* tumbuhan = dynamic_cast<Tumbuhan*>(this->getFromInventory(key_inv));  
+        vector<Tumbuhan*> tumbuhanTanam;
+        for(const string& key_inv : slotTanam){
+            Tumbuhan* tumbuhan = dynamic_cast<Tumbuhan*>(this->getFromInventory(key_inv)); 
+            tumbuhanTanam.push_back(tumbuhan);
+            std::cout << "Kamu memilih " << tumbuhan->getNamaAsset() << " pada " << key_inv << std::endl;
 
-        std::cout << "Kamu memilih " << tumbuhan->getNamaAsset() << std::endl;
+            this->inventory.setNull(key_inv);
+        }
+
         std::cout << "\nPilih petak yang akan ditanami" << std::endl;
         this->ladang.print();
 
-        string key_ladang;
-        bool validLad = false;
-        while(!validLad){
-            std::cout << "Petak tanah: ";
-            std::cin >> key_ladang;
+        for(Tumbuhan* tanaman : tumbuhanTanam){
+            string key_ladang;
+            bool validLad = false;
+            while(!validLad){
+                std::cout << "Tanaman: " << tanaman->getNamaAsset() << endl;
+                std::cout << "Petak tanah: ";
+                std::cin >> key_ladang;
 
-            if(!this->inventory.isValidKey(key_ladang)){
-                std::cout << key_ladang << " is invalid" << std::endl;
-            }else if(this->ladang.get(key_ladang) != nullptr){
-                std::cout << key_ladang << " is not vacant" << std::endl;
-            }else{
-                validLad = true;
+                if(!this->inventory.isValidKey(key_ladang)){
+                    std::cout << YELLOW << key_ladang << " is invalid\n" << NORMAL << std::endl;
+                }else if(this->ladang.get(key_ladang) != nullptr){
+                    std::cout << YELLOW << key_ladang << " is not vacant\n" << NORMAL << std::endl;
+                }else{
+                    validLad = true;
+                }
             }
+
+            this->ladang.setWithKey(key_ladang, tanaman);
+
+            std::cout << "\nCangkul, cangkul, cangkul yang dalam~!" << std::endl;
+            std::cout << GREEN << tanaman->getNamaAsset() << " berhasil ditanam!\n" << NORMAL << endl;
         }
-
-        this->ladang.setWithKey(key_ladang, tumbuhan);
-        this->inventory.setNull(key_inv);
-
-        std::cout << "\nCangkul, cangkul, cangkul yang dalam~!" << std::endl;
-        std::cout << tumbuhan->getNamaAsset() << " berhasil ditanam!" << endl;
     }catch(inventoryEmptyException& e){
         std::cout << e.what();
     }catch(noTumbuhanAvailableException& e){
@@ -1079,6 +1100,10 @@ int Peternak::getPeternakID(){
 
 Peternakan Peternak::getPeternakan(){
     return this->peternakan;
+}
+
+void Peternak::printPeternakan(){
+    this->peternakan.print();
 }
 
 void Peternak::taruhHewan(){

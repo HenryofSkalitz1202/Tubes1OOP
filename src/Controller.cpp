@@ -395,7 +395,7 @@ void Controller::readCommand() {
         this->cetak_penyimpanan();
     } 
     else if (choice.compare("pungut_pajak") == 0) {
-        this->pungut_pajak();;
+        this->pungut_pajak();
     } 
     else if (choice.compare("cetak_ladang") == 0) {
         this->cetak_ladang();
@@ -435,8 +435,8 @@ void Controller::readCommand() {
     }
     else throw commandNotFoundException();
     }
-    catch (exception& e) {
-        throw e;
+    catch (const exception& e) {
+        throw;
     }
 }
 
@@ -459,8 +459,8 @@ void Controller::cetak_penyimpanan() {
         }
         current_player->printInventory();
     }
-    catch (gameNotStartedException& e) {
-        std::cout << e.what();
+    catch (const exception& e) {
+        throw;
     }
 }
 void Controller::pungut_pajak() {
@@ -477,11 +477,8 @@ void Controller::pungut_pajak() {
             temp.tagihPajak();
         }
     }
-    catch (gameNotStartedException& e) {
-        std::cout << e.what();
-    }
-    catch (wrongPlayerTypeException& e) {
-        std::cout << e.what();
+    catch (const exception& e) {
+        throw;
     }
 }
 
@@ -499,11 +496,8 @@ void Controller::cetak_ladang() {
             temp.printLadang();
         }
     }
-    catch (wrongPlayerTypeException& e) {
-        std::cout << e.what();
-    }
-    catch (gameNotStartedException& e) {
-        std::cout << e.what();
+    catch (const exception& e) {
+        throw;
     }
 }
 
@@ -521,11 +515,8 @@ void Controller::cetak_peternakan() {
             temp.printPeternakan();
         }
     }
-    catch (wrongPlayerTypeException& e) {
-        std::cout << e.what();
-    }
-    catch (gameNotStartedException& e) {
-        std::cout << e.what();
+    catch (const exception& e) {
+        throw;
     }
 }
 
@@ -543,11 +534,8 @@ void Controller::tanam() {
             temp.tanamTanaman();
         }
     }
-    catch (wrongPlayerTypeException& e) {
-        std::cout << e.what();
-    }    
-    catch (gameNotStartedException& e) {
-        std::cout << e.what();
+    catch (const exception& e) {
+        throw;
     }
 }
 
@@ -565,11 +553,8 @@ void Controller::ternak() {
             temp.taruhHewan();
         }
     }
-    catch (wrongPlayerTypeException& e) {
-        std::cout << e.what();
-    }    
-    catch (gameNotStartedException& e) {
-        std::cout << e.what();
+    catch (const exception& e) {
+        throw;
     }
 }
 
@@ -587,11 +572,8 @@ void Controller::bangun() {
             temp.bangunBangunan();
         }
     }
-    catch (wrongPlayerTypeException& e) {
-        std::cout << e.what();
-    }  
-    catch (gameNotStartedException& e) {
-        std::cout << e.what();
+    catch (const exception& e) {
+        throw;
     }  
 }
 
@@ -602,8 +584,8 @@ void Controller::makan() {
         }
         current_player->makan();
     }
-    catch (gameNotStartedException& e) {
-        std::cout << e.what();
+    catch (const exception& e) {
+        throw;
     }
 }
 
@@ -621,16 +603,28 @@ void Controller::kasih_makan() {
             temp.beriMakan();
         }
     }
-    catch (wrongPlayerTypeException& e) {
-        std::cout << e.what();
-    }   
-    catch (gameNotStartedException& e) {
-        std::cout << e.what();
+    catch (const exception& e) {
+        throw;
     } 
 }
 
 void Controller::panen() {
-    // TODO
+    try {
+        if (this->is_game_over()) {
+            throw gameNotStartedException();
+        }
+        if (!this->is_petani(current_player)) {
+            throw wrongPlayerTypeException();
+        }
+        else {
+            Petani temp;
+            temp = current_player;
+            temp.panenTanaman();
+        }
+    }
+    catch (const exception& e) {
+        throw;
+    }
 }
 
 void Controller::tambah_pemain() {
@@ -676,21 +670,9 @@ void Controller::tambah_pemain() {
         std::cout << "Pemain ditambahkan!" << endl;
         std::cout << "Selamat datang \"" << usn << "\" di kota ini!" << endl;
     }
-    catch (wrongPlayerTypeException& e) {
-        std::cout << e.what();
-    }   
-    catch (gameNotStartedException& e) {
-        std::cout << e.what();
-    }   
-    catch (notEnoughMoneyException& e) {
-        std::cout << e.what();
-    }   
-    catch (pemainFalseTypeException& e) {
-        std::cout << e.what();
-    }   
-    catch (usernameNotUniqueException& e) {
-        std::cout << e.what();
-    }   
+    catch (const exception& e) {
+        throw;
+    } 
 }
 
 
@@ -737,12 +719,8 @@ void Controller::beli() {
         }
 
         std::cout << item->getNamaAsset() << " berhasil disimpan dalam penyimpanan!" << endl;
-    } catch (NotEnoughInventoryException& e) {
-        std::cout << e.what() << endl;
-    } catch (wrongPlayerTypeException& e) {
-        std::cout << e.what() << endl;
-    } catch (gameNotStartedException& e) {
-        std::cout << e.what() << endl;
+    } catch (const exception& e) {
+        throw;
     }
 }
 
@@ -786,12 +764,8 @@ void Controller::jual() {
         int hasilJual = toko.jual(itemJual);
         current_player->setUang(current_player->getUang() + hasilJual);
         std::cout << "Barang Anda berhasil dijual! Uang Anda bertambah " << hasilJual << " gulden!" << endl;
-    } catch (inventoryEmptyException& e) {
-        std::cout << e.what() << endl;
-    } catch (wrongPlayerTypeException& e) {
-        std::cout << e.what() << endl;
-    } catch (gameNotStartedException& e) {
-        std::cout << e.what() << endl;
+    } catch (const exception& e) {
+        throw;
     }
 }
 
@@ -824,7 +798,7 @@ void Controller::simpan() {
         Simpan simpan(filepath, *this);
         simpan.write();
         cout << "State berhasil disimpan" << endl;
-    } catch (SavePathNotFoundException& e) {
-        cout << e.what() << endl;
+    } catch (const exception& e) {
+        throw;
     }
 }

@@ -1,5 +1,9 @@
 #include "Herbivore.hpp"
 
+Herbivore::Herbivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price): 
+    Hewan(hewanID, kodeHuruf, namaHewan, type, weightToHarvest, 0, price) {
+}
+
 Herbivore::Herbivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int weight, int price): 
     Hewan(hewanID, kodeHuruf, namaHewan, type, weightToHarvest, weight, price) {
 }
@@ -17,7 +21,7 @@ Herbivore& Herbivore::operator=(Herbivore& other){
 
 Herbivore::~Herbivore(){}
 
-void Herbivore::makan(Produk*& produk){
+void Herbivore::makan(Produk* produk){
     if (produk->getProdukType() == "PRODUCT_FRUIT_PLANT"){
          this->weight+=produk->getAddedWeight();
     }

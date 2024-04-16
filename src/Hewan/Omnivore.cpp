@@ -1,5 +1,9 @@
 #include "Omnivore.hpp"
 
+Omnivore::Omnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price) : 
+    Hewan(hewanID, kodeHuruf, namaHewan, type, weightToHarvest, 0, price) {
+}
+
 Omnivore::Omnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int weight, int price) : 
     Hewan(hewanID, kodeHuruf, namaHewan, type, weightToHarvest, weight, price) {
 }
@@ -17,7 +21,7 @@ Omnivore& Omnivore::operator=(Omnivore& other){
     return *this;
 }
 
-void Omnivore::makan(Produk*& produk){
+void Omnivore::makan(Produk* produk){
     if (produk->getProdukType() == "PRODUCT_FRUIT_PLANT" || produk->getProdukType() == "PRODUCT_ANIMAL"){
          this->weight+=produk->getAddedWeight();
     }

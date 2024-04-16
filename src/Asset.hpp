@@ -12,7 +12,7 @@ protected:
   string namaAsset;
   int price;
 public:
-  ~Asset(){}
+  virtual ~Asset(){}
 
   virtual void setAssetType(string assetType) = 0;
   void setAssetID(int assetID);

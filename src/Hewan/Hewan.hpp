@@ -20,7 +20,7 @@ class Hewan: public Asset {
     static map<string, Hewan*> configHewan;
 
     Hewan(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int weight, int price);
-    virtual ~Hewan();
+    ~Hewan();
 
     // setter
     void setAssetType(string AssetType);
@@ -34,7 +34,7 @@ class Hewan: public Asset {
     int getWeight() const;
 
     bool isReadyToHarvest();
-    virtual void makan(Produk*&) = 0; 
+    virtual void makan(Produk*) = 0; 
     vector<Produk*> harvest();
 };
 

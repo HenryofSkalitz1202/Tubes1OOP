@@ -18,6 +18,20 @@ Toko::Toko(){
 
 Toko::~Toko(){}
 
+map<string, int> Toko::rekapToko(){
+    map<string, int> gudangToko;
+    for(const auto& pair : Toko::catalogBangunan){
+        if(pair.second > 0){
+            gudangToko.insert({pair.first, pair.second});
+        }
+    }
+    for(const auto& pair : Toko::catalogProduk){
+        if(pair.second > 0){
+            gudangToko.insert({pair.first, pair.second});
+        }
+    }
+}
+
 int Toko::getCheapest(){
     return this->cheapestPrice;
 }

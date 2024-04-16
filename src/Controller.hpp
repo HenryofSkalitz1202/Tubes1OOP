@@ -8,6 +8,8 @@
 #include "Pemain.cpp"
 using namespace std;
 
+class Import;
+
 class Controller
 {
 private:
@@ -16,6 +18,7 @@ private:
     Pemain* current_player;
     int turn_number;
     bool game_over;
+    Toko store;
 
 public:
     static vector<Pemain*> players;
@@ -42,7 +45,11 @@ public:
     Pemain* get_first_player();
     void print_players();
 
+    vector<Pemain*> getPlayers();
     int getTurnNumber();
+
+    Toko getToko();
+    map<string, int> getRekapToko();
 
     bool is_game_over();
     void is_won();
@@ -55,7 +62,7 @@ public:
     bool is_walikota(Pemain* player);
 
     bool isValidCommand(string command, Pemain* player);
-    void readCommand(Pemain* player, Toko* toko);
+    void readCommand(Pemain* player);
     void next();
     void cetak_penyimpanan(Pemain* player);
     void pungut_pajak(Walikota* walikota);
@@ -66,7 +73,7 @@ public:
     void bangun(Walikota* walikota);
     void makan(Pemain* player);
     void kasih_makan(Peternak* peternak);
-    void beli(Pemain* player, Toko* store);
+    void beli(Pemain* player);
     void jual(Pemain* player);
     void panen(Petani* petani);
     void panen(Peternak* peternak);

@@ -1,6 +1,7 @@
 #include "Simpan.hpp"
 #include <sstream>
 #include <iomanip>
+#include <fstream>
 
 Simpan::Simpan(string filepath, Controller& controller) : filepath(filepath), controller(controller) {}
 
@@ -18,13 +19,13 @@ void Simpan::write() {
             SaveFile << item << endl;
         }
 
-        if (player->getStatus() == "Petani") {
+        if (dynamic_cast<Petani*>(player)) {
             vector<string> ladang = this->ladangItems(dynamic_cast<Petani*>(player));
             SaveFile << ladang.size() << endl;
             for (auto const& item: ladang) {
                 SaveFile << item << endl;
             }
-        } else if (player->getStatus() == "Peternak") {
+        } else if (dynamic_cast<Peternak*>(player)) {
             vector<string> peternakan = this->peternakanItems(dynamic_cast<Peternak*>(player));
             SaveFile << peternakan.size() << endl;
             for (auto const& item: peternakan) {
@@ -32,7 +33,8 @@ void Simpan::write() {
             }
         }
     }
-    map<string, int> tokoItems = controller.getListJumlahItemToko();
+
+    map<string, int> tokoItems = controller.getRekapToko();
     SaveFile << tokoItems.size() << endl;
     for (auto const& x: tokoItems) {
         SaveFile << x.first << " " << x.second << endl;
@@ -44,8 +46,8 @@ vector<string> Simpan::inventoryItems(Pemain* player) {
     vector<string> itemNames;
     for (size_t i=0; i<Inventory::inventoryRowSize; ++i) {
         for (size_t j=0; j<Inventory::inventoryColumnSize; ++j) {
-            if (player->getFromInventory(i, j) != nullptr) {
-                itemNames.push_back(player->getFromInventory(i, j)->getNamaAsset());
+            if (player->getFromInventory(calculateKey(i, j)) != nullptr) {
+                itemNames.push_back(player->getFromInventory(calculateKey(i, j))->getNamaAsset());
             }
         }
     }

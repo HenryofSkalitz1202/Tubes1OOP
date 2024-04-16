@@ -20,6 +20,7 @@ public:
   static vector<string> catalogHewan;
   static vector<string> catalogTumbuhan;
 
+  map<string, int> rekapToko();
   int getCheapest();
   int findCheapest();
 };

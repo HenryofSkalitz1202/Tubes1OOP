@@ -42,7 +42,7 @@ public:
 class missingDataException : public exception{
 public:
     const char* what() const noexcept override{
-        return "\033[1;31m\033[1;31mIt seems that there are missing data. Please recheck your config file\033[0m";
+        return "\033[1;31m\033[1;31mIt seems that there are missing data. Please recheck your config file!\n\033[0m";
     }
 };
 
@@ -50,6 +50,13 @@ class UnexpectedDataException : public std::exception {
 public:
     const char* what() const noexcept override {
         return "\033[1;31mIt seems that there are unexpected additional data. Please recheck your config file!\n\033[0m";
+    }
+};
+
+class SavePathNotFoundException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31mFile path invalid!\n\033[0m";
     }
 };
 

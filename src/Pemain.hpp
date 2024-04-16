@@ -13,6 +13,7 @@ protected:
   string username;
   int uang;
   int beratBadan;
+  string status;
   Inventory inventory;
 public:
   static int beratWin;
@@ -32,6 +33,7 @@ public:
   string getUsername();
   int getUang();
   int getBeratBadan();
+  string getStatus();
   Inventory getInventory();
   Asset* getFromInventory(string key);
 
@@ -60,6 +62,7 @@ public:
   void setPetaniID(int petaniID);
   int getPetaniID();
   Ladang getLadang();
+  Tumbuhan* getFromLadang(string key);
 
   void printLadang();
   void tanamTanaman();
@@ -108,6 +111,7 @@ public:
   void setPeternakID(int peternakID);
   int getPeternakID();
   Peternakan getPeternakan();
+  Hewan* getFromPeternakan(string key);
 
   void printPeternakan();
   void taruhHewan();

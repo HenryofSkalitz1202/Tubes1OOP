@@ -192,17 +192,14 @@ int main(){
         if(gameMode == "1"){
             cout << ANSI_COLOR_BLUE << "\nStarting new game...." << ANSI_COLOR_RESET << endl;
             Controller mainPage;
-            Toko* store = new Toko;
-
-            cout << ANSI_COLOR_MAGENTA << "Cheapest: " << store->getCheapest() << ANSI_COLOR_RESET << endl;
 
             while(!mainPage.is_game_over()){
                 cout << ANSI_COLOR_CYAN << "\nTurn: " << mainPage.getTurnNumber() << ANSI_COLOR_RESET << endl; 
                 cout << ANSI_COLOR_MAGENTA << "Current player: " << mainPage.get_current_player()->getUsername() << ANSI_COLOR_RESET << endl;
-                mainPage.readCommand(mainPage.get_current_player(), store);
+                mainPage.readCommand(mainPage.get_current_player());
             }
 
-            cout << "Selamat kamu menang!" << endl;
+            cout << GREEN << "Selamat kamu menang!" << NORMAL << endl;
         }else if(gameMode == "2"){
             //COMING SOON
         }

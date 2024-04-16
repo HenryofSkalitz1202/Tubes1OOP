@@ -1,6 +1,7 @@
 #include "Controller.hpp"
 #include "Exception.hpp"
 #include "input.cpp"
+#include "Simpan.cpp"
 #include <iostream>
 #include <vector>
 #include <sstream>
@@ -444,6 +445,18 @@ int Controller::getTurnNumber(){
     return this->turn_number;
 }
 
+vector<Pemain*> Controller::getPlayers() {
+    return this->players;
+}
+
+Toko Controller::getToko(){
+    return this->store;
+}
+
+map<string, int> Controller::getRekapToko(){
+    return this->store.rekapToko();
+}
+
 bool Controller::is_game_over()
 {
     return this->game_over;
@@ -529,7 +542,7 @@ bool Controller::isValidCommand(string command, Pemain* player){
     }
 }
 
-void Controller::readCommand(Pemain* player, Toko* store){
+void Controller::readCommand(Pemain* player){
     cout << CYAN << "========Available Command========" << NORMAL << endl;
     if(dynamic_cast<Petani*>(player)){
         cout << BLUE << "1. NEXT" << endl;
@@ -599,7 +612,7 @@ void Controller::readCommand(Pemain* player, Toko* store){
     }else if(command == "KASIH_MAKAN"){
         this->kasih_makan(dynamic_cast<Peternak*>(player));
     }else if(command == "BELI"){
-        this->beli(player, store);
+        this->beli(player);
     }else if(command == "JUAL"){
         this->jual(player);
     }else if(command == "PANEN"){
@@ -609,7 +622,7 @@ void Controller::readCommand(Pemain* player, Toko* store){
             this->panen(dynamic_cast<Peternak*>(player));
         }
     }else if(command == "SIMPAN"){
-        //this->simpan();
+        this->simpan();
     }else if(command == "TAMBAH_PEMAIN"){
         this->tambah_pemain(dynamic_cast<Walikota*>(player));
     }
@@ -662,8 +675,9 @@ void Controller::kasih_makan(Peternak* peternak){
     peternak->beriMakan();
 }
 
-void Controller::beli(Pemain* player, Toko* store){
-    player->beliAsset(store);
+void Controller::beli(Pemain* player){
+    Toko* storePtr = &this->store;
+    player->beliAsset(storePtr);
 }
 
 void Controller::jual(Pemain* player){
@@ -690,8 +704,22 @@ void Controller::tambah_pemain(Walikota* walikota){
     if(indexWalikota > indexNew){
         this->current_player_index++;
     }
+}
 
-    for(Pemain* player : players){
-        cout << BLUE << "username: " << player->getUsername() << NORMAL << endl;
+void Controller::simpan(){
+    string filepath;
+    cout << "Masukkan lokasi berkas state:";
+    cin >> filepath;
+    try {
+        ofstream SaveFile(filepath);
+        if (!SaveFile) {
+            throw SavePathNotFoundException();
+        }
+        SaveFile.close();
+        Simpan simpan(filepath, *this);
+        simpan.write();
+        cout << "State berhasil disimpan" << endl;
+    } catch (SavePathNotFoundException& e) {
+        cout << e.what() << endl;
     }
 }

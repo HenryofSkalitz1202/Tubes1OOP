@@ -13,7 +13,6 @@ protected:
   int price;
 public:
   ~Asset(){}
-
   virtual void setAssetType(string assetType) = 0;
   void setAssetID(int assetID);
   void setKodeHuruf(string kodeHuruf);
@@ -25,6 +24,8 @@ public:
   string getKodeHuruf();
   string getNamaAsset();
   int getPrice();
+
+  Asset& operator=(const Asset*& other);
 };
 
 #endif

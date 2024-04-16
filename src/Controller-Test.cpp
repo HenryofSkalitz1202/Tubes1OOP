@@ -65,8 +65,8 @@ int main() {
             test.readCommand();
         }
     }
-    catch(const std::exception& e) {
-        cerr << e.what() << endl; // Print any error message
+    catch(const exception& e) {
+        cout << e.what() << endl; // Print any error message
         return 1;
     }
     return 0;

@@ -24,12 +24,13 @@ protected:
 public:
   Grid(size_t rows, size_t cols);
 
-  string calculateKey(size_t row, size_t col);
+  string calculateKey(size_t row, size_t col) const;
   void set(size_t row, size_t col, T value);
   void setWithKey(string key, T value);
   void setNull(string key);
 
   T get(size_t row, size_t col);
+  T get(size_t row, size_t col) const;
   T get(string key);
   size_t numRows();
   size_t numCols();
@@ -42,9 +43,9 @@ public:
 
   virtual void addItem(T item) = 0;
   virtual void addItemKey(T item, string loc) = 0;
-  void printLexicalOrder(int n);
-  void printBorder(int n);
-  virtual void print() = 0;
+  void printLexicalOrder(int n) const;
+  void printBorder(int n) const;
+  virtual void print() const= 0;
 };
 
 class Inventory : public Grid<Asset*>{
@@ -59,6 +60,7 @@ public:
 
   Inventory();
   Inventory(Inventory& other);
+  Inventory(const Inventory& other);
   ~Inventory();
   Inventory& operator=(const Inventory& other);
 
@@ -66,7 +68,7 @@ public:
   void addItemKey(Asset*, string loc);
   bool hasType(string type);
   void rekapInventory();
-  void print();
+  void print() const;
 };
 
 class Ladang : public Grid<Tumbuhan*>{
@@ -84,7 +86,7 @@ public:
 
   bool isAvailablePanen();
   map<string, int> rekapLadang();
-  void print();
+  void print() const;
 };
 
 class Peternakan : public Grid<Hewan*>{
@@ -101,7 +103,7 @@ public:
 
   bool isAvailablePanen();
   map<string, int> rekapPeternakan();
-  void print();
+  void print() const;
 };
 
 #endif

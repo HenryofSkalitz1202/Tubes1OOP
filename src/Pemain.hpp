@@ -2,6 +2,7 @@
 #define PEMAIN_HPP
 #include <string>
 #include "Grid.hpp"
+#include "Tumbuhan.hpp"
 
 using namespace std;
 
@@ -32,7 +33,7 @@ public:
   string getUsername() const;
   int getUang() const ;
   int getBeratBadan() const;
-  Inventory getInventory();
+  Inventory getInventory() const;
   Asset* getFromInventory(string key);
   Asset* getFromInventory(size_t i, size_t j);
   void removeFromInventory(string key);
@@ -64,7 +65,7 @@ public:
   Tumbuhan* getFromLadang(string key);
   void addToLadang(Tumbuhan* tumbuhan, string loc);
 
-  void tanamTanaman();
+  void tanamTanaman(size_t turn);
   void panenTanaman();
   void beliBangunan();
 

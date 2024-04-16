@@ -27,7 +27,8 @@ void Pemain::addToInventory(Asset* item){
 }
 
 void Pemain::addToInventory(Asset* item, string loc) {
-    this->inventory.addItemKey(item, loc);
+    try {this->inventory.addItemKey(item, loc);}
+    catch (const exception& e) {throw;}
 }
 
 
@@ -47,7 +48,7 @@ int Pemain::getBeratBadan() const {
     return this->beratBadan;
 }
 
-Inventory Pemain::getInventory() {
+Inventory Pemain::getInventory() const {
     return this->inventory;
 }
 
@@ -106,6 +107,8 @@ Petani& Petani::operator=(const Petani& other){
     this->uang = other.uang;
     this->beratBadan = other.beratBadan;
     this->status = other.status;
+    this->inventory = other.inventory;
+    this->ladang = other.ladang;
     return *this;
 }
 
@@ -114,6 +117,7 @@ Petani& Petani::operator=(const Pemain* other){
     this->uang = other->getUang();
     this->beratBadan = other->getBeratBadan();
     this->status = other->getStatus();
+    this->inventory = other->getInventory();
     return *this;
 }
 
@@ -143,7 +147,7 @@ void Petani::addToLadang(Tumbuhan* tumbuhan, string loc) {
     this->ladang.addItemKey(tumbuhan, loc);
 }
 
-void Petani::tanamTanaman(){
+void Petani::tanamTanaman(size_t turn){
     std::cout << "Pilih tanaman dari penyimpanan" << std::endl;
     this->inventory.print();
 
@@ -156,6 +160,9 @@ void Petani::tanamTanaman(){
     try{
         if(tumbuhan){
             std::cout << "Kamu memilih " << tumbuhan->getNamaAsset() << std::endl;
+            tumbuhan->setTurnInstantiated(turn);
+            cout << "Tumbuhan ini ditanam pada giliran ke-" << tumbuhan->getTurnInstantiated() << endl;
+            cout << "Tumbuhan ini akan siap panen dalam " << tumbuhan->getDurationToHarvest() << " giliran." << endl;
             std::cout << "\n";
             std::cout << "Pilih petak yang akan ditanami" << std::endl;
             this->ladang.print();
@@ -168,7 +175,7 @@ void Petani::tanamTanaman(){
 
             std::cout << "\nCangkul, cangkul, cangkul yang dalam~!" << std::endl;
             std::cout << tumbuhan->getNamaAsset() << " berhasil ditanam!";
-
+            
             this->inventory.setNull(key_inv);
             delete tumbuhan;
         }else{
@@ -198,7 +205,14 @@ void Petani::panenTanaman(){
 
         map<string, int> rekapLadang = this->ladang.rekapLadang();
         for(const auto& pair : rekapLadang){
-            std::cout << "- " << pair.first << ": " << Tumbuhan::configTumbuhan[pair.first]->getNamaAsset() << std::endl;
+            string nama;
+            for (auto& pairname : Tumbuhan::configTumbuhan) {
+                if (pairname.second!=nullptr && (pairname.second->getKodeHuruf() == pair.first)) {
+                    nama = pairname.second->getNamaAsset();
+                    break;
+                }
+            }
+            std::cout << "- " << pair.first << ": " << nama << std::endl;
         }
 
         std::cout << "\nPilih tanaman siap panen yang kamu miliki" << std::endl;
@@ -318,8 +332,8 @@ Walikota::Walikota(){
 
 Walikota::Walikota(string username, int uang, int beratBadan){
     this->username = username;
-    this->uang = defaultUang;
-    this->beratBadan = defaultBerat;
+    this->uang = uang;
+    this->beratBadan = beratBadan;
     this->status = "Walikota";
 }
 
@@ -397,8 +411,8 @@ Peternak::Peternak(){
 
 Peternak::Peternak(string username, int uang, int beratBadan){
     this->username = username;
-    this->uang = defaultUang;
-    this->beratBadan = defaultBerat;
+    this->uang = uang;
+    this->beratBadan = beratBadan;
     this->status = "Peternak";
 }
 

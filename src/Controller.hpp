@@ -18,6 +18,7 @@
 #include "Hewan/Omnivore.hpp"
 #include "Tumbuhan.hpp"
 #include "Toko.hpp"
+#include "Grid.hpp"
 
 using namespace std;
 

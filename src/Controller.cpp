@@ -337,6 +337,7 @@ void Controller::start_option()
         this->set_current_player(this->get_first_player());
         this->game_over = false;
     }
+    this->turn_number = 1;
 }
 
 void Controller::start_default()
@@ -383,7 +384,7 @@ int Controller::getTurnNumber() {
 }
 
 void Controller::readCommand() {
-    cout << "Apa yang ingin kamu lakukan?" << endl;
+    cout << endl << "Apa yang ingin kamu lakukan?" << endl;
     string choice;
     cin >> choice;
     for (auto& x : choice) x = tolower(x); // mengubah string input menjadi lowercase untuk pengecekan
@@ -444,7 +445,7 @@ void Controller::next()
 {
     this->is_won();
     if (!this->is_game_over()) {
-        std::cout << current_player->getUsername() << " mengakhiri gilirannya" << endl;
+        std::cout << current_player->getUsername() << " mengakhiri gilirannya" << endl << endl;
         this->current_player_index = (this->current_player_index + 1) % this->players.size();
         this->current_player = this->players[this->current_player_index];
         this->turn_number++;
@@ -472,9 +473,8 @@ void Controller::pungut_pajak() {
             throw wrongPlayerTypeException();
         }
         else {
-            Walikota temp;
-            temp = current_player;
-            temp.tagihPajak();
+            Walikota* walikota = dynamic_cast<Walikota*>(current_player);
+            walikota->tagihPajak();
         }
     }
     catch (const exception& e) {
@@ -491,9 +491,8 @@ void Controller::cetak_ladang() {
             throw wrongPlayerTypeException();
         }
         else {
-            Petani temp;
-            temp = current_player;
-            temp.printLadang();
+            Petani* petani = dynamic_cast<Petani*>(current_player);
+            petani->printLadang();
         }
     }
     catch (const exception& e) {
@@ -510,9 +509,8 @@ void Controller::cetak_peternakan() {
             throw wrongPlayerTypeException();
         }
         else {
-            Peternak temp;
-            temp = current_player;
-            temp.printPeternakan();
+            Peternak* peternak = dynamic_cast<Peternak*>(current_player);
+            peternak->printPeternakan();
         }
     }
     catch (const exception& e) {
@@ -529,9 +527,8 @@ void Controller::tanam() {
             throw wrongPlayerTypeException();
         }
         else {
-            Petani temp;
-            temp = current_player;
-            temp.tanamTanaman();
+            Petani* petani = dynamic_cast<Petani*>(current_player);
+            petani->tanamTanaman(turn_number);
         }
     }
     catch (const exception& e) {
@@ -548,9 +545,8 @@ void Controller::ternak() {
             throw wrongPlayerTypeException();
         }
         else {
-            Peternak temp;
-            temp = current_player;
-            temp.taruhHewan();
+            Peternak* peternak = dynamic_cast<Peternak*>(current_player);
+            peternak->taruhHewan();
         }
     }
     catch (const exception& e) {
@@ -567,9 +563,8 @@ void Controller::bangun() {
             throw wrongPlayerTypeException();
         }
         else {
-            Walikota temp;
-            temp = current_player;
-            temp.bangunBangunan();
+            Walikota* walikota = dynamic_cast<Walikota*>(current_player);
+            walikota->bangunBangunan();
         }
     }
     catch (const exception& e) {
@@ -598,9 +593,8 @@ void Controller::kasih_makan() {
             throw wrongPlayerTypeException();
         }
         else {
-            Peternak temp;
-            temp = current_player;
-            temp.beriMakan();
+            Peternak* peternak = dynamic_cast<Peternak*>(current_player);
+            peternak->beriMakan();
         }
     }
     catch (const exception& e) {
@@ -617,9 +611,8 @@ void Controller::panen() {
             throw wrongPlayerTypeException();
         }
         else {
-            Petani temp;
-            temp = current_player;
-            temp.panenTanaman();
+            Petani* petani = dynamic_cast<Petani*>(current_player);
+            petani->panenTanaman();
         }
     }
     catch (const exception& e) {
@@ -663,8 +656,7 @@ void Controller::tambah_pemain() {
             Petani newPlayer(usn, 50, 0);
             Pemain* newPlayerPoint = &newPlayer;
         }
-        players.push_back(newPlayerPoint);
-        this->sort_players();
+        this->add_player(newPlayerPoint);
         // update current index
         if (current_player->getUsername().compare(usn) > 0) this->current_player_index  = (this->current_player_index + 1) % this->players.size();
         std::cout << "Pemain ditambahkan!" << endl;

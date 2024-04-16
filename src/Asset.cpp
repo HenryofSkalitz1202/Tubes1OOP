@@ -39,3 +39,12 @@ string Asset::getNamaAsset(){
 int Asset::getPrice(){
     return this->price;
 }
+
+Asset& Asset::operator=(const Asset*& other) {
+    this->assetID = other->assetID;
+    this->assetType = other->assetType;
+    this->kodeHuruf = other->kodeHuruf;
+    this->namaAsset = other->namaAsset;
+    this->price = other->price;
+    return *this;
+}

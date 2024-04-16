@@ -11,7 +11,7 @@
 #define BLUE "\x1B[34m"
 
 template <typename T>
-string Grid<T>::calculateKey(size_t row, size_t col){
+string Grid<T>::calculateKey(size_t row, size_t col) const{
     std::ostringstream oss;
     char key_alphabet = 'A' + col;
     oss << std::setw(2) << std::setfill('0') << row + 1;
@@ -93,6 +93,17 @@ T Grid<T>::get(size_t row, size_t col){
 }
 
 template <typename T>
+T Grid<T>::get(size_t row, size_t col) const{
+    if(row >= this->rows || col >= this->cols) {
+        cout << "Attempted to set value at position (" << row << ", " << col << ").";
+        throw outOfBoundsException();
+    }
+
+    auto it = this->data.at(calculateKey(row, col));
+    return it;
+}
+
+template <typename T>
 T Grid<T>::get(string key){
     if(!this->isValidKey(key)) {
         cout << "Attempted to set value with invalid key: " << key;
@@ -114,7 +125,7 @@ size_t Grid<T>::numCols(){
 }
 
 template <typename T>
-void Grid<T>::printLexicalOrder(int n) {
+void Grid<T>::printLexicalOrder(int n) const {
     char current = 'A';
     int count = 0;
 
@@ -135,7 +146,7 @@ void Grid<T>::printLexicalOrder(int n) {
 }
 
 template <typename T>
-void Grid<T>::printBorder(int n) {
+void Grid<T>::printBorder(int n) const{
     std::cout << "   ";
     for(int i = 0; i < n; i++) {
         std::cout << "+-----";
@@ -189,8 +200,8 @@ bool Grid<T>::isValidKey(string key){
     return this->data.find(key) != this->data.end();
 }
 //<---------------INVENTORY----------------->
-int Inventory::inventoryRowSize;
-int Inventory::inventoryColumnSize;
+int Inventory::inventoryRowSize = 5;
+int Inventory::inventoryColumnSize = 5;
 
 Inventory::Inventory() : Grid<Asset*>(inventoryRowSize, inventoryColumnSize) {}
 
@@ -237,26 +248,52 @@ Inventory::Inventory(Inventory& other) : Grid<Asset*>(other.numRows(), other.num
     }
 }
 
+Inventory::Inventory(const Inventory& other) : Grid<Asset*>(other.rows, other.cols) {
+    try{
+        for (size_t i = 0; i < other.rows; ++i) {
+            for (size_t j = 0; j < other.cols; ++j) {
+                Asset* asset = other.get(i,j);
+                if (asset != nullptr) {
+                    if (Produk* produk = dynamic_cast<Produk*>(asset)) {
+                        Produk* newProduk = nullptr;
+                        if (ProductMaterial* material = dynamic_cast<ProductMaterial*>(produk)) {
+                            newProduk = new ProductMaterial(*material);
+                        } else if (ProductFruit* fruit = dynamic_cast<ProductFruit*>(produk)) {
+                            newProduk = new ProductFruit(*fruit);
+                        } else if (ProductHewan* hewan = dynamic_cast<ProductHewan*>(produk)) {
+                            newProduk = new ProductHewan(*hewan);
+                        }
+                        newProduk->setProdukType(produk->getProdukType());
+                        set(i, j, newProduk);
+                    } else if (Bangunan* bangunan = dynamic_cast<Bangunan*>(asset)) {
+                        set(i, j, new Bangunan(*bangunan));
+                    }
+                }
+            }
+        }
+    }catch(insertIntoUnemptyCellException& e){
+        std::cout << e.what();
+    }
+}
+
 Inventory& Inventory::operator=(const Inventory& other) {
     if (this == &other)
         return *this;
 
-    for (size_t i = 0; i < numRows(); ++i) {
+    /*for (size_t i = 0; i < numRows(); ++i) {
         for (size_t j = 0; j < numCols(); ++j) {
             Asset* asset = get(i, j);
             if (asset != nullptr) {
                 delete asset;
             }
         }
-    }
+    }*/
 
     try{
         for (size_t i = 0; i < numRows(); ++i) {
             for (size_t j = 0; j < numCols(); ++j) {
-                auto it = other.data.find(calculateKey(i, j));
-                Asset* asset = it->second;
-                if (asset != nullptr) {
-                    if (Produk* produk = dynamic_cast<Produk*>(asset)) {
+                if (other.get(i,j) != nullptr) {
+                    if (Produk* produk = dynamic_cast<Produk*>(other.get(i,j))) {
                         Produk* newProduk = nullptr;
                         if (ProductMaterial* material = dynamic_cast<ProductMaterial*>(produk)) {
                             newProduk = new ProductMaterial(*material);
@@ -268,9 +305,30 @@ Inventory& Inventory::operator=(const Inventory& other) {
 
                         newProduk->setProdukType(produk->getProdukType());
                         set(i, j, newProduk);
-                    } else if (Bangunan* bangunan = dynamic_cast<Bangunan*>(asset)) {
+                    } else if (Bangunan* bangunan = dynamic_cast<Bangunan*>(other.get(i,j))) {
                         set(i, j, new Bangunan(*bangunan));
-                    }
+                    } else if (Tumbuhan* tumbuhan = dynamic_cast<Tumbuhan*>(other.get(i,j))) {
+                        Tumbuhan* newTumbuhan = nullptr;
+                        if (MaterialPlant* material = dynamic_cast<MaterialPlant*>(tumbuhan)) {
+                            newTumbuhan = new MaterialPlant(*material);
+                        } else if (FruitPlant* fruit = dynamic_cast<FruitPlant*>(tumbuhan)) {
+                            newTumbuhan = new FruitPlant(*fruit);
+						}
+                        newTumbuhan->setAssetType(tumbuhan->getAssetType());
+                        set(i, j, newTumbuhan);
+                    } else if (Hewan* hewan = dynamic_cast<Hewan*>(other.get(i,j))) {
+                        Hewan* newHewan = nullptr;
+                        if (Carnivore* carnivore = dynamic_cast<Carnivore*>(hewan)) {
+                            newHewan = new Carnivore(*carnivore);
+                        } else if (Herbivore* herbivore = dynamic_cast<Herbivore*>(hewan)) {
+                            newHewan = new Herbivore(*herbivore);
+                        } else if (Omnivore* omnivore = dynamic_cast<Omnivore*>(hewan)) {
+                            newHewan = new Omnivore(*omnivore);
+                        }
+
+                        newHewan->setAssetType(hewan->getAssetType());
+                        set(i, j, newHewan);
+					}
                 }
             }
         }
@@ -369,7 +427,7 @@ void Inventory::rekapInventory() {
     std::cout << "ProductHewan: " << jumlahProductHewan << endl;
 }
 
-void Inventory::print() {
+void Inventory::print() const {
     //std::cout << ==============[ PENYIMPANAN ]==================
     std::cout << " ";
     printLexicalOrder(this->cols);
@@ -488,9 +546,12 @@ void Ladang::addItemKey(Tumbuhan* tumbuhan, string loc) {
 }
 
 bool Ladang::isAvailablePanen(){
-    for(const auto& pair : this->data){
-        if(pair.second->isReadyToHarvest()){
-            return true;
+    for (int i=0; i<this->rows; i++) {
+        for (int j=0; j<this->cols; j++) {
+            Tumbuhan* tumbuhan = get(i,j);
+            if (tumbuhan != nullptr) {
+                if (tumbuhan->isReadyToHarvest()) return true;
+            }
         }
     }
     return false;
@@ -498,21 +559,19 @@ bool Ladang::isAvailablePanen(){
 
 map<string, int> Ladang::rekapLadang(){
     map<string, int> siapPanen;
-    
-    for (const auto& pair : this->data) {
-        siapPanen[pair.second->getKodeHuruf()] = 0;
-    }
 
     for (const auto& pair : this->data) {
-        if (pair.second->isReadyToHarvest()) {
-            siapPanen[pair.second->getKodeHuruf()]++;
+        if (pair.second != nullptr) siapPanen[pair.second->getKodeHuruf()] = 0;
+    }
+    for (const auto& pair : this->data) {
+        if ((pair.second != nullptr) && pair.second->isReadyToHarvest()) {
+            siapPanen[pair.second->getKodeHuruf()] += 1;
         }
     }
-
     return siapPanen;
 }
 
-void Ladang::print() {
+void Ladang::print() const{
     std::cout << " ";
     printLexicalOrder(this->cols);
     for (int i = 0; i < this->rows; ++i) {
@@ -661,7 +720,7 @@ std::map<std::string, int> Peternakan::rekapPeternakan() {
     return siapPanen;
 }
 
-void Peternakan::print() {
+void Peternakan::print() const {
     std::cout << " ";
     printLexicalOrder(this->cols);
     for (int i = 0; i < this->rows; ++i) {

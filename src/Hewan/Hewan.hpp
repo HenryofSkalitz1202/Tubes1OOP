@@ -1,7 +1,6 @@
 #ifndef HEWAN_HPP
 #define HEWAN_HPP
 
-#include <string>
 #include <vector>
 #include <map>
 #include <iostream>
@@ -12,16 +11,6 @@
 
 using namespace std;
 
-// enum class Category{
-//     Cow = 1,
-//     Sheep = 2,
-//     Horse = 3,
-//     Rabbit = 4,
-//     Snake = 5,
-//     Chicken = 6,
-//     Duck = 7
-// };
-
 class Hewan: public Asset {
   protected:
     string type;
@@ -30,7 +19,6 @@ class Hewan: public Asset {
   public:
     static map<string, Hewan*> configHewan;
 
-    Hewan(); 
     Hewan(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int weight, int price);
     virtual ~Hewan();
 
@@ -39,7 +27,6 @@ class Hewan: public Asset {
     void setType(string type);
     void setWeightToHarvest(size_t weightToHarvest);
     void setWeight(int weight);
-    void setPrice(int price);
 
     // getter
     string getType() const;

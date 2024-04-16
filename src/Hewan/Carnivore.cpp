@@ -1,11 +1,7 @@
 #include "Carnivore.hpp"
 
-Carnivore::Carnivore(): Hewan() {
-    
-}
-
-Carnivore::Carnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price): 
-    Hewan(hewanID, kodeHuruf, namaHewan, type, weightToHarvest, 0, price) {
+Carnivore::Carnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int weight, int price): 
+    Hewan(hewanID, kodeHuruf, namaHewan, type, weightToHarvest, weight, price) {
 }
 
 Carnivore& Carnivore::operator=(Carnivore& other){
@@ -21,8 +17,8 @@ Carnivore& Carnivore::operator=(Carnivore& other){
 
 Carnivore::~Carnivore(){}
 
-void Carnivore::makan(Produk*& produk){
-    if (produk->isEdibleCarnivore()){
+void Carnivore::makan(Produk* produk){
+    if (produk->getProdukType() == "PRODUCT_ANIMAL"){
          this->weight+=produk->getAddedWeight();
     }
     else{

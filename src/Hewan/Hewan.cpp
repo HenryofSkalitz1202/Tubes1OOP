@@ -2,19 +2,15 @@
 
 map<string, Hewan*> Hewan::configHewan;
 
-Hewan::Hewan(){
-    //to do
-}
-
 Hewan::Hewan(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int weight, int price){
     this->assetType = "Hewan";
     this->assetID = hewanID;
     this->kodeHuruf = kodeHuruf;
     this->namaAsset = namaHewan;
+    this->price = price;
     this->type = type;
     this->weightToHarvest = weightToHarvest;
     this->weight = weight;
-    this->price = price;
 }
 
 Hewan::~Hewan(){}
@@ -39,9 +35,6 @@ void Hewan::setWeightToHarvest(size_t weightToHarvest){
 }
 void Hewan::setWeight(int weight){
     this->weight = weight;
-}
-void Hewan::setPrice(int price){
-    this->price = price;
 }
 
 string Hewan::getType() const{

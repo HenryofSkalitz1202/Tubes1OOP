@@ -461,4 +461,26 @@ public:
     }
 };
 
+class uangWinTooLittleException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31mUang win is set less or equal to default uang!\n\033[0m";
+    }
+};
+
+class beratWinTooLittleException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31mBerat win is set less or equal to default berat!\n\033[0m";
+    }
+};
+
+class SizeUnsupportedException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31mColumns of size more than 26 is unsupported!\n\033[0m";
+    }
+};
+
+
 #endif

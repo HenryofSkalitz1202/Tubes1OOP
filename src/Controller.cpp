@@ -165,23 +165,6 @@ void Controller::populateConfigProduk(string filePathProduk){
     for (const auto& pair : mp_hewan) {
         ProductHewan::configProdukHewan.insert({pair.first, pair.second});
     }
-
-    // std::cout << "Map content Material:" << std::endl;
-    // for (const auto& pair : ProductMaterial::configProdukMaterial) {
-    //     std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
-    // }
-
-    // std::cout << std::endl;
-    // std::cout << "Map content Plant:" << std::endl;
-    // for (const auto& pair : ProductFruit::configProdukFruit) {
-    //     std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
-    // }
-
-    // std::cout << std::endl;
-    // std::cout << "Map content Hewan:" << std::endl;
-    // for (const auto& pair : ProductHewan::configProdukHewan) {
-    //     std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
-    // }
 }
 
 void Controller::populateConfigHewan(string filePathHewan){
@@ -228,11 +211,6 @@ void Controller::populateConfigHewan(string filePathHewan){
         Hewan::configHewan.insert({pair.first, pair.second});
         Produk::cekHewan.insert({pair.second->getNamaAsset(), pair.first});
     }
-
-    // std::cout << "Map content:" << std::endl;
-    // for (const auto& pair : Hewan::configHewan) {
-    //     std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
-    // }
 }
 
 void Controller::populateConfigTumbuhan(string filePathTumbuhan){
@@ -278,11 +256,6 @@ void Controller::populateConfigTumbuhan(string filePathTumbuhan){
     for (const auto& pair : mp) {
         Tumbuhan::configTumbuhan.insert({pair.first, pair.second});
     }
-
-    // std::cout << "Map content:" << std::endl;
-    // for (const auto& pair : Tumbuhan::configTumbuhan) {
-    //     std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << std::endl;
-    // }
 }
 
 void Controller::populateConfigBangunan(string filePathBangunan){
@@ -332,24 +305,12 @@ void Controller::populateConfigBangunan(string filePathBangunan){
         }else{
             throw duplicateKeyException();
         }
-
-        // std::cout << "ListBahan:" << std::endl;
-        // for (const auto& pair : mp_bahan) {
-        //     std::cout << "Key: " << pair.first << ", Value: " << pair.second << std::endl;
-        // }
-        // std::cout << "=====================" << std::endl;
     }
 
     Bangunan::resepBangunan.clear();
     for (const auto& pair : mp) {
         Bangunan::resepBangunan.insert({pair.first, pair.second});
     }
-
-    // std::cout << "Map content:" << std::endl;
-    // for (const auto& pair : Bangunan::resepBangunan) {
-    //     std::cout << "Key: " << pair.first << ", Value: " << pair.second->getNamaAsset() << ", Bahan: ";
-    //     printMap(pair.second->getListBahan());
-    // }
 }
 
 void Controller::GameConfig(string filePathMisc){
@@ -365,7 +326,14 @@ void Controller::GameConfig(string filePathMisc){
         throw UnexpectedDataException();
     }
 
+    if(Controller::custom_stoi(fileContentarr[0]) <= Pemain::defaultUang){
+        throw uangWinTooLittleException();
+    }
     Pemain::uangWin = Controller::custom_stoi(fileContentarr[0]);
+
+    if(Controller::custom_stoi(fileContentarr[1]) <= Pemain::defaultBerat){
+        throw beratWinTooLittleException();
+    }
     Pemain::beratWin = Controller::custom_stoi(fileContentarr[1]);
 
     vector<string> str_arr_inv = stringToArraySpace(fileContentarr[2]);
@@ -375,6 +343,12 @@ void Controller::GameConfig(string filePathMisc){
     }else if(str_arr_inv.size() > 2){
         cout << "On " << filePathMisc << ": " << endl;
         throw UnexpectedDataException();
+    }
+
+    if(Controller::custom_stoi(str_arr_inv[0]) <= 0 || Controller::custom_stoi(str_arr_inv[1]) <= 0){
+        throw inventorySizeInvalidException();
+    }else if(Controller::custom_stoi(str_arr_inv[1]) > 26){
+        throw SizeUnsupportedException();
     }
     Inventory::inventoryRowSize = Controller::custom_stoi(str_arr_inv[0]);
     Inventory::inventoryColumnSize = Controller::custom_stoi(str_arr_inv[1]);
@@ -387,6 +361,12 @@ void Controller::GameConfig(string filePathMisc){
         cout << "On " << filePathMisc << ": " << endl;
         throw UnexpectedDataException();
     }
+
+    if(Controller::custom_stoi(str_arr_lhn[0]) <= 0 || Controller::custom_stoi(str_arr_lhn[1]) <= 0){
+        throw ladangSizeInvalidException();
+    }else if(Controller::custom_stoi(str_arr_lhn[1]) > 26){
+        throw SizeUnsupportedException();
+    }
     Ladang::lahanRowSize = Controller::custom_stoi(str_arr_lhn[0]);
     Ladang::lahanColumnSize = Controller::custom_stoi(str_arr_lhn[1]);
 
@@ -397,6 +377,12 @@ void Controller::GameConfig(string filePathMisc){
     }else if(str_arr_pet.size() > 2){
         cout << "On " << filePathMisc << ": " << endl;
         throw UnexpectedDataException();
+    }
+
+    if(Controller::custom_stoi(str_arr_pet[0]) <= 0 || Controller::custom_stoi(str_arr_pet[1]) <= 0){
+        throw peternakanSizeInvalidException();
+    }else if(Controller::custom_stoi(str_arr_pet[1]) > 26){
+        throw SizeUnsupportedException();
     }
     Peternakan::peternakanRowSize = Controller::custom_stoi(str_arr_pet[0]);
     Peternakan::peternakanColumnSize = Controller::custom_stoi(str_arr_pet[1]);

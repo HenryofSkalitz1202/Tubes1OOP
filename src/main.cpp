@@ -291,6 +291,12 @@ int main(){
         cout << e.what() << endl;
     } catch(storeSizeInvalidException& e){
         cout << e.what() << endl;
+    } catch(uangWinTooLittleException& e){
+        cout << e.what() << endl;
+    } catch(beratWinTooLittleException& e){
+        cout << e.what() << endl;
+    } catch(SizeUnsupportedException& e){
+        cout << e.what() << endl;
     } catch(const std::exception& e) {
         cerr << e.what() << endl;
         return 1;

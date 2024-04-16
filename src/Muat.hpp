@@ -18,6 +18,8 @@ class Muat {
 
     void read();
     Asset* getAsset(string name);
+
+    bool isStringDigit(const std::string& str);
 };
 
 #endif

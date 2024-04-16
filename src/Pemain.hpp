@@ -54,7 +54,7 @@ private:
   const int ktkp = 13;
 public:
   Petani(int petaniID, string username);
-  Petani(int petaniID, string username, int uang, int beratBadan, Inventory inventory, Ladang ladang);
+  Petani(int petaniID, string username, int uang, int beratBadan);
   ~Petani();
   Petani(Petani& other);
   Petani& operator=(const Petani& other);
@@ -63,6 +63,7 @@ public:
   int getPetaniID();
   Ladang getLadang();
   Tumbuhan* getFromLadang(string key);
+  void addToLadang(Tumbuhan* tumbuhan, string loc);
 
   void printLadang();
   void tanamTanaman();
@@ -79,7 +80,7 @@ private:
 
 public:
   Walikota(int walikotaID, string username);
-  Walikota(int walikotaID, string username, int uang, int beratBadan, Inventory inventory);
+  Walikota(int walikotaID, string username, int uang, int beratBadan);
   ~Walikota();
   Walikota(Walikota& other);
   Walikota& operator=(const Walikota& other);
@@ -103,7 +104,7 @@ private:
   const int ktkp = 11;
 public:
   Peternak(int peternakID, string username);
-  Peternak(int peternakID, string username, int uang, int beratBadan, Inventory inventory, Peternakan peternakan);
+  Peternak(int peternakID, string username, int uang, int beratBadan);
   ~Peternak();
   Peternak(Peternak& other);
   Peternak& operator=(const Peternak& other);
@@ -112,6 +113,7 @@ public:
   int getPeternakID();
   Peternakan getPeternakan();
   Hewan* getFromPeternakan(string key);
+  void addToPeternakan(Hewan* hewan, string loc);
 
   void printPeternakan();
   void taruhHewan();

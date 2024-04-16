@@ -2,6 +2,7 @@
 #include "Exception.hpp"
 #include "input.cpp"
 #include "Simpan.cpp"
+#include "Muat.cpp"
 #include <iostream>
 #include <vector>
 #include <sstream>
@@ -12,8 +13,12 @@ vector<Pemain*> Controller::players;
 map<string, int> Toko::catalogPrice;
 map<string, int> Toko::catalogBangunan;
 map<string, int> Toko::catalogProduk;
+map<string, string> Toko::catalogProdukFruitNama;
+map<string, string> Toko::catalogProdukHewanNama;
 vector<string> Toko::catalogHewan;
+map<string, string> Toko::catalogHewanNama;
 vector<string> Toko::catalogTumbuhan;
+map<string, string> Toko::catalogTumbuhanNama;
 map<string, string> cekHewan;
 map<string, string> cekMaterialPlant;
 map<string, string> cekFruitPlant;
@@ -138,11 +143,13 @@ void Controller::populateConfigProduk(string filePathProduk){
                 mp_fruit.insert({str_arr[1], produkFruitPtr});
                 Toko::catalogPrice.insert({str_arr[1], Controller::custom_stoi(str_arr[6])});
                 Toko::catalogProduk.insert({str_arr[1], 0});
+                Toko::catalogProdukFruitNama.insert({str_arr[2], str_arr[1]});
             }else if(str_arr[3] == "PRODUCT_ANIMAL"){
                 produkHewanPtr = new ProductHewan(Controller::custom_stoi(str_arr[0]), str_arr[1], str_arr[2], str_arr[3], str_arr[4], Controller::custom_stoi(str_arr[5]), Controller::custom_stoi(str_arr[6]));
                 mp_hewan.insert({str_arr[1], produkHewanPtr});
                 Toko::catalogPrice.insert({str_arr[1], Controller::custom_stoi(str_arr[6])});
                 Toko::catalogProduk.insert({str_arr[1], 0});
+                Toko::catalogProdukHewanNama.insert({str_arr[2], str_arr[1]});
             }else{
                 cout << "Type " << str_arr[3];
                 throw UnknownProductTypeException();
@@ -217,6 +224,7 @@ void Controller::populateConfigHewan(string filePathHewan){
             }
             mp.insert({str_arr[1], hewanPtr});
             Toko::catalogHewan.push_back(str_arr[1]);
+            Toko::catalogHewanNama.insert({str_arr[2], str_arr[1]});
             Toko::catalogPrice.insert({str_arr[1], Controller::custom_stoi(str_arr[5])});
         }else{
             throw duplicateKeyException();
@@ -267,6 +275,7 @@ void Controller::populateConfigTumbuhan(string filePathTumbuhan){
             }
             mp.insert({str_arr[1], tumbuhanPtr});
             Toko::catalogTumbuhan.push_back(str_arr[1]);
+            Toko::catalogTumbuhanNama.insert({str_arr[2], str_arr[1]});
             Toko::catalogPrice.insert({str_arr[1], Controller::custom_stoi(str_arr[5])});
         }else{
             throw duplicateKeyException();
@@ -706,6 +715,39 @@ void Controller::tambah_pemain(Walikota* walikota){
     }
 }
 
+void Controller::muat(string filePathState)
+{
+    try{
+        Muat Muat(filePathState, *this);
+        Muat.read();
+
+        cout << GREEN << filePathState << " successfully loaded!" << NORMAL << endl;
+    } catch(MuatPathNotFoundException& e){
+        cout << "Opening " << filePathState << "..." << endl;
+        cout << e.what() << endl;
+    } catch(walikotaAlreadyExistException& e){
+        cout << e.what() << endl;
+    } catch(playerTypeNotExistException& e){
+        cout << e.what() << endl;
+    } catch(UnknownProductException& e){
+        cout << e.what() << endl;
+    } catch(inventorySizeInvalidException& e){
+        cout << e.what() << endl;
+    } catch(inventoryItemInvalidException& e){
+        cout << e.what() << endl;
+    } catch(ladangSizeInvalidException& e){
+        cout << e.what() << endl;
+    } catch(ladangItemInvalidException& e){
+        cout << e.what() << endl;
+    } catch(peternakanSizeInvalidException& e){
+        cout << e.what() << endl;
+    } catch(peternakanItemInvalidException& e){
+        cout << e.what() << endl;
+    } catch(storeSizeInvalidException& e){
+        cout << e.what() << endl;
+    } 
+}
+
 void Controller::simpan(){
     string filepath;
     cout << "Masukkan lokasi berkas state: ";
@@ -718,8 +760,11 @@ void Controller::simpan(){
         SaveFile.close();
         Simpan simpan(filepath, *this);
         simpan.write();
+
+        cout << "Saving to " << filepath << "..." << endl;
         cout << GREEN << "State berhasil disimpan" << NORMAL << endl;
     } catch (SavePathNotFoundException& e) {
+        cout << "Saving to " << filepath << "..." << endl;
         cout << e.what() << endl;
     }
 }

@@ -191,17 +191,46 @@ int main(){
         //READ AND EXECUTE COMMAND
         if(gameMode == "1"){
             cout << ANSI_COLOR_BLUE << "\nStarting new game...." << ANSI_COLOR_RESET << endl;
-            Controller mainPage;
+            Controller mainPageDefault;
 
-            while(!mainPage.is_game_over()){
-                cout << ANSI_COLOR_CYAN << "\nTurn: " << mainPage.getTurnNumber() << ANSI_COLOR_RESET << endl; 
-                cout << ANSI_COLOR_MAGENTA << "Current player: " << mainPage.get_current_player()->getUsername() << ANSI_COLOR_RESET << endl;
-                mainPage.readCommand(mainPage.get_current_player());
+            while(!mainPageDefault.is_game_over()){
+                cout << ANSI_COLOR_CYAN << "\nTurn: " << mainPageDefault.getTurnNumber() << ANSI_COLOR_RESET << endl; 
+                cout << ANSI_COLOR_MAGENTA << "Current player: " << mainPageDefault.get_current_player()->getUsername() << ANSI_COLOR_RESET << endl;
+                mainPageDefault.readCommand(mainPageDefault.get_current_player());
             }
 
             cout << GREEN << "Selamat kamu menang!" << NORMAL << endl;
         }else if(gameMode == "2"){
-            //COMING SOON
+            Controller mainPageMuat;
+
+            string filePathState;
+            bool validPathState = false;
+            while(!validPathState){
+                filePathState = "";
+                cout << "Masukkan lokasi berkas state: " << endl;
+                cin >> filePathState;
+
+                std::ifstream fileState(filePathState);
+                cout << "\nOpening " << filePathState << "....." << endl;
+
+                if(Controller::stringToArrayDot(filePathState)[1] != "txt"){
+                    cout << ANSI_COLOR_YELLOW << "File config must be a txt file!\n" << ANSI_COLOR_RESET << endl;
+                }else if (!fileState.is_open()) {
+                    cout << ANSI_COLOR_YELLOW << "File config state '" << filePathMisc << "' is not found\n" << ANSI_COLOR_RESET << endl;
+                }else{
+                    validPathState = true;
+                }
+            }
+
+            mainPageMuat.muat(filePathState);
+            
+            while(!mainPageMuat.is_game_over()){
+                cout << ANSI_COLOR_CYAN << "\nTurn: " << mainPageMuat.getTurnNumber() << ANSI_COLOR_RESET << endl; 
+                cout << ANSI_COLOR_MAGENTA << "Current player: " << mainPageMuat.get_current_player()->getUsername() << ANSI_COLOR_RESET << endl;
+                mainPageMuat.readCommand(mainPageMuat.get_current_player());
+            }
+
+            cout << GREEN << "Selamat kamu menang!" << NORMAL << endl;
         }
     } catch(UnknownProductTypeException& e){
         cout << e.what() << endl;

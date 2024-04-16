@@ -60,6 +60,13 @@ public:
     }
 };
 
+class MuatPathNotFoundException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31mFile path invalid!\n\033[0m";
+    }
+};
+
 class duplicateKeyException : public exception{
 public:
     const char* what() const noexcept override{
@@ -148,6 +155,13 @@ class ProductHewanFalseTypeException : public exception{
 public:
     const char* what() const noexcept override{
         return "\033[1;31mObject of ProductHewan type must have type 'PRODUCT_ANIMAL\n\033[0m";
+    }
+};
+
+class UnknownProductException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31m is an unknown product!\n\033[0m";
     }
 };
 
@@ -381,4 +395,70 @@ public:
         return "\033[1;31mExpected integer but found non-numeric characters!\n\033[0m";
     }
 };
+
+class playerTypeNotExistException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31m is an unknown player type!\n\033[0m";
+    }
+};
+
+class walikotaAlreadyExistException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31mMultiple Walikota detected! There can only be one Walikota!\n\033[0m";
+    }
+};
+
+class inventorySizeInvalidException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31mInventory size is invalid!\n\033[0m";
+    }
+};
+
+class inventoryItemInvalidException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31mInventory item is unknown!\n\033[0m";
+    }
+};
+
+class ladangSizeInvalidException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31mLadang size is invalid!\n\033[0m";
+    }
+};
+
+
+class ladangItemInvalidException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31m is not recognized as Tumbuhan!\n\033[0m";
+    }
+};
+
+class peternakanSizeInvalidException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31mPeternakan size is invalid!\n\033[0m";
+    }
+};
+
+
+class peternakanItemInvalidException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31m is not recognized as Hewan!\n\033[0m";
+    }
+};
+
+class storeSizeInvalidException : public exception{
+public:
+    const char* what() const noexcept override{
+        return "\033[1;31mStore size is invalid!\n\033[0m";
+    }
+};
+
 #endif

@@ -193,14 +193,12 @@ Petani::Petani(int petaniID, string username){
     this->status = "Petani";
 }
 
-Petani::Petani(int petaniID, string username, int uang, int beratBadan, Inventory inventory, Ladang ladang){
+Petani::Petani(int petaniID, string username, int uang, int beratBadan){
     this->petaniID = petaniID;
     this->username = username;
     this->uang = uang;
     this->beratBadan = beratBadan;
     this->status = "Petani";
-    this->inventory = inventory;
-    this->ladang = ladang;
 }
 
 Petani::~Petani(){
@@ -240,6 +238,10 @@ int Petani::getPetaniID(){
 
 Tumbuhan* Petani::getFromLadang(string key) {
     return this->ladang.get(key);
+}
+
+void Petani::addToLadang(Tumbuhan* tumbuhan, string loc) {
+    this->ladang.addItemKey(tumbuhan, loc);
 }
 
 Ladang Petani::getLadang(){
@@ -338,7 +340,7 @@ void Petani::tanamTanaman(){
             this->ladang.setWithKey(key_ladang, tanaman);
 
             std::cout << "\nCangkul, cangkul, cangkul yang dalam~!" << std::endl;
-            std::cout << GREEN << tanaman->getNamaAsset() << " berhasil ditanam!" << NORMAL << endl;
+            std::cout << GREEN << tanaman->getNamaAsset() << " berhasil ditanam!\n" << NORMAL << endl;
         }
     }catch(inventoryEmptyException& e){
         std::cout << e.what();
@@ -765,13 +767,12 @@ Walikota::Walikota(int walikotaID, string username){
     this->status = "Walikota";
 }
 
-Walikota::Walikota(int walikotaID, string username, int uang, int beratBadan, Inventory inventory){
+Walikota::Walikota(int walikotaID, string username, int uang, int beratBadan){
     this->walikotaID = walikotaID;
     this->username = username;
     this->uang = uang;
     this->beratBadan = beratBadan;
     this->status = "Walikota";
-    this->inventory = inventory;
 }
 
 Walikota::~Walikota(){
@@ -1223,14 +1224,12 @@ Peternak::Peternak(int peternakID, string username){
     this->status = "Peternak";
 }
 
-Peternak::Peternak(int peternakID, string username, int uang, int beratBadan, Inventory inventory, Peternakan peternakan){
+Peternak::Peternak(int peternakID, string username, int uang, int beratBadan){
     this->peternakID = peternakID;
     this->username = username;
     this->uang = uang;
     this->beratBadan = beratBadan;
     this->status = "Peternak";
-    this->inventory = inventory;
-    this->peternakan = peternakan;
 }
 
 Peternak::~Peternak(){
@@ -1273,6 +1272,10 @@ Peternakan Peternak::getPeternakan(){
 
 Hewan* Peternak::getFromPeternakan(string key) {
     return this->peternakan.get(key);
+}
+
+void Peternak::addToPeternakan(Hewan* hewan, string loc) {
+    this->peternakan.addItemKey(hewan, loc);
 }
 
 void Peternak::printPeternakan(){
@@ -1370,7 +1373,7 @@ void Peternak::taruhHewan(){
             this->peternakan.setWithKey(key_peternakan, hewan);
 
             std::cout << "\nDengan hati-hati, kamu meletakkan seekor " << hewan->getNamaAsset() << " di kandang." << std::endl;
-            std::cout << GREEN << hewan->getNamaAsset() << " telah menjadi peliharaanmu sekarang!" << NORMAL << endl;
+            std::cout << GREEN << hewan->getNamaAsset() << " telah menjadi peliharaanmu sekarang!\n" << NORMAL << endl;
         }
     }catch(inventoryEmptyException& e){
         std::cout << e.what();

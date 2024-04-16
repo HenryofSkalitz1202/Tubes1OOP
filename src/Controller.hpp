@@ -78,7 +78,7 @@ public:
     void panen(Petani* petani);
     void panen(Peternak* peternak);
     void tambah_pemain(Walikota* walikota);
-    void muat();
+    void muat(string filePathState);
     void simpan();
 };
 

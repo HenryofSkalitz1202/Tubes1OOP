@@ -316,10 +316,16 @@ void Inventory::addItemKey(Asset* asset, string loc) {
 }
 
 void Inventory::findAndRemoveItem(string item_key){
-    for(const auto& pair : this->data){
-        if(pair.second->getNamaAsset() == item_key){
-            this->setNull(pair.first);
-            return;
+    bool found = false;
+    for(int row  = 0; row < this->numRows() && !found; row++){
+        for(int col = 0; col < this->numCols() && !found; col++){
+            if(this->get(row, col) != nullptr){
+                if(this->get(row, col)->getNamaAsset() == item_key){
+                    cout << "key: " << calculateKey(row, col) << endl;
+                    this->setNull(calculateKey(row, col));
+                    found = true;
+                }
+            }
         }
     }
 }

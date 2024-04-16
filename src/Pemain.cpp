@@ -790,33 +790,30 @@ void Walikota::bangunBangunan(){
     Bangunan::printResep();
     map<string, int> myMaterial = this->inventory.rekapMaterial();
     bool found = false;
-    string namaBangunan = "";
-
-    if(this->inventory.isFull()){
-        throw inventoryFullException();
-    }
+    string namaBangunan;
 
     while(!found){
+        namaBangunan = "";
         std::cout << "\nBangunan yang ingin dibangun: ";
         cin >> namaBangunan;
 
         if(Bangunan::resepBangunan.find(namaBangunan) == Bangunan::resepBangunan.end()){
-            std::cout << "Kamu tidak punya resep bangunan tersebut!" << std::endl;
+            std::cout << YELLOW << "Kamu tidak punya resep bangunan tersebut!" << NORMAL << std::endl;
         }else{
             found = true;
         }
     }
 
+    map<string, int> materialBangunan = Bangunan::resepBangunan[namaBangunan]->getListBahan();
     map<string, int> materialKurang;
     bool uangCukup = true;
     bool materialCukup = true;
-
     if(this->uang < Bangunan::resepBangunan[namaBangunan]->getPrice()){
         materialKurang.insert({"gulden", Bangunan::resepBangunan[namaBangunan]->getPrice() - this->uang});
         uangCukup = false;
     }
 
-    for(const auto& pair : Bangunan::resepBangunan[namaBangunan]->getListBahan()){
+    for(const auto& pair : materialBangunan){
         if(myMaterial[pair.first] < pair.second){
             materialCukup = false;
             materialKurang.insert({pair.first, pair.second - myMaterial[pair.first]});
@@ -829,7 +826,7 @@ void Walikota::bangunBangunan(){
         this->uang -= new_building->getPrice();
 
         for(const auto& pair : myMaterial){
-            for(int i = 0; i < pair.second; i++){
+            for(int i = 0; i < materialBangunan[pair.first]; i++){
                 this->inventory.findAndRemoveItem(pair.first);
             }
         }
@@ -837,7 +834,7 @@ void Walikota::bangunBangunan(){
         this->inventory.addItem(new_building);
         std::cout << new_building->getNamaAsset() << " berhasil dibangun dan telah menjadi hak milik walikota!";
     }else{
-        std::cout << "Kamu tidak punya sumber daya yang cukup! Masih memerlukan ";
+        std::cout << RED << "Kamu tidak punya sumber daya yang cukup! Masih memerlukan ";
         bool first = true;
         for (const auto& pair : materialKurang) {
             if (!first) {
@@ -846,75 +843,79 @@ void Walikota::bangunBangunan(){
             std::cout << pair.second << " " << pair.first;
             first = false;
         }
-        std::cout << std::endl;
+        std::cout << NORMAL << std::endl;
     }
 }
 
 Pemain* Walikota::tambahAkun(vector<Pemain*> players){
-    if(this->uang < 50){
-        throw uangInsufficientException();
-    }  
+    try{
+        if(this->uang < 50){
+            throw uangInsufficientException();
+        }  
 
-    string jenis_pemain;
-    bool validJenisPemain = false;
-    while(!validJenisPemain){
-        jenis_pemain = "";
-        std::cout << "Masukkan jenis pemain: ";
-        cin >> jenis_pemain;
+        string jenis_pemain;
+        bool validJenisPemain = false;
+        while(!validJenisPemain){
+            jenis_pemain = "";
+            std::cout << "Masukkan jenis pemain: ";
+            cin >> jenis_pemain;
 
-        if(jenis_pemain == "petani" || jenis_pemain == "PETANI"){
-            validJenisPemain = true;
-        }else if(jenis_pemain == "peternak" || jenis_pemain == "PETERNAK"){
-            validJenisPemain = true;
-        }else if(jenis_pemain == "walikota" || jenis_pemain == "WALIKOTA"){
-            cout << YELLOW << "There can only be one Walikota, chosen one! You!\n" << NORMAL << endl;
-        }else{
-            cout << YELLOW << "Role is invalid!\n" << NORMAL << endl;
-        }
-    }
-
-    string nama_pemain;
-    bool validNamaPemain = false;
-    while(!validNamaPemain){
-        nama_pemain = "";
-        std::cout << "Masukkan nama pemain: ";
-        cin >> nama_pemain;
-
-        bool containLetter = false;
-        for (char c : nama_pemain) {
-            if (std::isalpha(c)) {
-                containLetter = true;
-                break;
+            if(jenis_pemain == "petani" || jenis_pemain == "PETANI"){
+                validJenisPemain = true;
+            }else if(jenis_pemain == "peternak" || jenis_pemain == "PETERNAK"){
+                validJenisPemain = true;
+            }else if(jenis_pemain == "walikota" || jenis_pemain == "WALIKOTA"){
+                cout << YELLOW << "There can only be one Walikota, chosen one! You!\n" << NORMAL << endl;
+            }else{
+                cout << YELLOW << "Role is invalid!\n" << NORMAL << endl;
             }
         }
 
-        if(containLetter){
-            bool isTaken = false;
-            for(Pemain* player : players){
-                if(player->getUsername() == nama_pemain){
-                    isTaken = true;
+        string nama_pemain;
+        bool validNamaPemain = false;
+        while(!validNamaPemain){
+            nama_pemain = "";
+            std::cout << "Masukkan nama pemain: ";
+            cin >> nama_pemain;
+
+            bool containLetter = false;
+            for (char c : nama_pemain) {
+                if (std::isalpha(c)) {
+                    containLetter = true;
                     break;
                 }
             }
 
-            if(!isTaken){
-                validNamaPemain = true;
-            }else{
-                cout << YELLOW <<  "Username " << nama_pemain << " is already taken! Please choose another name\n" << NORMAL << endl; 
-            }
-        }else{
-            cout << YELLOW << "Username must contain at least one letter!\n" << NORMAL << endl;
-        }
-    }
+            if(containLetter){
+                bool isTaken = false;
+                for(Pemain* player : players){
+                    if(player->getUsername() == nama_pemain){
+                        isTaken = true;
+                        break;
+                    }
+                }
 
-    if(jenis_pemain == "petani" || jenis_pemain == "PETANI"){
-        Petani* player = new Petani(players.size() + 1, nama_pemain);
-        std::cout << GREEN << "Pemain baru ditambahkan!\nSelamat datang \"" << nama_pemain << "\" di kota ini!" << NORMAL << std::endl;
-        return player;
-    }else if(jenis_pemain == "peternak" || jenis_pemain == "PETERNAK"){
-        Peternak* player = new Peternak(players.size() + 1, nama_pemain);
-        std::cout << GREEN << "Pemain baru ditambahkan!\nSelamat datang \"" << nama_pemain << "\" di kota ini!" << NORMAL << std::endl;
-        return player;
+                if(!isTaken){
+                    validNamaPemain = true;
+                }else{
+                    cout << YELLOW <<  "Username " << nama_pemain << " is already taken! Please choose another name\n" << NORMAL << endl; 
+                }
+            }else{
+                cout << YELLOW << "Username must contain at least one letter!\n" << NORMAL << endl;
+            }
+        }
+
+        if(jenis_pemain == "petani" || jenis_pemain == "PETANI"){
+            Petani* player = new Petani(players.size() + 1, nama_pemain);
+            std::cout << GREEN << "Pemain baru ditambahkan!\nSelamat datang \"" << nama_pemain << "\" di kota ini!" << NORMAL << std::endl;
+            return player;
+        }else if(jenis_pemain == "peternak" || jenis_pemain == "PETERNAK"){
+            Peternak* player = new Peternak(players.size() + 1, nama_pemain);
+            std::cout << GREEN << "Pemain baru ditambahkan!\nSelamat datang \"" << nama_pemain << "\" di kota ini!" << NORMAL << std::endl;
+            return player;
+        }
+    }catch(uangInsufficientException& e){
+        cout << e.what();
     }
 }
 
@@ -992,9 +993,9 @@ void Walikota::beliAsset(Toko* store){
 
             nomorBarang = std::stoi(input);
             if(mapIdxKode.find(nomorBarang) == mapIdxKode.end() || nomorBarang <= 0){
-                std::cout << YELLOW << "Nomor barang is invalid!" << NORMAL << std::endl;
+                std::cout << YELLOW << "Nomor barang is invalid!\n" << NORMAL << std::endl;
             }else if(Toko::catalogPrice[mapIdxKode[nomorBarang]] > this->uang){
-                std::cout << YELLOW << "Barang is too expensive!" << NORMAL << std::endl;
+                std::cout << YELLOW << "Barang is too expensive!\n" << NORMAL << std::endl;
             }else{
                 validNomorBarang = true;
             }
@@ -1027,27 +1028,27 @@ void Walikota::beliAsset(Toko* store){
 
             kuantitas = std::stoi(input);
             if(kuantitas <= 0){
-                std::cout << YELLOW <<  "Kuantitas is invalid!" << NORMAL << std::endl;
+                std::cout << YELLOW <<  "Kuantitas is invalid!\n" << NORMAL << std::endl;
             }else if(kuantitas > this->inventory.countAvailableCapacity()){
-                cout << YELLOW << "Inventory capacity is not enough" << NORMAL << endl;
+                cout << YELLOW << "Inventory capacity is not enough\n" << NORMAL << endl;
             }else{
                 if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_MATERIAL_PLANT"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
-                        std::cout << YELLOW << "There isn't enough stock of " << mapIdxKode[nomorBarang] << "!" << NORMAL << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << mapIdxKode[nomorBarang] << "!\n" << NORMAL << std::endl;
                     }else{
                         barang = ProductMaterial::configProdukMaterial[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
                     }
                 }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_FRUIT_PLANT"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
-                        std::cout << YELLOW << "There isn't enough stock of " << ProductFruit::configProdukFruit[mapIdxKode[nomorBarang]]->getNamaAsset() << "!" << NORMAL << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << ProductFruit::configProdukFruit[mapIdxKode[nomorBarang]]->getNamaAsset() << "!\n" << NORMAL << std::endl;
                     }else{
                         barang = ProductFruit::configProdukFruit[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
                     }
                 }else if(mapType[mapIdxKode[nomorBarang]] == "PRODUCT_ANIMAL"){
                     if(kuantitas > Toko::catalogProduk[mapIdxKode[nomorBarang]]){
-                        std::cout << YELLOW << "There isn't enough stock of " << ProductHewan::configProdukHewan[mapIdxKode[nomorBarang]]->getNamaAsset() << "!" << NORMAL << std::endl;
+                        std::cout << YELLOW << "There isn't enough stock of " << ProductHewan::configProdukHewan[mapIdxKode[nomorBarang]]->getNamaAsset() << "!\n" << NORMAL << std::endl;
                     }else{
                         barang = ProductHewan::configProdukHewan[mapIdxKode[nomorBarang]];
                         kuantitasCukup = true;
@@ -1063,10 +1064,10 @@ void Walikota::beliAsset(Toko* store){
 
             if(kuantitasCukup){
                 if(this->uang >= kuantitas * Toko::catalogPrice[mapIdxKode[nomorBarang]]){
-                    std::cout << GREEN << "Selamat! Anda berhasil membeli " << kuantitas << barang->getNamaAsset() << NORMAL << std::endl;
+                    std::cout << GREEN << "Selamat! Anda berhasil membeli " << kuantitas << " " << barang->getNamaAsset() << NORMAL << std::endl;
                     validKuantitas = true;
                 }else{
-                    std::cout << YELLOW << "You don't have enough money to buy that much!" << NORMAL << std::endl;
+                    std::cout << YELLOW << "You don't have enough money to buy that much!\n" << NORMAL << std::endl;
                 }
             }
         }

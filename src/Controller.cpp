@@ -29,14 +29,6 @@ Controller::Controller()
     this->turn_number = 0;
     this->game_over = false;
     Tumbuhan::current_turn = this->turn_number;
-
-    Petani *p1 = new Petani(1, "Petani1");
-    Peternak *p2 = new Peternak(2, "Peternak1");
-    Walikota *p3 = new Walikota(3, "Walikota1");
-    this->add_player(p1);
-    this->add_player(p2);
-    this->add_player(p3);
-    this->set_current_player(this->get_first_player());
 }
 
 Controller::~Controller()
@@ -717,35 +709,10 @@ void Controller::tambah_pemain(Walikota* walikota){
 
 void Controller::muat(string filePathState)
 {
-    try{
-        Muat Muat(filePathState, *this);
-        Muat.read();
+    Muat Muat(filePathState, *this);
+    Muat.read();
 
-        cout << GREEN << filePathState << " successfully loaded!" << NORMAL << endl;
-    } catch(MuatPathNotFoundException& e){
-        cout << "Opening " << filePathState << "..." << endl;
-        cout << e.what() << endl;
-    } catch(walikotaAlreadyExistException& e){
-        cout << e.what() << endl;
-    } catch(playerTypeNotExistException& e){
-        cout << e.what() << endl;
-    } catch(UnknownProductException& e){
-        cout << e.what() << endl;
-    } catch(inventorySizeInvalidException& e){
-        cout << e.what() << endl;
-    } catch(inventoryItemInvalidException& e){
-        cout << e.what() << endl;
-    } catch(ladangSizeInvalidException& e){
-        cout << e.what() << endl;
-    } catch(ladangItemInvalidException& e){
-        cout << e.what() << endl;
-    } catch(peternakanSizeInvalidException& e){
-        cout << e.what() << endl;
-    } catch(peternakanItemInvalidException& e){
-        cout << e.what() << endl;
-    } catch(storeSizeInvalidException& e){
-        cout << e.what() << endl;
-    } 
+    cout << GREEN << filePathState << " successfully loaded!" << NORMAL << endl;
 }
 
 void Controller::simpan(){

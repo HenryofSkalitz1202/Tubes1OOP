@@ -193,6 +193,15 @@ int main(){
             cout << ANSI_COLOR_BLUE << "\nStarting new game...." << ANSI_COLOR_RESET << endl;
             Controller mainPageDefault;
 
+            Petani *p1 = new Petani(1, "Petani1");
+            Peternak *p2 = new Peternak(2, "Peternak1");
+            Walikota *p3 = new Walikota(3, "Walikota1");
+            mainPageDefault.add_player(p1);
+            mainPageDefault.add_player(p2);
+            mainPageDefault.add_player(p3);
+
+            mainPageDefault.set_current_player(mainPageDefault.get_first_player());
+
             while(!mainPageDefault.is_game_over()){
                 cout << ANSI_COLOR_CYAN << "\nTurn: " << mainPageDefault.getTurnNumber() << ANSI_COLOR_RESET << endl; 
                 cout << ANSI_COLOR_MAGENTA << "Current player: " << mainPageDefault.get_current_player()->getUsername() << ANSI_COLOR_RESET << endl;
@@ -207,7 +216,7 @@ int main(){
             bool validPathState = false;
             while(!validPathState){
                 filePathState = "";
-                cout << "Masukkan lokasi berkas state: " << endl;
+                cout << "Masukkan lokasi berkas state: ";
                 cin >> filePathState;
 
                 std::ifstream fileState(filePathState);
@@ -223,6 +232,8 @@ int main(){
             }
 
             mainPageMuat.muat(filePathState);
+
+            mainPageMuat.set_current_player(mainPageMuat.get_first_player());
             
             while(!mainPageMuat.is_game_over()){
                 cout << ANSI_COLOR_CYAN << "\nTurn: " << mainPageMuat.getTurnNumber() << ANSI_COLOR_RESET << endl; 
@@ -262,8 +273,26 @@ int main(){
         cout << e.what() << endl;
     } catch(duplicateKeyException& e){
         cout << e.what() << endl;
+    } catch(walikotaAlreadyExistException& e){
+        cout << e.what() << endl;
+    } catch(playerTypeNotExistException& e){
+        cout << e.what() << endl;
+    } catch(inventorySizeInvalidException& e){
+        cout << e.what() << endl;
+    } catch(inventoryItemInvalidException& e){
+        cout << e.what() << endl;
+    } catch(ladangSizeInvalidException& e){
+        cout << e.what() << endl;
+    } catch(ladangItemInvalidException& e){
+        cout << e.what() << endl;
+    } catch(peternakanSizeInvalidException& e){
+        cout << e.what() << endl;
+    } catch(peternakanItemInvalidException& e){
+        cout << e.what() << endl;
+    } catch(storeSizeInvalidException& e){
+        cout << e.what() << endl;
     } catch(const std::exception& e) {
-        cerr << e.what() << endl; // Print any error message
+        cerr << e.what() << endl;
         return 1;
     }
 

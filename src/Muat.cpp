@@ -5,6 +5,8 @@ Muat::Muat(string filepath, Controller& controller) : filepath(filepath), contro
 void Muat::read(){
     ifstream file(filepath);
 
+    cout << "Processing players...." << endl;
+
     int num_players;
     file >> num_players;
     file.ignore();
@@ -87,20 +89,20 @@ void Muat::read(){
                 istringstream iss(line);
                 iss >> loc >> item >> num;
 
-                if(Tumbuhan::configTumbuhan.find(item) == Tumbuhan::configTumbuhan.end()){
+                if(Tumbuhan::configTumbuhan.find(Toko::catalogTumbuhanNama[item]) == Tumbuhan::configTumbuhan.end()){
                     delete player;
                     Controller::players.clear();
                     file.close();
-                    cout << RED << item << NORMAL << endl;
+                    cout << RED << item << NORMAL;
                     throw ladangItemInvalidException();
                 }
 
-                if(Tumbuhan::configTumbuhan[item]->getTumbuhanType() == "MATERIAL_PLANT"){
-                    MaterialPlant* t = new MaterialPlant(*dynamic_cast<MaterialPlant*>(Tumbuhan::configTumbuhan[item]));
+                if(Tumbuhan::configTumbuhan[Toko::catalogTumbuhanNama[item]]->getTumbuhanType() == "MATERIAL_PLANT"){
+                    MaterialPlant* t = new MaterialPlant(*dynamic_cast<MaterialPlant*>(Tumbuhan::configTumbuhan[Toko::catalogTumbuhanNama[item]]));
                     t->setTurnInstantiated(-1 * num);
                     dynamic_cast<Petani*>(player)->addToLadang(t, loc);
-                }else if(Tumbuhan::configTumbuhan[item]->getTumbuhanType() == "FRUIT_PLANT"){
-                    FruitPlant* t = new FruitPlant(*dynamic_cast<FruitPlant*>(Tumbuhan::configTumbuhan[item]));
+                }else if(Tumbuhan::configTumbuhan[Toko::catalogTumbuhanNama[item]]->getTumbuhanType() == "FRUIT_PLANT"){
+                    FruitPlant* t = new FruitPlant(*dynamic_cast<FruitPlant*>(Tumbuhan::configTumbuhan[Toko::catalogTumbuhanNama[item]]));
                     t->setTurnInstantiated(-1 * num);
                     dynamic_cast<Petani*>(player)->addToLadang(t, loc);
                 }
@@ -121,7 +123,7 @@ void Muat::read(){
                 istringstream iss(line);
                 iss >> loc >> item >> num;
 
-                if(Hewan::configHewan.find(item) == Hewan::configHewan.end()){
+                if(Hewan::configHewan.find(Toko::catalogHewanNama[item]) == Hewan::configHewan.end()){
                     delete player;
                     Controller::players.clear();
                     file.close();
@@ -129,16 +131,16 @@ void Muat::read(){
                     throw peternakanItemInvalidException();
                 }
 
-                if(Hewan::configHewan[item]->getType() == "CARNIVORE"){
-                    Carnivore* h = new Carnivore(*dynamic_cast<Carnivore*>(Hewan::configHewan[item]));
+                if(Hewan::configHewan[Toko::catalogHewanNama[item]]->getType() == "CARNIVORE"){
+                    Carnivore* h = new Carnivore(*dynamic_cast<Carnivore*>(Hewan::configHewan[Toko::catalogHewanNama[item]]));
                     h->setWeight(num);
                     dynamic_cast<Peternak*>(player)->addToPeternakan(h, loc);
-                }else if(Hewan::configHewan[item]->getType() == "HERBIVORE"){
-                    Herbivore* h = new Herbivore(*dynamic_cast<Herbivore*>(Hewan::configHewan[item]));
+                }else if(Hewan::configHewan[Toko::catalogHewanNama[item]]->getType() == "HERBIVORE"){
+                    Herbivore* h = new Herbivore(*dynamic_cast<Herbivore*>(Hewan::configHewan[Toko::catalogHewanNama[item]]));
                     h->setWeight(num);
                     dynamic_cast<Peternak*>(player)->addToPeternakan(h, loc);
-                }else if(Hewan::configHewan[item]->getType() == "OMNIVORE"){
-                    Omnivore* h = new Omnivore(*dynamic_cast<Omnivore*>(Hewan::configHewan[item]));
+                }else if(Hewan::configHewan[Toko::catalogHewanNama[item]]->getType() == "OMNIVORE"){
+                    Omnivore* h = new Omnivore(*dynamic_cast<Omnivore*>(Hewan::configHewan[Toko::catalogHewanNama[item]]));
                     h->setWeight(num);
                     dynamic_cast<Peternak*>(player)->addToPeternakan(h, loc);
                 }
@@ -147,6 +149,9 @@ void Muat::read(){
 
         this->controller.add_player(player);
     }
+
+    cout << GREEN << "Players successfully loaded!\n" << NORMAL << endl;
+    cout << "Processing store...." << endl;
 
     getline(file, line);
 
@@ -182,6 +187,7 @@ void Muat::read(){
             
             Controller::players.clear();
             file.close();
+            cout << RED << item << NORMAL;
             throw UnknownProductException();
         }
     }
@@ -194,14 +200,14 @@ Asset* Muat::getAsset(string name) {
         return Bangunan::resepBangunan[name];
     } else if (ProductMaterial::configProdukMaterial.count(name)) {
         return ProductMaterial::configProdukMaterial[name];
-    } else if (ProductFruit::configProdukFruit.count(name)) {
-        return ProductFruit::configProdukFruit[name];
-    } else if (ProductHewan::configProdukHewan.count(name)) {
-        return ProductHewan::configProdukHewan[name];
-    } else if (Hewan::configHewan.count(name)) {
-        return Hewan::configHewan[name];
-    } else if (Tumbuhan::configTumbuhan.count(name)) {
-        return Tumbuhan::configTumbuhan[name];
+    } else if (ProductFruit::configProdukFruit.count(Toko::catalogProdukFruitNama[name])) {
+        return ProductFruit::configProdukFruit[Toko::catalogProdukFruitNama[name]];
+    } else if (ProductHewan::configProdukHewan.count(Toko::catalogProdukHewanNama[name])) {
+        return ProductHewan::configProdukHewan[Toko::catalogProdukHewanNama[name]];
+    } else if (Hewan::configHewan.count(Toko::catalogHewanNama[name])) {
+        return Hewan::configHewan[Toko::catalogHewanNama[name]];
+    } else if (Tumbuhan::configTumbuhan.count(Toko::catalogTumbuhanNama[name])) {
+        return Tumbuhan::configTumbuhan[Toko::catalogTumbuhanNama[name]];
     }
     return nullptr;
 }

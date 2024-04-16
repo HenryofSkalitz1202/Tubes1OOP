@@ -34,7 +34,7 @@ void Simpan::write() {
         }
     }
 
-    map<string, int> tokoItems = controller.getRekapToko();
+    map<string, int> tokoItems = this->controller.getRekapToko();
     SaveFile << tokoItems.size() << endl;
     for (auto const& x: tokoItems) {
         SaveFile << x.first << " " << x.second << endl;

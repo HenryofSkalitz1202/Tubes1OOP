@@ -30,6 +30,8 @@ map<string, int> Toko::rekapToko(){
             gudangToko.insert({pair.first, pair.second});
         }
     }
+
+    return gudangToko;
 }
 
 int Toko::getCheapest(){

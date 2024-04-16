@@ -708,7 +708,7 @@ void Controller::tambah_pemain(Walikota* walikota){
 
 void Controller::simpan(){
     string filepath;
-    cout << "Masukkan lokasi berkas state:";
+    cout << "Masukkan lokasi berkas state: ";
     cin >> filepath;
     try {
         ofstream SaveFile(filepath);
@@ -718,7 +718,7 @@ void Controller::simpan(){
         SaveFile.close();
         Simpan simpan(filepath, *this);
         simpan.write();
-        cout << "State berhasil disimpan" << endl;
+        cout << GREEN << "State berhasil disimpan" << NORMAL << endl;
     } catch (SavePathNotFoundException& e) {
         cout << e.what() << endl;
     }

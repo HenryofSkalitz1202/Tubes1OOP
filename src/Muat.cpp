@@ -47,7 +47,7 @@ void Muat::read(){
 
         getline(file, line);
         
-        if(!isStringDigit(line) || stoi(line) <= 0){
+        if(!isStringDigit(line) || stoi(line) < 0){
             delete player;
             Controller::players.clear();
             file.close();

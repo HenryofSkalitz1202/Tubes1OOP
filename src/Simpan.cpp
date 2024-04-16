@@ -44,8 +44,8 @@ void Simpan::write() {
 
 vector<string> Simpan::inventoryItems(Pemain* player) {
     vector<string> itemNames;
-    for (size_t i=0; i<Inventory::inventoryRowSize; ++i) {
-        for (size_t j=0; j<Inventory::inventoryColumnSize; ++j) {
+    for (size_t i = 0; i < Inventory::inventoryRowSize; ++i) {
+        for (size_t j = 0; j < Inventory::inventoryColumnSize; ++j) {
             if (player->getFromInventory(calculateKey(i, j)) != nullptr) {
                 itemNames.push_back(player->getFromInventory(calculateKey(i, j))->getNamaAsset());
             }
@@ -57,8 +57,8 @@ vector<string> Simpan::inventoryItems(Pemain* player) {
 vector<string> Simpan::ladangItems(Petani* player) {
     vector<string> items;
     string details;
-    for (size_t i=0; i<Ladang::lahanRowSize; ++i) {
-        for (size_t j=0; j<Ladang::lahanColumnSize; ++j) {
+    for (size_t i = 0; i < Ladang::lahanRowSize; ++i) {
+        for (size_t j = 0; j < Ladang::lahanColumnSize; ++j) {
             string key = calculateKey(i, j);
             if (player->getFromLadang(key) != nullptr) {
                 details = "";
@@ -75,8 +75,8 @@ vector<string> Simpan::ladangItems(Petani* player) {
 
 vector<string> Simpan::peternakanItems (Peternak* player) {
     vector<string> items;
-    for (size_t i=0; i<Peternakan::peternakanRowSize; i++) {
-        for (size_t j=0; j<Peternakan::peternakanColumnSize; j++) {
+    for (size_t i = 0; i < Peternakan::peternakanRowSize; i++) {
+        for (size_t j = 0; j < Peternakan::peternakanColumnSize; j++) {
             string key = calculateKey(i, j);
             if (player->getFromPeternakan(key) != nullptr) {
                 string details = "";

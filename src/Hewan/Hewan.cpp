@@ -3,21 +3,21 @@
 map<string, Hewan*> Hewan::configHewan;
 
 Hewan::Hewan(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int weight, int price){
-    this->assetType = "Hewan";
-    this->assetID = hewanID;
-    this->kodeHuruf = kodeHuruf;
-    this->namaAsset = namaHewan;
-    this->price = price;
-    this->type = type;
-    this->weightToHarvest = weightToHarvest;
-    this->weight = weight;
+    this->setAssetType("HEWAN");
+    this->setAssetID(hewanID);
+    this->setKodeHuruf(kodeHuruf);
+    this->setNamaAsset(namaHewan);
+    this->setPrice(price);
+    this->setType(type);
+    this->setWeightToHarvest(weightToHarvest);
+    this->setWeight(weight);
 }
 
 Hewan::~Hewan(){}
 
 void Hewan::setAssetType(string assetType){
     try{
-        if(assetType != "Hewan"){
+        if(assetType != "HEWAN"){
             throw HewanFalseTypeException();
         }
 
@@ -60,4 +60,11 @@ vector<Produk*> Hewan::harvest(){
     }
 
     return harvestedMaterials;
+}
+void Hewan::printHewan(){
+    cout << "Name: " << this->namaAsset << endl;
+    cout << "Price: " << this->price << endl;
+    cout << "Type: " << this->type << endl;
+    cout << "Weight to harvest: " << this->weightToHarvest << endl;
+    cout << "Weight: " << this->weight << endl;
 }

@@ -4,223 +4,223 @@
 #include <exception>
 using namespace std;
 
-struct FilePathStateNotFoundException : public exception{
+class FilePathStateNotFoundException : public exception{
     const char* what() const throw(){
         return "' is not found.";
     }
 };
 
-struct FilePathProdukNotFoundException : public exception{
+class FilePathProdukNotFoundException : public exception{
     const char* what() const throw(){
         return "' is not found.";
     }
 };
 
-struct FilePathHewanNotFoundException : public exception{
+class FilePathHewanNotFoundException : public exception{
     const char* what() const throw(){
         return "' is not found.";
     }
 };
 
-struct FilePathTumbuhanNotFoundException : public exception{
+class FilePathTumbuhanNotFoundException : public exception{
     const char* what() const throw(){
         return "' is not found.";
     }
 };
 
-struct FilePathBangunanNotFoundException : public exception{
+class FilePathBangunanNotFoundException : public exception{
     const char* what() const throw(){
         return "' is not found.";
     }
 };
 
-struct SavePathNotFoundException : public exception{
+class SavePathNotFoundException : public exception{
     const char* what() const throw(){
         return "File path invalid.";
     }
 };
 
-struct BangunanFalseTypeException : public exception{
+class BangunanFalseTypeException : public exception{
     const char* what() const throw(){
         return "Object of Bangunan type doesn't have type 'BANGUNAN\n";
     }
 };
 
-struct ProdukFalseTypeException : public exception{
+class ProdukFalseTypeException : public exception{
     const char* what() const throw(){
         return "Object of Produk type doesn't have type 'PRODUK\n";
     }
 };
 
-struct HewanFalseTypeException : public exception{
+class HewanFalseTypeException : public exception{
     const char* what() const throw(){
         return "Object of Hewan type doesn't have type 'Hewan\n";
     }
 };
 
-struct TumbuhanFalseTypeException : public exception{
+class TumbuhanFalseTypeException : public exception{
     const char* what() const throw(){
         return "Object of Tumbuhan type doesn't have type 'Tumbuhan\n";
     }
 };
 
-struct ProductMaterialFalseTypeException : public exception{
+class ProductMaterialFalseTypeException : public exception{
     const char* what() const throw(){
         return "Object of ProductMaterial type doesn't have type 'PRODUCT_MATERIAL_PLANT\n";
     }
 };
 
-struct ProductFruitFalseTypeException : public exception{
+class ProductFruitFalseTypeException : public exception{
     const char* what() const throw(){
         return "Object of ProductFruit type doesn't have type 'PRODUCT_FRUIT_PLANT\n";
     }
 };
 
-struct ProductHewanFalseTypeException : public exception{
+class ProductHewanFalseTypeException : public exception{
     const char* what() const throw(){
         return "Object of ProductHewan type doesn't have type 'PRODUCT_ANIMAL\n";
     }
 };
 
-struct NotHerbivoreException : public exception{
+class NotHerbivoreException : public exception{
     const char* what() const throw(){
         return " bukan herbivore.\n";
     }
 };
 
-struct NotCarnivoreException : public exception{
+class NotCarnivoreException : public exception{
     const char* what() const throw(){
         return " bukan carnivore.\n";
     }
 };
 
-struct NotOmnivoreException : public exception{
+class NotOmnivoreException : public exception{
     const char* what() const throw(){
         return " bukan omnivore.\n";
     }
 };
 
-struct UnknownProductTypeException : public exception{
+class UnknownProductTypeException : public exception{
     const char* what() const throw(){
         return " is an unknown product type.\n";
     }
 };
 
-struct UnknownAnimalTypeException : public exception{
+class UnknownAnimalTypeException : public exception{
     const char* what() const throw(){
         return " is an unknown animal type.\n";
     }
 };
 
-struct UnknownPlantTypeException : public exception{
+class UnknownPlantTypeException : public exception{
     const char* what() const throw(){
         return " is an unknown plant type.\n";
     }
 };
 
-struct MaterialBangunanNotProductMaterialException : public exception{
+class MaterialBangunanNotProductMaterialException : public exception{
     const char* what() const throw(){
         return " is not of ProductMaterial type.\n";
     }
 };
 
-struct HewanWrongFoodTypeException : public exception{
+class HewanWrongFoodTypeException : public exception{
     const char* what() const throw(){
         return ". Hewan can only eat Produk type.\n";
     }
 };
 
-struct HerbivoreWrongFoodTypeException : public exception{
+class HerbivoreWrongFoodTypeException : public exception{
     const char* what() const throw(){
         return "Herbivore can only eat ProductFruit type.\n";
     }
 };
 
-struct CarnivoreWrongFoodTypeException : public exception{
+class CarnivoreWrongFoodTypeException : public exception{
     const char* what() const throw(){
         return "Carnivore can only eat ProductHewan type.\n";
     }
 };
 
-struct OmnivoreWrongFoodTypeException : public exception{
+class OmnivoreWrongFoodTypeException : public exception{
     const char* what() const throw(){
         return "Omnivore can only eat ProductFruit or ProductHewan type.\n";
     }
 };
 
-struct insertIntoUnemptyCellException : public exception{
+class insertIntoUnemptyCellException : public exception{
     const char* what() const throw(){
         return "Value can only be inserted on empty cells.\n";
     }
 };
 
-struct isAlreadyNullException : public exception{
+class isAlreadyNullException : public exception{
     const char* what() const throw(){
         return "Value of given cell is already null!\n";
     }
 };
 
-struct outOfBoundsException : public exception{
+class outOfBoundsException : public exception{
     const char* what() const throw(){
         return " .Index is out of bounds!\n";
     }
 };
 
-struct inventoryEmptyException : public exception{
+class inventoryEmptyException : public exception{
     const char* what() const throw(){
         return "Inventory is empty!\n";
     }
 };
 
-struct inventoryFullException : public exception{
+class inventoryFullException : public exception{
     const char* what() const throw(){
         return "Inventory is full!\n";
     }
 };
 
-struct ladangEmptyException : public exception{
+class ladangEmptyException : public exception{
     const char* what() const throw(){
         return "Ladang is empty!\n";
     }
 };
 
-struct ladangFullException : public exception{
+class ladangFullException : public exception{
     const char* what() const throw(){
         return "Ladang is full!\n";
     }
 };
 
-struct noneSiapPanenLadangException : public exception{
+class noneSiapPanenLadangException : public exception{
     const char* what() const throw(){
         return "\\('u')/ Sing sabar, sing tenang \\('u')/\nNo tanaman is ready for panen yet!\n";
     }
 };
 
-struct noneSiapPanenPeternakanException : public exception{
+class noneSiapPanenPeternakanException : public exception{
     const char* what() const throw(){
         return "\\('u')/ Sing sabar, sing tenang \\('u')/\nNo hewan is ready for panen yet!\n";
     }
 };
 
-struct peternakanEmptyException : public exception{
+class peternakanEmptyException : public exception{
     const char* what() const throw(){
         return "Peternakan is empty!\n";
     }
 };
 
-struct peternakanFullException : public exception{
+class peternakanFullException : public exception{
     const char* what() const throw(){
         return "Peternakan is full!\n";
     }
 };
 
-struct tanamNotTumbuhanException : public exception{
+class tanamNotTumbuhanException : public exception{
     const char* what() const throw(){
         return " You can only plant object of Tumbuhan type.\n";
     }
 };
 
-struct ternakNotHewanException : public exception{
+class ternakNotHewanException : public exception{
     const char* what() const throw(){
         return " You can only raise object of Hewan type.\n";
     }
@@ -235,31 +235,31 @@ class InvalidMakananException : public exception{
         }
 };
 
-struct invalidNomorTanamanException : public exception{
+class invalidNomorTanamanException : public exception{
     const char* what() const throw(){
         return "Nomor tanaman is invalid!\n";
     }
 };
 
-struct invalidNomorHewanException : public exception{
+class invalidNomorHewanException : public exception{
     const char* what() const throw(){
         return "Nomor hewan is invalid!\n";
     }
 };
 
-struct invalidJumlahPetakException : public exception{
+class invalidJumlahPetakException : public exception{
     const char* what() const throw(){
         return "Jumlah petak is invalid!\n";
     }
 };
 
-struct invalidKeyException : public exception{
+class invalidKeyException : public exception{
     const char* what() const throw(){
         return "Key is invalid!\n";
     }
 };
 
-struct invalidPetakException : public exception{
+class invalidPetakException : public exception{
     const char* what() const throw(){
         return "Pilihan petak is invalid!\n";
     }
@@ -283,31 +283,31 @@ class InvalidPilihanBeliException : public exception{
         }
 };
 
-struct gameNotStartedException : public exception{
+class gameNotStartedException : public exception{
     const char* what() const throw(){
         return "Game sedang tidak berjalan!\n";
     }
 };
 
-struct wrongPlayerTypeException : public exception{
+class wrongPlayerTypeException : public exception{
     const char* what() const throw(){
         return "Kamu tidak bisa melakukan itu!\n";
     }
 };
 
-struct notEnoughMoneyException : public exception{
+class notEnoughMoneyException : public exception{
     const char* what() const throw(){
         return "Uang tidak cukup!\n";
     }
 };
 
-struct pemainFalseTypeException : public exception{
+class pemainFalseTypeException : public exception{
     const char* what() const throw(){
         return "Kamu hanya bisa menambahkan pemain dengan tipe \"peternak\" atau \"petani\"!\n";
     }
 };
 
-struct usernameNotUniqueException : public exception{
+class usernameNotUniqueException : public exception{
     const char* what() const throw(){
         return "Username tersebut sudah digunakan pemain lain!\n";
     }
@@ -331,7 +331,7 @@ class NotEnoughInventoryException : public exception{
         }
 };
 
-struct commandNotFoundException : public exception{
+class commandNotFoundException : public exception{
     const char* what() const throw(){
         return "Pilihan tidak ditemukan, coba periksa kembali!\n";
     }

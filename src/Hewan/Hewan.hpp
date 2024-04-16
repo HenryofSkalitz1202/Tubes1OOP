@@ -36,6 +36,7 @@ class Hewan: public Asset {
     bool isReadyToHarvest();
     virtual void makan(Produk*) = 0; 
     vector<Produk*> harvest();
+    void printHewan();
 };
 
 #endif

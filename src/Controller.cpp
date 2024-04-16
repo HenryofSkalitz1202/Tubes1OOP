@@ -631,7 +631,7 @@ void Controller::cetak_penyimpanan(Pemain* player){
 }
 
 void Controller::pungut_pajak(Walikota* walikota){
-    walikota->pungutPajak(Controller::players);
+    walikota->setUang(walikota->getUang() + walikota->pungutPajak(Controller::players));
 }
 
 void Controller::cetak_ladang(Petani* petani){

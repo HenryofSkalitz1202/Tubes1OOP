@@ -158,8 +158,13 @@ int Grid<T>::countAvailableCapacity() {
 template<typename T>
 int Grid<T>::getTotalWorth(){
     int worth = 0;
-    for(const auto& pair : this->data){
-        worth += pair.second->getPrice();
+
+    for(int row = 0; row < this->numRows(); row++){
+        for(int col = 0; col < this->numCols(); col++){
+            if(get(row, col) != nullptr){
+                worth += get(row, col)->getPrice();
+            }
+        }
     }
 
     return worth;

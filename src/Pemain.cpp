@@ -1,6 +1,7 @@
 #include "Pemain.hpp"
 #include <iostream>
 #include <cctype>
+#include <cmath>
 using namespace std;
 
 int Pemain::uangWin;
@@ -729,15 +730,15 @@ int Petani::countPajak(){
     if(kkp <= 0){
         return 0;
     }else if(kkp <= 6){
-        return 0.05 * kkp;
+        return round(0.05 * kkp);
     }else if(kkp <= 25){
-        return 0.15 * kkp;
+        return round(0.15 * kkp);
     }else if(kkp <= 50){
-        return 0.25 * kkp;
+        return round(0.25 * kkp);
     }else if(kkp <= 500){
-        return 0.3 * kkp;
+        return round(0.3 * kkp);
     }else{
-        return 0.35 * kkp;
+        return round(0.35 * kkp);
     }
 }
 
@@ -1130,21 +1131,48 @@ int Walikota::getNetWorth(){
 }
 
 int Walikota::pungutPajak(vector<Pemain*> players){
+    cout << "Cring cring cring..." << endl;
+    cout << "Pajak sudah dipungut!\n" << endl;
+    cout << "Berikut adalah detil dari pemungutan pajak: " << endl; 
     int total_pajak = 0;
-
+    map<Pemain*, int> leaderboardPajak;
     for(Pemain* player : players){
-        int tax_deduction;
-
-        if(player->countPajak() > player->getUang()){
-            tax_deduction = player->getUang();
+        if(dynamic_cast<Walikota*>(player)){
+            continue;
         }else{
-            tax_deduction = player->countPajak();
-        }
+            int tax_deduction = 0;
 
-        total_pajak += tax_deduction;
-        int taxed_money = player->getUang() - tax_deduction;
-        player->setUang(taxed_money);
+            if(player->countPajak() > player->getUang()){
+                tax_deduction = player->getUang();
+            }else{
+                tax_deduction = player->countPajak();
+            }
+
+            total_pajak += tax_deduction;
+            int taxed_money = player->getUang() - tax_deduction;
+            player->setUang(taxed_money);
+
+            leaderboardPajak.insert({player, tax_deduction});
+        }
     }
+
+    vector<pair<Pemain*, int>> vec(leaderboardPajak.begin(), leaderboardPajak.end());
+    auto comparator = [](const pair<Pemain*, int>& a, const pair<Pemain*, int>& b) {
+        return a.second > b.second;
+    };
+    std::sort(vec.begin(), vec.end(), comparator);
+
+    int idx = 0;
+    for(const auto& pair : vec){
+        if(dynamic_cast<Petani*>(pair.first)){
+            cout << "   " << ++idx << ". " << pair.first->getUsername() << " - Petani: " << pair.second << " gulden" << endl;
+        }else if(dynamic_cast<Peternak*>(pair.first)){
+            cout << "   " << ++idx << ". " << pair.first->getUsername() << " - Peternak: " << pair.second << " gulden" << endl;
+        }
+    }
+
+    cout << GREEN << "\nNegara mendapatkan pemasukan sebesar " << total_pajak << " gulden." << endl;
+    cout << "Gunakan dengan baik dan jangan dikorupsi ya!" << NORMAL << endl;
 
     return total_pajak;
 }
@@ -1154,15 +1182,15 @@ int Walikota::countPajak(){
     if(kkp <= 0){
         return 0;
     }else if(kkp <= 6){
-        return 0.05 * kkp;
+        return round(0.05 * kkp);
     }else if(kkp <= 25){
-        return 0.15 * kkp;
+        return round(0.15 * kkp);
     }else if(kkp <= 50){
-        return 0.25 * kkp;
+        return round(0.25 * kkp);
     }else if(kkp <= 500){
-        return 0.3 * kkp;
+        return round(0.3 * kkp);
     }else{
-        return 0.35 * kkp;
+        return round(0.35 * kkp);
     }
 }
 //<---------------PETERNAK----------------->
@@ -1830,14 +1858,14 @@ int Peternak::countPajak(){
     if(kkp <= 0){
         return 0;
     }else if(kkp <= 6){
-        return 0.05 * kkp;
+        return round(0.05 * kkp);
     }else if(kkp <= 25){
-        return 0.15 * kkp;
+        return round(0.15 * kkp);
     }else if(kkp <= 50){
-        return 0.25 * kkp;
+        return round(0.25 * kkp);
     }else if(kkp <= 500){
-        return 0.3 * kkp;
+        return round(0.3 * kkp);
     }else{
-        return 0.35 * kkp;
+        return round(0.35 * kkp);
     }
 }

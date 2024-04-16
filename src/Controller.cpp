@@ -423,20 +423,20 @@ void Controller::sort_players() {
 
 void Controller::add_player(Pemain* player)
 {
-    this->players.push_back(player);
+    Controller::players.push_back(player);
     this->sort_players();
 }
 
 Pemain* Controller::get_first_player()
 {
-    return this->players[0];
+    return Controller::players[0];
 }
 
 void Controller::print_players()
 {
     for (int i = 0; i < this->players.size(); i++)
     {
-        cout << this->players[i]->getUsername() << endl;
+        cout << Controller::players[i]->getUsername() << endl;
     }
 }
 
@@ -453,9 +453,9 @@ void Controller::is_won()
 {
     for (int i = 0; i < this->players.size(); i++)
     {
-        if (this->players[i]->getUang() >= Pemain::uangWin && this->players[i]->getBeratBadan() >= Pemain::beratWin)
+        if (Controller::players[i]->getUang() >= Pemain::uangWin && Controller::players[i]->getBeratBadan() >= Pemain::beratWin)
         {
-            cout << this->players[i]->getUsername() << " wins!" << endl;
+            cout << Controller::players[i]->getUsername() << " wins!" << endl;
             this->game_over = true;
             break;
         }
@@ -679,5 +679,19 @@ void Controller::panen(Peternak* peternak){
 }
 
 void Controller::tambah_pemain(Walikota* walikota){
-    walikota->tambahAkun(Controller::players);
+    Pemain* newPlayer = walikota->tambahAkun(Controller::players);
+    this->add_player(newPlayer);
+
+    auto it = std::find(Controller::players.begin(), Controller::players.end(), newPlayer);
+    int indexNew = std::distance(Controller::players.begin(), it);
+    it = std::find(Controller::players.begin(), Controller::players.end(), walikota);
+    int indexWalikota = std::distance(Controller::players.begin(), it);
+
+    if(indexWalikota > indexNew){
+        this->current_player_index++;
+    }
+
+    for(Pemain* player : players){
+        cout << BLUE << "username: " << player->getUsername() << NORMAL << endl;
+    }
 }

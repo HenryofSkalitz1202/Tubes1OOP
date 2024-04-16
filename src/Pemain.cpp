@@ -849,20 +849,72 @@ void Walikota::bangunBangunan(){
     }
 }
 
-void Walikota::tambahAkun(vector<Pemain*> players){
+Pemain* Walikota::tambahAkun(vector<Pemain*> players){
     if(this->uang < 50){
         throw uangInsufficientException();
     }  
 
     string jenis_pemain;
-    std::cout << "Masukkan jenis pemain: ";
-    cin >> jenis_pemain;
+    bool validJenisPemain = false;
+    while(!validJenisPemain){
+        jenis_pemain = "";
+        std::cout << "Masukkan jenis pemain: ";
+        cin >> jenis_pemain;
+
+        if(jenis_pemain == "petani" || jenis_pemain == "PETANI"){
+            validJenisPemain = true;
+        }else if(jenis_pemain == "peternak" || jenis_pemain == "PETERNAK"){
+            validJenisPemain = true;
+        }else if(jenis_pemain == "walikota" || jenis_pemain == "WALIKOTA"){
+            cout << YELLOW << "There can only be one Walikota, chosen one! You!\n" << NORMAL << endl;
+        }else{
+            cout << YELLOW << "Role is invalid!\n" << NORMAL << endl;
+        }
+    }
 
     string nama_pemain;
-    std::cout << "Masukkan nama pemain: ";
-    cin >> nama_pemain;
+    bool validNamaPemain = false;
+    while(!validNamaPemain){
+        nama_pemain = "";
+        std::cout << "Masukkan nama pemain: ";
+        cin >> nama_pemain;
 
-    std::cout << "Pemain baru ditambahkan!\nSelamat datang \"" << nama_pemain << "\" di kota ini!" << std::endl;
+        bool containLetter = false;
+        for (char c : nama_pemain) {
+            if (std::isalpha(c)) {
+                containLetter = true;
+                break;
+            }
+        }
+
+        if(containLetter){
+            bool isTaken = false;
+            for(Pemain* player : players){
+                if(player->getUsername() == nama_pemain){
+                    isTaken = true;
+                    break;
+                }
+            }
+
+            if(!isTaken){
+                validNamaPemain = true;
+            }else{
+                cout << YELLOW <<  "Username " << nama_pemain << " is already taken! Please choose another name\n" << NORMAL << endl; 
+            }
+        }else{
+            cout << YELLOW << "Username must contain at least one letter!\n" << NORMAL << endl;
+        }
+    }
+
+    if(jenis_pemain == "petani" || jenis_pemain == "PETANI"){
+        Petani* player = new Petani(players.size() + 1, nama_pemain);
+        std::cout << GREEN << "Pemain baru ditambahkan!\nSelamat datang \"" << nama_pemain << "\" di kota ini!" << NORMAL << std::endl;
+        return player;
+    }else if(jenis_pemain == "peternak" || jenis_pemain == "PETERNAK"){
+        Peternak* player = new Peternak(players.size() + 1, nama_pemain);
+        std::cout << GREEN << "Pemain baru ditambahkan!\nSelamat datang \"" << nama_pemain << "\" di kota ini!" << NORMAL << std::endl;
+        return player;
+    }
 }
 
 void Walikota::beliAsset(Toko* store){

@@ -85,7 +85,7 @@ public:
   int getWalikotaID();
 
   void bangunBangunan();
-  void tambahAkun(vector<Pemain*> players);
+  Pemain* tambahAkun(vector<Pemain*> players);
   void beliAsset(Toko* store);
 
   int getNetWorth();

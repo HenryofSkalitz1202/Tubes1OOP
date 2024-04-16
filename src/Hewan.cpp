@@ -10,7 +10,7 @@ Hewan::~Hewan(){}
 
 void Hewan::setAssetType(string assetType){
     try{
-        if(assetType != "Hewan"){
+        if(assetType != "HEWAN"){
             throw HewanFalseTypeException();
         }
 
@@ -24,8 +24,13 @@ void Hewan::setType(string type){
     this->type = type;
 }
 
-void Hewan::setWeightToHarvest(size_t weightToHarvest){
-    this->weightToHarvest = weightToHarvest;
+void Hewan::setWeightToHarvest(int weightToHarvest){
+    if(weightToHarvest <= 0){
+        cout << "Weight to harvest of " << this->getNamaAsset() << " is set to " << weightToHarvest << ". " << endl;
+        throw invalidWeightToHarvestException();
+    }else{
+        this->weightToHarvest = weightToHarvest;
+    }
 }
 
 void Hewan::setWeight(int weight){
@@ -45,10 +50,11 @@ int Hewan::getWeight(){
 }
 
 bool Hewan::isReadyToHarvest(){
-    if (this->weight == this->weightToHarvest){
+    if(this->weight >= this->weightToHarvest){
         return true;
+    }else{
+        return false;
     }
-    return false;
 }
 
 vector<Produk*> Hewan::harvest(){
@@ -64,8 +70,8 @@ vector<Produk*> Hewan::harvest(){
 }
 
 //<---------------HERBIVORE----------------->
-Herbivore::Herbivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price){
-    this->setAssetType("Hewan");
+Herbivore::Herbivore(int hewanID, string kodeHuruf, string namaHewan, string type, int weightToHarvest, int price){
+    this->setAssetType("HEWAN");
     this->setAssetID(hewanID);
     this->setKodeHuruf(kodeHuruf);
     this->setNamaAsset(namaHewan);
@@ -107,13 +113,12 @@ void Herbivore::makan(Produk* pakan){
         this->weight += fruit->getAddedWeight();
     } else {
         cout << "Herbivore is fed " << pakan->getNamaAsset() << " which is not of ProductFruit type. ";
-        throw HerbivoreWrongFoodTypeException();
     }
 }
 
 //<---------------CARNIVORE----------------->
-Carnivore::Carnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price){
-    this->setAssetType("Hewan");
+Carnivore::Carnivore(int hewanID, string kodeHuruf, string namaHewan, string type, int weightToHarvest, int price){
+    this->setAssetType("HEWAN");
     this->setAssetID(hewanID);
     this->setKodeHuruf(kodeHuruf);
     this->setNamaAsset(namaHewan);
@@ -155,14 +160,13 @@ void Carnivore::makan(Produk* pakan){
         this->weight += hewan->getAddedWeight();
     } else {
         cout << "Carnivore is fed " << pakan->getNamaAsset() << " which is not of ProductHewan type. ";
-        throw CarnivoreWrongFoodTypeException();
     }
 }
 
 //<---------------OMNIVORE----------------->
 
-Omnivore::Omnivore(int hewanID, string kodeHuruf, string namaHewan, string type, size_t weightToHarvest, int price){
-    this->setAssetType("Hewan");
+Omnivore::Omnivore(int hewanID, string kodeHuruf, string namaHewan, string type, int weightToHarvest, int price){
+    this->setAssetType("HEWAN");
     this->setAssetID(hewanID);
     this->setKodeHuruf(kodeHuruf);
     this->setNamaAsset(namaHewan);
@@ -208,7 +212,6 @@ void Omnivore::makan(Produk* pakan){
             this->weight += fruit->getAddedWeight();
         } else{
             cout << "Omnivore is fed " << pakan->getNamaAsset() << " which is neither of ProductFruit nor ProductHewan type. ";
-            throw OmnivoreWrongFoodTypeException();
         }
     }
 }

@@ -1,9 +1,12 @@
 #ifndef PEMAIN_HPP
 #define PEMAIN_HPP
 #include <string>
+#include <vector>
+#include <algorithm>
+#include <cctype>
+#include <sstream>
+#include "Toko.cpp"
 #include "Grid.cpp"
-
-using namespace std;
 
 class Pemain{
 protected:
@@ -18,21 +21,28 @@ public:
   static int defaultBerat;
   static int defaultUang;
 
-  Pemain();
+  static vector<string> stringToArrayComma(const string& input);
+
   ~Pemain();
 
-  virtual void setStatus() = 0;
   void setUsername(string username);
   void setUang(int uang);
   void setberatBadan(int beratBadan);
   void addToInventory(Asset* item);
 
-  string getStatus();
   string getUsername();
   int getUang();
   int getBeratBadan();
+  string getStatus();
+  Inventory getInventory();
   Asset* getFromInventory(string key);
 
+  void printInventory();
+  void jualAsset();
+  void makan();
+  //void simpan();
+
+  virtual void beliAsset(Toko* store) = 0;
   virtual int getNetWorth() = 0;
   virtual int countPajak() = 0;
 };
@@ -43,19 +53,22 @@ private:
   Ladang ladang;
   const int ktkp = 13;
 public:
-  Petani();
-  Petani(string username, int uang, int beratBadan);
+  Petani(int petaniID, string username);
+  Petani(int petaniID, string username, int uang, int beratBadan);
   ~Petani();
   Petani(Petani& other);
   Petani& operator=(const Petani& other);
 
-  void setStatus();
   void setPetaniID(int petaniID);
   int getPetaniID();
+  Ladang getLadang();
+  Tumbuhan* getFromLadang(string key);
+  void addToLadang(Tumbuhan* tumbuhan, string loc);
 
+  void printLadang();
   void tanamTanaman();
   void panenTanaman();
-  void beliBangunan();
+  void beliAsset(Toko* store);
 
   int getNetWorth();
   int countPajak();
@@ -66,22 +79,21 @@ private:
   int walikotaID;
 
 public:
-  Walikota();
-  Walikota(string username, int uang, int beratBadan);
+  Walikota(int walikotaID, string username);
+  Walikota(int walikotaID, string username, int uang, int beratBadan);
   ~Walikota();
   Walikota(Walikota& other);
   Walikota& operator=(const Walikota& other);
 
-  void setStatus();
   void setWalikotaID(int walikotaID);
   int getWalikotaID();
 
-  void tagihPajak();
   void bangunBangunan();
-  void tambahAkun();
-  void jualBangunan();
+  Pemain* tambahAkun(vector<Pemain*> players);
+  void beliAsset(Toko* store);
 
   int getNetWorth();
+  int pungutPajak(vector<Pemain*> players);
   int countPajak();
 };
 
@@ -91,20 +103,23 @@ private:
   Peternakan peternakan;
   const int ktkp = 11;
 public:
-  Peternak();
-  Peternak(string username, int uang, int beratBadan);
+  Peternak(int peternakID, string username);
+  Peternak(int peternakID, string username, int uang, int beratBadan);
   ~Peternak();
   Peternak(Peternak& other);
   Peternak& operator=(const Peternak& other);
 
-  void setStatus();
   void setPeternakID(int peternakID);
   int getPeternakID();
+  Peternakan getPeternakan();
+  Hewan* getFromPeternakan(string key);
+  void addToPeternakan(Hewan* hewan, string loc);
 
+  void printPeternakan();
   void taruhHewan();
   void beriMakan();
   void panenHewan();
-  void beliBangunan();
+  void beliAsset(Toko* store);
 
   int getNetWorth();
   int countPajak();

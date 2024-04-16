@@ -1,15 +1,16 @@
 #include "Tumbuhan.hpp"
+#include "Exception.hpp"
 #include <iostream>
 
 using namespace std;
-size_t Tumbuhan::current_turn;
+int Tumbuhan::current_turn;
 map<string, Tumbuhan*> Tumbuhan::configTumbuhan;
 //<---------------TUMBUHAN----------------->
 Tumbuhan::~Tumbuhan(){}
 
 void Tumbuhan::setAssetType(string assetType){
     try{
-        if(assetType != "Tumbuhan"){
+        if(assetType != "TUMBUHAN"){
             throw TumbuhanFalseTypeException();
         }
 
@@ -19,44 +20,48 @@ void Tumbuhan::setAssetType(string assetType){
     }
 }
 
-void Tumbuhan::setType(string type){
+void Tumbuhan::setTumbuhanType(string type){
     this->type = type;
 }
 
-void Tumbuhan::setDurationToHarvest(size_t durationToHarvest){
-    this->duration_to_harvest = duration_to_harvest;
+void Tumbuhan::setDurationToHarvest(int durationToHarvest){
+    if(durationToHarvest <= 0){
+        cout << "Duration to harvest of " << this->getNamaAsset() << " is set to " << durationToHarvest << ". " << endl;
+        throw invalidDurationToHarvestException();
+    }
+    this->duration_to_harvest = durationToHarvest;
 }
 
-void Tumbuhan::setTurnInstantiated(size_t turn_instantiated){
+void Tumbuhan::setTurnInstantiated(int turn_instantiated){
     this->turn_instantiated = turn_instantiated;
 }
 
-string Tumbuhan::getType(){
+string Tumbuhan::getTumbuhanType(){
     return this->type;
 }
 
-size_t Tumbuhan::getDurationToHarvest(){
+int Tumbuhan::getDurationToHarvest(){
     return this->duration_to_harvest;
 }
 
-size_t Tumbuhan::getTurnInstantiated(){
+int Tumbuhan::getTurnInstantiated(){
     return this->turn_instantiated;
 }
 
 bool Tumbuhan::isReadyToHarvest(){
-    return (current_turn == this->getTurnInstantiated() + this->getDurationToHarvest());
+    return (Tumbuhan::current_turn >= this->getTurnInstantiated() + this->getDurationToHarvest());
 }
 
 //<---------------FRUIT PLANT----------------->
-FruitPlant::FruitPlant(int tumbuhanID, string kodeHuruf, string namaTumbuhan, string type, size_t durationToHarvest, int price, size_t turn_instantiated){
-    this->setAssetType("Tumbuhan");
+FruitPlant::FruitPlant(int tumbuhanID, string kodeHuruf, string namaTumbuhan, string type, int durationToHarvest, int price){
+    this->setAssetType("TUMBUHAN");
     this->setAssetID(tumbuhanID);
     this->setKodeHuruf(kodeHuruf);
     this->setNamaAsset(namaTumbuhan);
-    this->setType(type);
-    this->setDurationToHarvest(duration_to_harvest);
+    this->setTumbuhanType(type);
+    this->setDurationToHarvest(durationToHarvest);
     this->setPrice(price);
-    this->setTurnInstantiated(turn_instantiated);
+    this->setTurnInstantiated(Tumbuhan::current_turn);
 }
 
 FruitPlant::~FruitPlant(){}
@@ -66,7 +71,7 @@ FruitPlant::FruitPlant(FruitPlant& other){
     this->setAssetID(other.getAssetID());
     this->setKodeHuruf(other.getKodeHuruf());
     this->setNamaAsset(other.getNamaAsset());
-    this->setType(other.getType());
+    this->setTumbuhanType(other.getTumbuhanType());
     this->setDurationToHarvest(other.getDurationToHarvest());
     this->setPrice(other.getPrice());
     this->setTurnInstantiated(other.getTurnInstantiated());
@@ -77,7 +82,7 @@ FruitPlant& FruitPlant::operator=(const FruitPlant& other){
     this->setAssetID(other.assetID);
     this->setKodeHuruf(other.kodeHuruf);
     this->setNamaAsset(other.namaAsset);
-    this->setType(other.type);
+    this->setTumbuhanType(other.type);
     this->setDurationToHarvest(other.duration_to_harvest);
     this->setPrice(other.price);
     this->setTurnInstantiated(other.turn_instantiated);
@@ -96,15 +101,15 @@ vector<Produk*> FruitPlant::harvest(){
 }
 
 //<---------------MATERIAL PLANT----------------->
-MaterialPlant::MaterialPlant(int tumbuhanID, string kodeHuruf, string namaTumbuhan, string type, size_t durationToHarvest, int price, size_t turn_instantiated){
-    this->setAssetType("Tumbuhan");
+MaterialPlant::MaterialPlant(int tumbuhanID, string kodeHuruf, string namaTumbuhan, string type, int durationToHarvest, int price){
+    this->setAssetType("TUMBUHAN");
     this->setAssetID(tumbuhanID);
     this->setKodeHuruf(kodeHuruf);
     this->setNamaAsset(namaTumbuhan);
-    this->setType(type);
-    this->setDurationToHarvest(duration_to_harvest);
+    this->setTumbuhanType(type);
+    this->setDurationToHarvest(durationToHarvest);
     this->setPrice(price);
-    this->setTurnInstantiated(turn_instantiated);
+    this->setTurnInstantiated(Tumbuhan::current_turn);
 }
 
 MaterialPlant::~MaterialPlant(){}
@@ -114,7 +119,7 @@ MaterialPlant::MaterialPlant(MaterialPlant& other){
     this->setAssetID(other.getAssetID());
     this->setKodeHuruf(other.getKodeHuruf());
     this->setNamaAsset(other.getNamaAsset());
-    this->setType(other.getType());
+    this->setTumbuhanType(other.getTumbuhanType());
     this->setDurationToHarvest(other.getDurationToHarvest());
     this->setPrice(other.getPrice());
     this->setTurnInstantiated(other.getTurnInstantiated());
@@ -125,7 +130,7 @@ MaterialPlant& MaterialPlant::operator=(const MaterialPlant& other){
     this->setAssetID(other.assetID);
     this->setKodeHuruf(other.kodeHuruf);
     this->setNamaAsset(other.namaAsset);
-    this->setType(other.type);
+    this->setTumbuhanType(other.type);
     this->setDurationToHarvest(other.duration_to_harvest);
     this->setPrice(other.price);
     this->setTurnInstantiated(other.turn_instantiated);

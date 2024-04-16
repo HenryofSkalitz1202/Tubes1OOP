@@ -12,6 +12,9 @@ protected:
   int addedWeight;
 
 public:
+  static map<string, string> cekHewan;
+  static map<string, string> cekMaterialPlant;
+  static map<string, string> cekFruitPlant;
   ~Produk();
 
   void setAssetType(string assetType);

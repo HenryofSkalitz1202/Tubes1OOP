@@ -14,22 +14,21 @@ template <typename T>
 class Grid{
 protected:
   map<string, T> data; 
-  size_t rows;
-  size_t cols;
-  //int available_capacity;
+  int rows;
+  int cols;
 
 public:
-  Grid(size_t rows, size_t cols);
+  Grid(int rows, int cols);
 
-  string calculateKey(size_t row, size_t col);
-  void set(size_t row, size_t col, T value);
+  string calculateKey(int row, int col);
+  void set(int row, int col, T value);
   void setWithKey(string key, T value);
   void setNull(string key);
 
-  T get(size_t row, size_t col);
+  T get(int row, int col);
   T get(string key);
-  size_t numRows();
-  size_t numCols();
+  int numRows();
+  int numCols();
   int countAvailableCapacity();
   int getTotalWorth();
 
@@ -50,6 +49,8 @@ private:
   int jumlahProductMaterial;
   int jumlahProductFruit;
   int jumlahProductHewan;
+  int jumlahHewan;
+  int jumlahTumbuhan;
 public:
   static int inventoryRowSize;
   static int inventoryColumnSize;
@@ -61,6 +62,16 @@ public:
 
   void addItem(Asset*);
   void addItemKey(Asset*, string loc);
+  void findAndRemoveItem(string key);
+
+  int getJumlahBangunan();
+  int getJumlahProductMaterial();
+  int getJumlahProductFruit();
+  int getJumlahProductHewan();
+  int getJumlahTumbuhan();
+  int getJumlahHewan();
+
+  map<string, int> rekapMaterial();
   void rekapInventory();
   void print();
 };
@@ -84,6 +95,10 @@ public:
 };
 
 class Peternakan : public Grid<Hewan*>{
+private:
+  bool existCarnivore;
+  bool existHerbivore;
+  bool existOmnivore;
 public:
   static int peternakanRowSize;
   static int peternakanColumnSize;
@@ -96,6 +111,11 @@ public:
   void addItemKey(Hewan*, string loc);
 
   bool isAvailablePanen();
+  bool hasCarnivore();
+  bool hasHerbivore();
+  bool hasOmnivore();
+
+  void cekPeternakan();
   map<string, int> rekapPeternakan();
   void print();
 };

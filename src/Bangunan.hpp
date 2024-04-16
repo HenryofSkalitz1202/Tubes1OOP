@@ -12,6 +12,7 @@ protected:
 
 public:
   static map<string, Bangunan*> resepBangunan;
+  static void printResep();
   Bangunan(int bangunanID, string kodeBangunan, string namaBangunan, int hargaBangunan, map<string, int> listBahan);
   ~Bangunan();
   Bangunan(Bangunan& other);
@@ -20,7 +21,8 @@ public:
   void setAssetType(string assetType);
   void setListBahan(map<string, int> listBahan);
   map<string, int> getListBahan();
-  //void print();
+
+  void printBahan();
 };
 
 

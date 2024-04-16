@@ -5,26 +5,31 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
 #include "Pemain.cpp"
 using namespace std;
+
+class Import;
 
 class Controller
 {
 private:
-    std::vector<Pemain*> players;
-    size_t current_player_index;
+    //std::vector<Pemain*> players;
+    int current_player_index;
     Pemain* current_player;
     int turn_number;
     bool game_over;
+    Toko store;
 
 public:
+    static vector<Pemain*> players;
     Controller();
     ~Controller();
 
     static vector<string> stringToArrayEnter(const string& input);
     static vector<string> stringToArraySpace(const string& input);
-    static void printVector(const vector<string>& vec);
+    static vector<string> stringToArrayDot(const string& input);
+    static int custom_stoi(const std::string& str);
+    static void printMap(const std::map<std::string, int>& myMap);
     static void populateConfigProduk(string filePathProduk);
     static void populateConfigHewan(string filePathHewan);
     static void populateConfigTumbuhan(string filePathTumbuhan);
@@ -40,33 +45,41 @@ public:
     Pemain* get_first_player();
     void print_players();
 
+    vector<Pemain*> getPlayers();
+    int getTurnNumber();
+
+    Toko getToko();
+    map<string, int> getRekapToko();
+
     bool is_game_over();
     void is_won();
 
-    void start_default();
-    void start_load();
+    //void start_default();
+    //void start_load();
 
     bool is_petani(Pemain* player);
     bool is_peternak(Pemain* player);
     bool is_walikota(Pemain* player);
 
+    bool isValidCommand(string command, Pemain* player);
+    void readCommand(Pemain* player);
     void next();
-    void cetak_penyimpanan();
-    void pungut_pajak();
-    void cetak_ladang();
-    void cetak_peternakan();
-    void tanam();
-    void ternak();
-    void bangun();
-    void makan();
-    void kasih_makan();
-    void beli();
-    void jual();
-    void panen();
-    void muat();
+    void cetak_penyimpanan(Pemain* player);
+    void pungut_pajak(Walikota* walikota);
+    void cetak_ladang(Petani* petani);
+    void cetak_peternakan(Peternak* peternak);
+    void tanam(Petani* petani);
+    void ternak(Peternak* peternak);
+    void bangun(Walikota* walikota);
+    void makan(Pemain* player);
+    void kasih_makan(Peternak* peternak);
+    void beli(Pemain* player);
+    void jual(Pemain* player);
+    void panen(Petani* petani);
+    void panen(Peternak* peternak);
+    void tambah_pemain(Walikota* walikota);
+    void muat(string filePathState);
     void simpan();
-    void tambah_pemain();
-
 };
 
 #endif
